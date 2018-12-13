@@ -5,9 +5,6 @@
 		},
 		"/daqsmanager":{
 			"ViewPath": "DAQsManager",
-			"ParamArray": [
-				"card0"
-			],
 			"Params": {
 				"param1":"1",
 				"param2":"2"

@@ -85,7 +85,6 @@ namespace Jtext103.CFET2.NancyHttpCommunicationModule
                 {
                     fakeSample = new Status<string>();
                     fakeSample.SetPath(request.Path);
-                    fakeSample.Context.Add("ParamArray", myViewConfig.RegexURLtoViewPathAndModel[v.Key].ParamArray);
                     if(myViewConfig.RegexURLtoViewPathAndModel[v.Key].Params != null)
                     {
                         foreach (var p in myViewConfig.RegexURLtoViewPathAndModel[v.Key].Params)

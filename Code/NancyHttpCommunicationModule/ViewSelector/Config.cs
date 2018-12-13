@@ -33,13 +33,8 @@ namespace Jtext103.CFET2.NancyHttpCommunicationModule
         public string ViewPath { get; set; }
 
         /// <summary>
-        /// 页面很可能会请求多个子页面，这里给出路径
+        /// 信息自定义
         /// </summary>
-        public string[] ParamArray { get; set; }
-
-        /// <summary>
-        /// 其它信息，自定义
-        /// </summary>
-        public Dictionary<string, string> Params { get; set; }
+        public Dictionary<string, object> Params { get; set; }
     }
 }

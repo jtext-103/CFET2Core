@@ -17,6 +17,15 @@ namespace Jtext103.CFET2.Core.Event
         /// </summary>
         public string Source { get;  }
 
+        /// <summary>
+        /// the remote host of the event publisher
+        /// </summary>
+        public string Host { get; set; }
+
+        /// <summary>
+        /// only applicable for remote event, 0 for lowest full sample,, 1 for minimum overhead
+        /// </summary>
+        public int PerformanceLevel { get; set; }
 
         /// <summary>
         /// a regex expression to specify the event tyep you interested in
@@ -38,6 +47,25 @@ namespace Jtext103.CFET2.Core.Event
             EventType = eventType;
             resourceRegexMatch = new Regex(Source,RegexOptions.IgnoreCase);
             eventTypeRegexMatch = new Regex(EventType, RegexOptions.IgnoreCase);
+            Host = "";
+            PerformanceLevel = 0;
+        }
+
+        /// <summary>
+        /// create a event filter with the input
+        /// </summary>
+        /// <param name="resource">IgnoreCase</param>
+        /// <param name="eventType">IgnoreCase</param>
+        /// <param name="performanceLevel"></param>
+        /// <param name="host">the remote host incluting protocol</param>
+        public EventFilter(string resource, string eventType,int performanceLevel,string host)
+        {
+            Source = resource;
+            EventType = eventType;
+            resourceRegexMatch = new Regex(Source, RegexOptions.IgnoreCase);
+            eventTypeRegexMatch = new Regex(EventType, RegexOptions.IgnoreCase);
+            Host = host;
+            PerformanceLevel = performanceLevel;
         }
 
 

@@ -89,6 +89,15 @@ namespace Jtext103.CFET2.Core.Event
         {
             var sample=payload.ToStatus();
             var eventArg = new EventArg(source, eventType, sample);
+            Publish(eventArg);
+        }
+
+        /// <summary>
+        /// publis a event, not that the payload you are supplying will be wrapped in a status sample if it is not a sample already.
+        /// </summary>
+        /// <param name="eventArg"></param>
+        public void Publish(EventArg eventArg)
+        {
             pendingEvent.Enqueue(eventArg);
             newPendingEvent();
         }

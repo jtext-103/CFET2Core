@@ -12,7 +12,7 @@ namespace WebsocketEventThing
     /// </summary>
     public class WebsocketEventServer
     {
-        private EventHub myEventHub;
+       
 
         private WebSocketServer myWsServer;
 
@@ -23,6 +23,7 @@ namespace WebsocketEventThing
 
         public void StartServer()
         {
+            
             myWsServer.Start();
         }
 

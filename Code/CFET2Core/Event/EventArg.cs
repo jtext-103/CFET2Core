@@ -13,6 +13,11 @@ namespace Jtext103.CFET2.Core.Event
     public class EventArg
     {
         /// <summary>
+        /// only applicable to remote event pushing, the host including protocol
+        /// </summary>
+        public string Host { get; set; }
+
+        /// <summary>
         /// a string that indicate the resources generated this event
         /// </summary>
         public string Source { get; }
@@ -32,13 +37,29 @@ namespace Jtext103.CFET2.Core.Event
         /// 
         /// </summary>
         /// <param name="source"></param>
-        /// <param name="type"></param>
+        /// <param name="type">if type is "" then match any type</param>
         /// <param name="sample"></param>
         public EventArg(string source,string type,ISample sample)
         {
             Source = source;
             EventType = type;
             Sample = sample;
+            Host = "";
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="source"></param>
+        /// <param name="type"></param>
+        /// <param name="sample"></param>
+        /// <param name="host"></param>
+        public EventArg(string source, string type, ISample sample,string host)
+        {
+            Source = source;
+            EventType = type;
+            Sample = sample;
+            Host = host;
         }
 
     }

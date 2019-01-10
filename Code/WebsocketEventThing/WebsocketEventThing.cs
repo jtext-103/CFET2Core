@@ -5,14 +5,15 @@ using System;
 
 namespace WebsocketEventThing
 {
-    public class WebsocketEventManager:Thing
+    public class WebsocketEventThing:Thing
     {
         public WebsocketEventConfig Config { get; set; }
 
         private ICfet2Logger logger;
         private EventHub myEventHub;
+        private WebsocketEventServer wsServer;
 
-        public WebsocketEventManager()
+        public WebsocketEventThing()
         {
             
         }
@@ -25,7 +26,14 @@ namespace WebsocketEventThing
 
         public override void Start()
         {
-            
+            wsServer = new WebsocketEventServer(Config.Host);
+            //todo: loop thrpugh a;; resource and create end points
+            var resources = MyHub.GetAllLocalResources();
+            foreach (var resource in resources)
+            {
+                wsServer.AddEndPoint(resource.Key);
+            }
+            wsServer.StartServer();
         }
 
     }

@@ -27,7 +27,7 @@ namespace WebsocketEventThing
         /// <summary>
         /// mostly used for perfomance level
         /// </summary>
-        public EventRequest EventRequest { get; set; }
+        public EventFilter EventRequest { get; set; }
 
     }
 }

@@ -22,7 +22,7 @@ namespace WebsocketEventThing
         /// the connections, the key is the session id
         /// </summary>
         public static Dictionary<string, WsSubscription> Subscription = new Dictionary<string, WsSubscription>();
-        internal static WebsocketEventManager ParentThing;
+        internal static WebsocketEventThing ParentThing;
 
         public WebsocketEventHandler()
         {

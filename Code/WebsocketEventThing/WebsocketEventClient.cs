@@ -15,7 +15,7 @@ namespace WebsocketEventThing
     /// </summary>
     public class WebsocketEventClient
     {
-        internal static WebsocketEventManager ParentThing;
+        internal static WebsocketEventThing ParentThing;
 
         public Dictionary<Token, RemoteSubscription> RemoteSubscriptions { get;  } = new Dictionary<Token, RemoteSubscription>();
 
@@ -29,7 +29,9 @@ namespace WebsocketEventThing
         /// <returns></returns>
         public async Task  SubscribeAync(EventFilter filter,Token token)
         {
-            
+            await Task.Run(() => {
+                subscribe(filter, token);
+            });
         }
 
         private void subscribe(EventFilter filter, Token token)

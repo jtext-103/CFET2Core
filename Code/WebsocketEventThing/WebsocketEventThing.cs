@@ -22,6 +22,8 @@ namespace WebsocketEventThing
         {
             Config = (WebsocketEventConfig)initObj;
             logger = Cfet2LogManager.GetLogger("WsEvent@"+ Path);
+            WebsocketEventClient.ParentThing = this;
+            WebsocketEventHandler.ParentThing = this;
         }
 
         public override void Start()

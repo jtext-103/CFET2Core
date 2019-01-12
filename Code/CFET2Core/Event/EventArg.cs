@@ -13,6 +13,11 @@ namespace Jtext103.CFET2.Core.Event
     public class EventArg
     {
         /// <summary>
+        /// the fill over head of event arg, so performanceLevel is 0
+        /// </summary>
+        public int PerformanceLevel { get; } = 0;
+
+        /// <summary>
         /// only applicable to remote event pushing, the host including protocol
         /// </summary>
         public string Host { get; set; }

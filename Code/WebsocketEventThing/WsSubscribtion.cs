@@ -6,6 +6,9 @@ using WebSocketSharp.Server;
 
 namespace WebsocketEventThing
 {
+    /// <summary>
+    /// subscribtion stored on server side
+    /// </summary>
     public class WsSubscription
     {
         /// <summary>

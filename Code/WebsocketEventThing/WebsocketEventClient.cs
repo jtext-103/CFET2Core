@@ -2,6 +2,7 @@
 using Jtext103.CFET2.Core.Sample;
 using Newtonsoft.Json;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading;
@@ -15,11 +16,22 @@ namespace WebsocketEventThing
     /// </summary>
     public class WebsocketEventClient
     {
+
         internal static WebsocketEventThing ParentThing;
 
-        public Dictionary<Token, RemoteSubscription> RemoteSubscriptions { get;  } = new Dictionary<Token, RemoteSubscription>();
+        public Guid ClientId { get; } = Guid.NewGuid();
 
-        public Dictionary<int, Token> websocketDict { get;  } = new Dictionary<int, Token>();
+
+
+        /// <summary>
+        /// the key is the host address,NOTE: only one connection for a remote host, muiltple subscriptions to the same host  share one connection
+        /// </summary>
+        public Dictionary<string, RemoteSubscription> RemoteSubscriptions  {get;  }= new Dictionary<string, RemoteSubscription>();
+
+        /// <summary>
+        /// the key is hash to a web socket, the value is the host address
+        /// </summary>
+        public Dictionary<int, string> WebsocketDict { get;  } = new Dictionary<int, string>();
 
         /// <summary>
         /// this will subscribe to the remote event, it will keep trying at 500ms interval is failed.
@@ -30,55 +42,49 @@ namespace WebsocketEventThing
         public async Task  SubscribeAync(EventFilter filter,Token token)
         {
             await Task.Run(() => {
-                subscribe(filter, token);
+                subscribe(filter, token.Id);
             });
         }
 
-        private void subscribe(EventFilter filter, Token token)
+        private void subscribe(EventFilter filter, Guid tokenId)
         {
             //connect to webwocket
-            var websocket = new WebSocket(filter.Host);
-            var eventRequest = new EventRequest(filter, EventRequestAction.Subscribe);
-            websocket.OnMessage += handleArrivedEvent;
-            websocket.OnClose += reconnect;
-            //send subscribe action
-            while (websocket.ReadyState!=WebSocketState.Open)
+            //check if a connection to a host alraedy exsits
+            if (!(RemoteSubscriptions.ContainsKey(filter.Host)))
             {
-                websocket.ConnectAsync();
-                Thread.Sleep(1000);
+                //if not make a connection
+                var websocket = new WebSocket(filter.Host);
+                websocket.OnMessage += handleArrivedEvent;
+                websocket.OnClose += reconnect;
+                RemoteSubscriptions.Add(filter.Host,new RemoteSubscription { Host=filter.Host, WebSocket=websocket,ClientId=ClientId});
+                WebsocketDict.Add(websocket.GetHashCode(), filter.Host);
             }
-            websocket.SendAsync(JsonConvert.SerializeObject(eventRequest),(result)=> { });
-            //save the connection instence
-            RemoteSubscriptions.Add(token,new RemoteSubscription { WebSocket= websocket, Filter=filter});
-            websocketDict.Add(websocket.GetHashCode(), token);
+            //save it to remote subscriptions
+            RemoteSubscriptions[filter.Host].AddNewSubscription(tokenId, filter);
+
+            //do not block
+            RemoteSubscriptions[filter.Host].SendSubscriptionAsync();   
         }
+
+ 
 
         private void reconnect(object sender, CloseEventArgs e)
         {
             var websocket = (WebSocket)sender;
-            if (!websocketDict.ContainsKey(websocket.GetHashCode()))
+            if (WebsocketDict.ContainsKey(websocket.GetHashCode()))
             {
-                return;
+                RemoteSubscriptions[WebsocketDict[websocket.GetHashCode()]].Reconnect();
             }
-            while (websocket.ReadyState != WebSocketState.Open)
-            {
-                websocket.ConnectAsync();
-                Thread.Sleep(1000);
-            }
-            //resubscribe
-            var eventRequest = new EventRequest(RemoteSubscriptions[websocketDict[websocket.GetHashCode()]].Filter, EventRequestAction.Subscribe);
-            websocket.SendAsync(JsonConvert.SerializeObject(eventRequest), (result) => { });
         }
 
         private void handleArrivedEvent(object sender, MessageEventArgs e)
         {
-            var token = websocketDict[sender.GetHashCode()];
-            var eventFilter = RemoteSubscriptions[token].Filter;
-
-            switch (eventFilter.PerformanceLevel)
+            dynamic incomingEvent = JsonConvert.DeserializeObject(e.Data);
+            switch (incomingEvent.PerformanceLevel.ToString())
             {
-                case 0:
-                    ParentThing.MyHub.EventHub.Publish(new EventArg(eventFilter.Source,eventFilter.EventType,e.Data.ToStatus(),eventFilter.Host));
+                //hi performance mode use remote event arg
+                case "1":
+                    ParentThing.MyHub.EventHub.Publish(JsonConvert.DeserializeObject<RemoteEventArgLevel1>(e.Data).ConvertToEventArg());
                     break;
                 default:
                     ParentThing.MyHub.EventHub.Publish(JsonConvert.DeserializeObject<EventArg>(e.Data));
@@ -92,25 +98,16 @@ namespace WebsocketEventThing
         /// <param name="token"></param>
         public void Unsubscribe(Token token)
         {
-            //remove from websocket dic so when closing it will not try to reconnect
-            if (websocketDict.ContainsKey(RemoteSubscriptions[token].WebSocket.GetHashCode()))
+            foreach (var sub in RemoteSubscriptions.Values)
             {
-                websocketDict.Remove(RemoteSubscriptions[token].WebSocket.GetHashCode());
+                if (sub.UnSubscribe(token.Id))
+                {
+                    ///so when i close it will not reconnect
+                    sub.WebSocket.OnClose -= reconnect;
+                    sub.WebSocket.Close();
+                    RemoteSubscriptions.Remove(sub.Host);
+                }
             }
-
-            
-
-            //send unsubscribe
-            if (!RemoteSubscriptions.ContainsKey(token))
-            {
-                return;
-            }
-            RemoteSubscriptions[token].WebSocket.SendAsync(JsonConvert.SerializeObject(new EventRequest(null, EventRequestAction.Unsubscribe)),(result)=> {
-                //close connection
-                RemoteSubscriptions[token].WebSocket.Close();
-            });
-            //remove form subscriptions dict
-            RemoteSubscriptions.Remove(token);
         }
 
   

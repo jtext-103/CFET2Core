@@ -70,6 +70,7 @@
     <Compile Include="Event\EventArg.cs" />
     <Compile Include="Event\EventFilter.cs" />
     <Compile Include="Event\EventHub.cs" />
+    <Compile Include="Event\SourceAndTypeFilter.cs" />
     <Compile Include="Event\Token.cs" />
     <Compile Include="Event\Subscriber.cs" />
     <Compile Include="Exception\GeneralCfet2Exception.cs" />

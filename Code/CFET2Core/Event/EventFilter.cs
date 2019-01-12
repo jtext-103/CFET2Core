@@ -13,9 +13,9 @@ namespace Jtext103.CFET2.Core.Event
     public  class EventFilter
     {
         /// <summary>
-        /// a regex expression that indicate the resources you interested in
+        /// a collection of  SourceAndTypeFilter, any mathch will fire the handler
         /// </summary>
-        public string Source { get;  }
+        public List<SourceAndTypeFilter> SourcesAndTypes { get; } = new List<SourceAndTypeFilter>();
 
         /// <summary>
         /// the remote host of the event publisher
@@ -27,13 +27,9 @@ namespace Jtext103.CFET2.Core.Event
         /// </summary>
         public int PerformanceLevel { get; set; }
 
-        /// <summary>
-        /// a regex expression to specify the event tyep you interested in
-        /// </summary>
-        public string EventType { get;  }
 
-        private readonly Regex resourceRegexMatch;
-        private readonly Regex eventTypeRegexMatch;
+        private readonly List<Regex> resourceRegexMatches;
+        private readonly List<Regex> eventTypeRegexMatches;
 
 
         /// <summary>
@@ -43,12 +39,21 @@ namespace Jtext103.CFET2.Core.Event
         /// <param name="eventType">IgnoreCase</param>
         public EventFilter(string resource, string eventType)
         {
-            Source = resource;
-            EventType = eventType;
-            resourceRegexMatch = new Regex(Source,RegexOptions.IgnoreCase);
-            eventTypeRegexMatch = new Regex(EventType, RegexOptions.IgnoreCase);
+            SourcesAndTypes.Add(new SourceAndTypeFilter { Source=resource,EventType=eventType});
+            (resourceRegexMatches, eventTypeRegexMatches) = makeRegexFilter(SourcesAndTypes);
             Host = "";
             PerformanceLevel = 0;
+        }
+
+        /// <summary>
+        /// create a event filter with the input
+        /// </summary>
+        public EventFilter(EventFilter oldFilter)
+        {
+            SourcesAndTypes.AddRange(oldFilter.SourcesAndTypes);
+            (resourceRegexMatches, eventTypeRegexMatches) = makeRegexFilter(SourcesAndTypes);
+            Host = oldFilter.Host;
+            PerformanceLevel = oldFilter.PerformanceLevel;
         }
 
         /// <summary>
@@ -58,12 +63,8 @@ namespace Jtext103.CFET2.Core.Event
         /// <param name="eventType">IgnoreCase</param>
         /// <param name="performanceLevel"></param>
         /// <param name="host">the remote host incluting protocol</param>
-        public EventFilter(string resource, string eventType,int performanceLevel,string host)
+        public EventFilter(string resource, string eventType,int performanceLevel,string host):this(resource, eventType)
         {
-            Source = resource;
-            EventType = eventType;
-            resourceRegexMatch = new Regex(Source, RegexOptions.IgnoreCase);
-            eventTypeRegexMatch = new Regex(EventType, RegexOptions.IgnoreCase);
             Host = host;
             PerformanceLevel = performanceLevel;
         }
@@ -78,17 +79,36 @@ namespace Jtext103.CFET2.Core.Event
         {
             string resource = eventArg.Source;
             string eventType = eventArg.EventType;
-            var souResult = resourceRegexMatch.Match(resource);
-            if (souResult.Success && souResult.Value==resource)
+
+            int matchIndex = 0;
+            for (matchIndex=0; matchIndex < resourceRegexMatches.Count(); matchIndex++)
             {
-                //test event type
-                var eventTypeResult = eventTypeRegexMatch.Match(eventType);
-                if (eventTypeResult.Success && eventTypeResult.Value==eventType)
+                var souResult = resourceRegexMatches[matchIndex].Match(resource);
+                if (souResult.Success && souResult.Value == resource)
                 {
-                    return true;
+                    //test event type
+                    var eventTypeResult = eventTypeRegexMatches[matchIndex].Match(eventType);
+                    if (eventTypeResult.Success && eventTypeResult.Value == eventType)
+                    {
+                        return true;
+                    }
                 }
             }
             return false;
+        }
+
+
+
+        private (List<Regex>, List<Regex>) makeRegexFilter(List<SourceAndTypeFilter> filters)
+        {
+            List<Regex> resources = new List<Regex>();
+            List<Regex> eventTypes = new List<Regex>();
+            foreach (var filter in filters)
+            {
+                resources.Add(new Regex(filter.Source, RegexOptions.IgnoreCase));
+                eventTypes.Add( new Regex(filter.EventType, RegexOptions.IgnoreCase));
+            }
+            return (resources, eventTypes);
         }
     }
 }

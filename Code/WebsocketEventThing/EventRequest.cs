@@ -6,7 +6,7 @@ using System.Text;
 namespace WebsocketEventThing
 {
     /// <summary>
-    /// this is the client send to the event object to subscrive the event
+    /// this is the client send to the event server to subscrive the event
     /// </summary>
     public class EventRequest:EventFilter
     {
@@ -16,15 +16,18 @@ namespace WebsocketEventThing
         }
 
 
+        public Guid ClientId { get; set; }
+
 
         /// <summary>
         /// if subscrube or unsub
         /// </summary>
         public EventRequestAction Action { get; set; }
 
-        public EventRequest(EventFilter filter,EventRequestAction action): base(filter.Source, filter.EventType,filter.PerformanceLevel,filter.Host)
+        public EventRequest(EventFilter filter,EventRequestAction action,Guid clientId): base(filter)
         {
             Action = action;
+            ClientId = clientId;
         }
 
     }

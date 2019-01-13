@@ -12,12 +12,54 @@ namespace WebsocketEventThing
 {
     public class RemoteSubscription
     {
-        private ConcurrentQueue<EventFilter> pendingSubscriptions = new ConcurrentQueue<EventFilter>();
+        private object lockObject = new object();
+        private bool isSending = false;
+        private bool isClosing = false;
 
-        /// <summary>
-        /// the performance level of these subscriptions, all subscriptoins to the same host share the same performance level, that the lowest one
-        /// </summary>
-        public int PerformanceLevel { get; private set; } = 100;
+        public RemoteSubscription( EventFilter filter,Action<EventArg> handler)
+        {
+            Host = filter.Host;
+            EventFilter = filter;
+            Handler = handler;
+            WebSocket = new WebSocket(Host);
+            WebSocket.OnMessage += onEventArrival;
+            WebSocket.OnClose += onReconnect;
+        }
+
+        private void onReconnect(object sender, CloseEventArgs e)
+        {
+            Reconnect();
+        }
+
+        private void onEventArrival(object sender, MessageEventArgs e)
+        {
+            switch (EventFilter.PerformanceLevel)
+            {
+                //hi performance mode use remote event arg
+                case 1:
+                    Handler(JsonConvert.DeserializeObject<RemoteEventArgLevel1>(e.Data).ConvertToEventArg());
+                    break;
+                default:
+                    Handler(JsonConvert.DeserializeObject<EventArg>(e.Data));
+                    break;
+            }
+        }
+
+        private bool getIsSending()
+        {
+            lock (lockObject)
+            {
+                return isSending;
+            }
+        }
+
+        private void setIsSending(bool sending)
+        {
+            lock (lockObject)
+            {
+                isSending=sending;
+            }
+        }
 
         /// <summary>
         /// the web socket to recieve the push event
@@ -26,45 +68,22 @@ namespace WebsocketEventThing
 
         public string Host { get; set; }
 
-        public Guid ClientId { get; set; }
-
         /// <summary>
-        /// the guid is the token id
+        /// 
         /// </summary>
-        public Dictionary<Guid, EventFilter> EventFilters { get; } = new Dictionary<Guid, EventFilter>();
+        public EventFilter EventFilter { get; }
 
-        private bool isConnecting=false;
-        private object connectionLock = new object();
+        public Action<EventArg> Handler { get; }
 
         /// <summary>
-        /// this is locked, so thread save, if this host is sending or connecting
+        /// connect to the ws server and send the subscription object
         /// </summary>
         /// <returns></returns>
-        public bool GetIsSending()
-        {
-            lock (connectionLock)
-            {
-                return isConnecting;
-            }
-        }
-
-        /// <summary>
-        ///  this is locked, so thread sace
-        /// </summary>
-        public void SetIsConnection(bool connecting)
-        {
-            lock (connectionLock)
-            {
-                isConnecting=connecting;
-            }
-        }
-
         internal async Task SendSubscriptionAsync()
         {
             await Task.Run(()=> {
                 sendSubs();
             });
-
         }
 
         /// <summary>
@@ -72,39 +91,24 @@ namespace WebsocketEventThing
         /// </summary>
         private void sendSubs()
         {
-            //if not already sending or connection, 
-            if (!GetIsSending())
+            if (getIsSending())
             {
-                SetIsConnection(true);
-                //send subscribe action
-                while (WebSocket.ReadyState != WebSocketState.Open)
-                {
-                    WebSocket.ConnectAsync();
-                    Thread.Sleep(1000);
-                }
-                //connected!
-                while (pendingSubscriptions.Count > 0)
-                {
-                    if (WebSocket.ReadyState == WebSocketState.Open)
-                    {
-                        EventFilter filter;
-                        pendingSubscriptions.TryDequeue(out filter);
-                        var eventRequest = new EventRequest(filter,EventRequestAction.Subscribe,ClientId);
-                        WebSocket.SendAsync(JsonConvert.SerializeObject(eventRequest), (result) => { });
-                    }
-                }
+                return;
             }
-            //if it is connection after connection all pending subscription will be send
-        }
-
-        internal void AddNewSubscription(Guid tokenId, EventFilter filter)
-        {
-            if (PerformanceLevel>filter.PerformanceLevel)
+            setIsSending(true);
+            while (WebSocket.ReadyState != WebSocketState.Open)
             {
-                PerformanceLevel = filter.PerformanceLevel;
+                if (isClosing)
+                {
+                    return;
+                }
+                WebSocket.ConnectAsync();
+                Thread.Sleep(1000);
             }
-            EventFilters.Add(tokenId, filter);
-            pendingSubscriptions.Enqueue(filter);
+            //connected!
+            var eventRequest = new EventRequest(EventFilter, EventRequestAction.Subscribe);
+            WebSocket.SendAsync(JsonConvert.SerializeObject(eventRequest), (result) => { });
+            setIsSending(false);
         }
 
         /// <summary>
@@ -112,53 +116,23 @@ namespace WebsocketEventThing
         /// </summary>
         internal void Reconnect()
         {
-            //emtpty the quere so i can re add all event filter to it
-            //potential bug, it the sending thread is trying to dequeue and it get recreated, it will crash, this is a extremely rare case
-            //todo fix this by suing lock or somehting
-            pendingSubscriptions = new ConcurrentQueue<EventFilter>();
-            foreach (var filter in EventFilters)
-            {
-                pendingSubscriptions.Enqueue(filter.Value);
-            }
+            //just re subscribe
             SendSubscriptionAsync();
         }
 
-        public bool UnSubscribe(Guid tokenId)
+        public void UnSubscribe()
         {
-            if (!EventFilters.ContainsKey(tokenId))
+            WebSocket.OnClose -= onReconnect;
+            WebSocket.OnMessage -= onEventArrival;
+            isClosing = true;
+            if (WebSocket.ReadyState == WebSocketState.Open)
             {
-                return false;
+                WebSocket.SendAsync(JsonConvert.SerializeObject(new EventRequest(EventFilter, EventRequestAction.Unsubscribe)), (result) => { });
             }
-
-            //send unsubscribption, if connected
-            WebSocket.SendAsync(JsonConvert.SerializeObject(new EventRequest(EventFilters[tokenId], EventRequestAction.Unsubscribe,ClientId)), (result) => { });
-
-            //remove the sub from the dictionery
-            var lastPl = EventFilters[tokenId].PerformanceLevel;
-            EventFilters.Remove(tokenId);
-
-            //if it is the last one return ture to let the out side to 
-            if (EventFilters.Count==0)
-            {
-                return true;
-            }
-            //check the performace level
-            int pl = 100;
-            foreach (var filter in EventFilters.Values)
-            {
-                if (pl>filter.PerformanceLevel)
-                {
-                    pl = filter.PerformanceLevel;
-                }
-            }
-            
-            if (lastPl<pl)
-            {   //the remaining pl are all higher then the one removed, then rais the pl
-                PerformanceLevel = pl;
-            }
-            return false;
+            WebSocket.CloseAsync();
         }
 
-        //todo for better reliability there shoud be a method to replace the subscriptions on the server.
+        
+        
     }
 }

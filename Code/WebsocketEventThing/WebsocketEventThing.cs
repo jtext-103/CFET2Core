@@ -5,13 +5,20 @@ using System;
 
 namespace WebsocketEventThing
 {
-    public class WebsocketEventThing:Thing
+    public class WebsocketEventThing : Thing, IRemoteEventHub
     {
+
+
         public WebsocketEventConfig Config { get; set; }
 
+        /// <summary>
+        /// the uri shceme
+        /// </summary>
+        public string Protocol => "ws";
+
         private ICfet2Logger logger;
-        private EventHub myEventHub;
         private WebsocketEventServer wsServer;
+        private WebsocketEventClient wsClient;
 
         public WebsocketEventThing()
         {
@@ -22,13 +29,13 @@ namespace WebsocketEventThing
         {
             Config = (WebsocketEventConfig)initObj;
             logger = Cfet2LogManager.GetLogger("WsEvent@"+ Path);
-            WebsocketEventClient.ParentThing = this;
             WebsocketEventHandler.ParentThing = this;
         }
 
         public override void Start()
         {
             wsServer = new WebsocketEventServer(Config.Host);
+            wsClient = new WebsocketEventClient();
             //todo: loop thrpugh a;; resource and create end points
             var resources = MyHub.GetAllLocalResources();
             foreach (var resource in resources)
@@ -38,5 +45,20 @@ namespace WebsocketEventThing
             wsServer.StartServer();
         }
 
+        public void Subscribe(Token token, EventFilter filter, Action<EventArg> handler)
+        {
+            wsClient.SubscribeAync(filter, token, handler);
+        }
+
+        public void Unsbscribe(Token token)
+        {
+            wsClient.Unsubscribe(token);
+        }
+
+        public void Dispose()
+        {
+            wsClient.Dispose();
+            wsServer.Dispose();
+        }
     }
 }

@@ -12,8 +12,9 @@ namespace Jtext103.CFET2.Core.Event
     /// </summary>
     public  class EventFilter
     {
+        public static string DefaultEventType="Changed";
         /// <summary>
-        /// a collection of  SourceAndTypeFilter, any mathch will fire the handler
+        /// a collection of  SourceAndTypeFilter, any mathch will fire the handler, donot add to list!! it will not work use AddSourceAndTpye method!!
         /// </summary>
         public List<SourceAndTypeFilter> SourcesAndTypes { get; } = new List<SourceAndTypeFilter>();
 
@@ -28,19 +29,15 @@ namespace Jtext103.CFET2.Core.Event
         public int PerformanceLevel { get; set; }
 
 
-        private readonly List<Regex> resourceRegexMatches;
-        private readonly List<Regex> eventTypeRegexMatches;
+        private List<Regex> resourceRegexMatches;
+        private List<Regex> eventTypeRegexMatches;
 
 
         /// <summary>
-        /// create a event filter with the input
+        /// create an empty filter
         /// </summary>
-        /// <param name="resource">IgnoreCase</param>
-        /// <param name="eventType">IgnoreCase</param>
-        public EventFilter(string resource, string eventType)
+        public EventFilter()
         {
-            SourcesAndTypes.Add(new SourceAndTypeFilter { Source=resource,EventType=eventType});
-            (resourceRegexMatches, eventTypeRegexMatches) = makeRegexFilter(SourcesAndTypes);
             Host = "";
             PerformanceLevel = 0;
         }
@@ -48,12 +45,22 @@ namespace Jtext103.CFET2.Core.Event
         /// <summary>
         /// create a event filter with the input
         /// </summary>
-        public EventFilter(EventFilter oldFilter)
+        /// <param name="resource">IgnoreCase</param>
+        /// <param name="eventType">IgnoreCase</param>
+        public EventFilter(string resource, string eventType):base()
+        {
+            SourcesAndTypes.Add(new SourceAndTypeFilter { Source=resource,EventType=eventType});
+            (resourceRegexMatches, eventTypeRegexMatches) = makeRegexFilter(SourcesAndTypes);
+
+        }
+
+        /// <summary>
+        /// create a event filter with the input
+        /// </summary>
+        public EventFilter(EventFilter oldFilter) : base()
         {
             SourcesAndTypes.AddRange(oldFilter.SourcesAndTypes);
             (resourceRegexMatches, eventTypeRegexMatches) = makeRegexFilter(SourcesAndTypes);
-            Host = oldFilter.Host;
-            PerformanceLevel = oldFilter.PerformanceLevel;
         }
 
         /// <summary>
@@ -67,6 +74,17 @@ namespace Jtext103.CFET2.Core.Event
         {
             Host = host;
             PerformanceLevel = performanceLevel;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="resource"></param>
+        /// <param name="eventType"></param>
+        public void AddSourceAndType(string resource, string eventType)
+        {
+            SourcesAndTypes.Add(new SourceAndTypeFilter { Source = resource, EventType = eventType });
+            (resourceRegexMatches, eventTypeRegexMatches) = makeRegexFilter(SourcesAndTypes);
         }
 
 

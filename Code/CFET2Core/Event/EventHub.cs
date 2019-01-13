@@ -1,4 +1,5 @@
-﻿using Jtext103.CFET2.Core.Sample;
+﻿using Jtext103.CFET2.Core.Log;
+using Jtext103.CFET2.Core.Sample;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -19,12 +20,18 @@ namespace Jtext103.CFET2.Core.Event
         /// </summary>
         public EventHub()
         {
-            //start the event handle loop
-            
+            logger = Cfet2LogManager.GetLogger("EventHub");
         }
 
         CancellationTokenSource tokenSource = new CancellationTokenSource();
         CancellationToken cancelToken;
+
+
+        /// <summary>
+        /// the remote event thing that the event hub uses
+        /// </summary>
+        public List<IRemoteEventHub> RemoteEventHubs { get; } = new List<IRemoteEventHub>();
+
 
 
         /// <summary>
@@ -78,6 +85,7 @@ namespace Jtext103.CFET2.Core.Event
         ConcurrentQueue<EventArg> pendingEvent=new ConcurrentQueue<EventArg>();
 
         AutoResetEvent eventPendingEvent = new AutoResetEvent(false);
+        private ICfet2Logger logger;
 
         /// <summary>
         /// publis a event, not that the payload you are supplying will be wrapped in a status sample if it is not a sample already.
@@ -117,6 +125,23 @@ namespace Jtext103.CFET2.Core.Event
         /// <returns></returns>
         public Token Subscribe(EventFilter filter, Action<EventArg> handler)
         {
+            if (!string.IsNullOrEmpty(filter.Host))
+            {
+                //try subscribe remote event
+                string protocol= new Uri(filter.Host).Scheme;
+                foreach (var remoteHub in RemoteEventHubs)
+                {
+                    if (remoteHub.Protocol == protocol)
+                    {
+                        var remoteToken = new Token(this,protocol);
+                        remoteHub.Subscribe(remoteToken, filter,handler);
+                        return remoteToken;
+                    }
+                }
+                //no matching protocol, print log
+                logger.Error("No matching remote event hub for: " + filter.Host);
+            }
+            //sub local event
             var token = new Token(this);
             subDict.Add(token.Id,
                         new Subscriber(filter, handler));
@@ -129,6 +154,17 @@ namespace Jtext103.CFET2.Core.Event
         /// <param name="token"></param>
         public void Unsubscribe(Token token)
         {
+            if (token.IsRemote)
+            {
+                foreach (var remoteHub in RemoteEventHubs)
+                {
+                    if (remoteHub.Protocol == token.Protocol)
+                    {
+                        remoteHub.Unsbscribe(token);
+                        return;
+                    }
+                }
+            }
             subDict.Remove(token.Id);
         }
 
@@ -142,6 +178,10 @@ namespace Jtext103.CFET2.Core.Event
             tokenSource.Cancel();
             //unblock the loop
             newPendingEvent();
+            foreach (var remteHub in RemoteEventHubs)
+            {
+                remteHub.Dispose();
+            }
         }
     }
 }

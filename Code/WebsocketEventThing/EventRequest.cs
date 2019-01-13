@@ -15,19 +15,14 @@ namespace WebsocketEventThing
             Action = action;
         }
 
-
-        public Guid ClientId { get; set; }
-
-
         /// <summary>
         /// if subscrube or unsub
         /// </summary>
         public EventRequestAction Action { get; set; }
 
-        public EventRequest(EventFilter filter,EventRequestAction action,Guid clientId): base(filter)
+        public EventRequest(EventFilter filter,EventRequestAction action): base(filter)
         {
             Action = action;
-            ClientId = clientId;
         }
 
     }

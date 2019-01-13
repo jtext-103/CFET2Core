@@ -32,5 +32,21 @@ namespace Jtext103.CFET2.Core.Event
             hub = eventHub;
             Id = Guid.NewGuid();
         }
+
+        public Token(EventHub eventHub,string protocol):this(eventHub)
+        {
+            Protocol = protocol;
+            IsRemote = true;
+        }
+
+        /// <summary>
+        /// is this token point to a remote subscription
+        /// </summary>
+        public bool IsRemote { get; } = false;
+
+        /// <summary>
+        /// the remote subscription protocol
+        /// </summary>
+        public string Protocol { get; }
     }
 }

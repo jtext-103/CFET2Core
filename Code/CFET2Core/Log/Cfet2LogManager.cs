@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Jtext103.CFET2.Core.Log.Dummy;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -37,6 +38,11 @@ namespace Jtext103.CFET2.Core.Log
         /// <returns></returns>
         public static ICfet2Logger GetLogger(string name)
         {
+            if (provider==null)
+            {
+                //return dummy logger
+                return new DummyLogger(name);
+            }
             return provider.GetLogger(name);
         }
 

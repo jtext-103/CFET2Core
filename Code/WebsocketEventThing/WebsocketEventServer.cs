@@ -23,13 +23,18 @@ namespace WebsocketEventThing
 
         public void StartServer()
         {
-            
             myWsServer.Start();
         }
 
         public void AddEndPoint(string path)
         {
             myWsServer.AddWebSocketService<WebsocketEventHandler>(path);
+        }
+
+        public void Dispose()
+        {
+            myWsServer.Stop();
+            WebsocketEventHandler.UnsubAllLocal();
         }
 
     }

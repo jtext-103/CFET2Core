@@ -59,6 +59,17 @@ namespace WebsocketEventThing
             }
         }
 
+        /// <summary>
+        /// unsubscribe all localevent this is used at disposing the server
+        /// </summary>
+        internal static void UnsubAllLocal()
+        {
+            foreach (var request in Subscription)
+            {
+                ParentThing.MyHub.EventHub.Unsubscribe(request.Value.Token);
+            }
+        }
+
         private void unsubscribe(EventRequest request)
         {
             if (!Subscription.ContainsKey(ID))
@@ -76,19 +87,20 @@ namespace WebsocketEventThing
 
         private void subscribe(EventRequest eventRequest)
         {
+            EventFilter eventFilter;
             //extract the resource path
             string path;
-            if (eventRequest.Source.IsNullOrEmpty())
+            if (eventRequest.SourcesAndTypes==null || eventRequest.SourcesAndTypes.Count==0)
             {
                 path = Sessions[ID].Context.RequestUri.AbsolutePath;
+                eventFilter = new EventFilter(path, EventFilter.DefaultEventType);
             }
             else
             {
-                path = eventRequest.Source;
+                eventFilter = new EventFilter(eventRequest);
             }
             //subscribe to loacl event with a func call to push to the remote subscriber
-            var filter = new EventFilter(path,eventRequest.EventType);
-            var token=ParentThing.MyHub.EventHub.Subscribe(filter,(e)=> { pushToRemoteSubscriber(ID, e); });
+            var token=ParentThing.MyHub.EventHub.Subscribe(eventFilter, (e)=> { pushToRemoteSubscriber(ID, e); });
             //save the token for unsub
             var sub = new WsSubscription { Id = ID, Session = Sessions[ID], EventRequest = eventRequest, Token = token };
             Subscription[ID]= sub;

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Text;
 using WebSocketSharp.Server;
 
-namespace WebsocketEventThing
+namespace Jtext103.CFET2.WebsocketEvent
 {
     /// <summary>
     /// subscribtion stored on server side

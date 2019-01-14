@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Text;
 using WebSocketSharp.Server;
 
-namespace WebsocketEventThing
+namespace Jtext103.CFET2.WebsocketEvent
 {
     /// <summary>
     /// this object will send event to the remote subscribers over web socket

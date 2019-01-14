@@ -4,11 +4,12 @@ using Jtext103.CFET2.Core.Log;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Text;
 using WebSocketSharp;
 using WebSocketSharp.Server;
 
-namespace WebsocketEventThing
+namespace Jtext103.CFET2.WebsocketEvent
 {
     /// <summary>
     /// handle local event and send it to remote clients
@@ -39,6 +40,7 @@ namespace WebsocketEventThing
             try
             {
                 request = JsonConvert.DeserializeObject<EventRequest>(e.Data);
+                Debug.WriteLine("recived a remote subscription");
             }
             catch (Exception)
             {
@@ -64,75 +66,90 @@ namespace WebsocketEventThing
         /// </summary>
         internal static void UnsubAllLocal()
         {
-            foreach (var request in Subscription)
+            lock (Subscription)
             {
-                ParentThing.MyHub.EventHub.Unsubscribe(request.Value.Token);
+                foreach (var request in Subscription)
+                {
+                    request.Value.Token.Dispose();
+                    //ParentThing.MyHub.EventHub.Unsubscribe(request.Value.Token);
+                }
             }
         }
 
         private void unsubscribe(EventRequest request)
         {
-            if (!Subscription.ContainsKey(ID))
+            lock (Subscription)
             {
-                return;
+                if (!Subscription.ContainsKey(ID))
+                {
+                    return;
+                }
+                //unsub the local event
+                var token = Subscription[ID].Token;
+                ParentThing.MyHub.EventHub.Unsubscribe(token);
+                //close ws connectoion
+                Subscription[ID].Session.Context.WebSocket.CloseAsync();
+                //remove client info
+                Subscription.Remove(ID);
             }
-            //unsub the local event
-            var token = Subscription[ID].Token;
-            ParentThing.MyHub.EventHub.Unsubscribe(token);
-            //close ws connectoion
-            Subscription[ID].Session.Context.WebSocket.CloseAsync();
-            //remove client info
-            Subscription.Remove(ID);
         }
 
         private void subscribe(EventRequest eventRequest)
         {
-            EventFilter eventFilter;
-            //extract the resource path
-            string path;
-            if (eventRequest.SourcesAndTypes==null || eventRequest.SourcesAndTypes.Count==0)
+            lock (Subscription)
             {
-                path = Sessions[ID].Context.RequestUri.AbsolutePath;
-                eventFilter = new EventFilter(path, EventFilter.DefaultEventType);
-            }
-            else
-            {
-                eventFilter = new EventFilter(eventRequest);
-            }
-            //subscribe to loacl event with a func call to push to the remote subscriber
-            var token=ParentThing.MyHub.EventHub.Subscribe(eventFilter, (e)=> { pushToRemoteSubscriber(ID, e); });
-            //save the token for unsub
-            var sub = new WsSubscription { Id = ID, Session = Sessions[ID], EventRequest = eventRequest, Token = token };
-            Subscription[ID]= sub;
+                EventFilter eventFilter;
+                //extract the resource path
+                string path;
+                if (eventRequest.SourcesAndTypes == null || eventRequest.SourcesAndTypes.Count == 0)
+                {
+                    path = Sessions[ID].Context.RequestUri.AbsolutePath;
+                    eventFilter = new EventFilter(path, EventFilter.DefaultEventType);
+                }
+                else
+                {
+                    eventFilter = new EventFilter(eventRequest);
+                    //transform the remote to local event
+                    eventFilter.Host = "";
+                }
+                //subscribe to loacl event with a func call to push to the remote subscriber
+                var token = ParentThing.MyHub.EventHub.Subscribe(eventFilter, (e) => { pushToRemoteSubscriber(ID, e); });
+                //save the token for unsub
+                var sub = new WsSubscription { Id = ID, Session = Sessions[ID], EventRequest = eventRequest, Token = token };
+                Subscription[ID] = sub;
+            }   
         }
 
         private void pushToRemoteSubscriber(string id, EventArg e)
         {
             try
             {
-                //compose the message to send based on performance level
-                string pushMsg = "";
-                switch (Subscription[id].EventRequest.PerformanceLevel)
+                lock (Subscription)
                 {
-                    case 1:
-                        ///for max performance just push the object val
-                        pushMsg = JsonConvert.SerializeObject(e.Sample.ObjectVal);
-                        break;
-                    //level 0 is default
-                    default:
-                        //for max infomation, pusht he whole event arg
-                        var pushEvent = new EventArg( e.Source,e.EventType,e.Sample, ParentThing.Config.Host );
-                        pushMsg = JsonConvert.SerializeObject(pushEvent);
-                        break;
-                }
-                //send via web socket
-                Subscription[id].Session.Context.WebSocket.SendAsync(pushMsg, (result) =>
-                {
-                    if (!result)
+                    //compose the message to send based on performance level
+                    string pushMsg = "";
+                    switch (Subscription[id].EventRequest.PerformanceLevel)
                     {
-                        logger.Error("push failed!  conection error");
+                        case 1:
+                            ///for max performance just push the object val
+                            pushMsg = JsonConvert.SerializeObject(new RemoteEventArgLevel1(e));
+                            break;
+                        //level 0 is default
+                        default:
+                            //for max infomation, pusht he whole event arg
+                            var pushEvent = new EventArg(e.Source, e.EventType, e.Sample, ParentThing.Config.Host);
+                            pushMsg = JsonConvert.SerializeObject(pushEvent);
+                            break;
                     }
-                });
+                    //send via web socket
+                    Subscription[id].Session.Context.WebSocket.SendAsync(pushMsg, (result) =>
+                    {
+                        if (!result)
+                        {
+                            logger.Error("push failed!  conection error");
+                        }
+                    });
+                } 
             }
             catch (Exception)
             {

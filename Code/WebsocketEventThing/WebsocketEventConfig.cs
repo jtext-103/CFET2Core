@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace WebsocketEventThing
+namespace Jtext103.CFET2.WebsocketEvent
 {
     public class WebsocketEventConfig
     {

@@ -12,10 +12,15 @@ namespace Jtext103.CFET2.Core.Event
     /// </summary>
     public class EventArg
     {
+        public EventArg()
+        {
+
+        }
+
         /// <summary>
         /// the fill over head of event arg, so performanceLevel is 0
         /// </summary>
-        public int PerformanceLevel { get; } = 0;
+        public int PerformanceLevel { get; set; } = 0;
 
         /// <summary>
         /// only applicable to remote event pushing, the host including protocol
@@ -25,18 +30,18 @@ namespace Jtext103.CFET2.Core.Event
         /// <summary>
         /// a string that indicate the resources generated this event
         /// </summary>
-        public string Source { get; }
+        public string Source { get; set; }
 
 
         /// <summary>
         /// a string to specify the event tyep you interested in
         /// </summary>
-        public string EventType { get; }
+        public string EventType { get; set; }
 
         /// <summary>
         /// the payload of the event wrapped in sample
         /// </summary>
-        public ISample Sample { get; }
+        public ISample Sample { get; set; }
 
         /// <summary>
         /// 

@@ -2,6 +2,8 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
+    <RootNamespace>Jtext103.CFET2.WebsocketEvent</RootNamespace>
+    <AssemblyName>WebsocketEvent</AssemblyName>
   </PropertyGroup>
 
   <ItemGroup>

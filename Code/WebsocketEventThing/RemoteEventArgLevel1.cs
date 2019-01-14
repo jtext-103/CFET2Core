@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace WebsocketEventThing
+namespace Jtext103.CFET2.WebsocketEvent
 {
     /// <summary>
     /// performance level 1 remote event arg
@@ -15,6 +15,18 @@ namespace WebsocketEventThing
         
         public string Source { get; set; }
         public string EventType { get; set; }
+
+        public RemoteEventArgLevel1(EventArg e)
+        {
+            Source = e.Source;
+            EventType = e.EventType;
+            Value = e.Sample.ObjectVal;
+        }
+
+        public RemoteEventArgLevel1()
+        {
+
+        }
 
         /// <summary>
         /// no sample just the raw wavlue
@@ -28,8 +40,12 @@ namespace WebsocketEventThing
 
         public EventArg ConvertToEventArg(string host)
         {
-            return new EventArg(Source, EventType, Value.ToStatus(),host);
+            var eventArg= new EventArg(Source, EventType, Value.ToStatus(),host);
+            eventArg.PerformanceLevel = PerformanceLevel;
+            return eventArg;
         }
+
+       
 
     }
 }

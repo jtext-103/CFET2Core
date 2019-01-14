@@ -3,7 +3,7 @@ using Jtext103.CFET2.Core.Event;
 using Jtext103.CFET2.Core.Log;
 using System;
 
-namespace WebsocketEventThing
+namespace Jtext103.CFET2.WebsocketEvent
 {
     public class WebsocketEventThing : Thing, IRemoteEventHub
     {
@@ -38,6 +38,7 @@ namespace WebsocketEventThing
             wsClient = new WebsocketEventClient();
             //todo: loop thrpugh a;; resource and create end points
             var resources = MyHub.GetAllLocalResources();
+            wsServer.AddEndPoint("/");
             foreach (var resource in resources)
             {
                 wsServer.AddEndPoint(resource.Key);

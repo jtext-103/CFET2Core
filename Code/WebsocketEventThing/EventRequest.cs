@@ -3,13 +3,18 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace WebsocketEventThing
+namespace Jtext103.CFET2.WebsocketEvent
 {
     /// <summary>
     /// this is the client send to the event server to subscrive the event
     /// </summary>
     public class EventRequest:EventFilter
     {
+        public EventRequest()
+        {
+
+        }
+
         public EventRequest(string resource, string eventType, EventRequestAction action):base( resource,  eventType)
         {
             Action = action;

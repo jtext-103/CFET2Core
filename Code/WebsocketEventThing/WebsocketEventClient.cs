@@ -8,7 +8,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using WebSocketSharp;
 
-namespace WebsocketEventThing
+namespace Jtext103.CFET2.WebsocketEvent
 {
     /// <summary>
     /// use this to subscribe to remote event
@@ -46,10 +46,15 @@ namespace WebsocketEventThing
 
         public void Dispose()
         {
+            List<Guid> toRemove = new List<Guid>();
             foreach (var sub in RemoteSubscriptions)
             {
                 sub.Value.UnSubscribe();
-                RemoteSubscriptions.Remove(sub.Key);
+                toRemove.Add(sub.Key);
+            }
+            for (int i = 0; i < toRemove.Count; i++)
+            {
+                RemoteSubscriptions.Remove(toRemove[i]);
             }
         }
   

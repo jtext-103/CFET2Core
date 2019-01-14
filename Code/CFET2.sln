@@ -11,7 +11,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CFET2CoreTest", "Cfet2CoreT
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NancyHttpCommunicationModule", "NancyHttpCommunicationModule\NancyHttpCommunicationModule.csproj", "{AC799159-B72B-4341-8255-8FF9A0B2400A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebsocketEventThing", "WebsocketEventThing\WebsocketEventThing.csproj", "{3F4ABC97-2510-4A7B-BDB7-97B9296DF7F0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebsocketEventThing", "WebsocketEventThing\WebsocketEventThing.csproj", "{3F4ABC97-2510-4A7B-BDB7-97B9296DF7F0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WobsocketEventTest", "WobsocketEventTest\WobsocketEventTest.csproj", "{0864FDFB-537E-4EC1-939A-D751A5D050F1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +41,10 @@ Global
 		{3F4ABC97-2510-4A7B-BDB7-97B9296DF7F0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3F4ABC97-2510-4A7B-BDB7-97B9296DF7F0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3F4ABC97-2510-4A7B-BDB7-97B9296DF7F0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0864FDFB-537E-4EC1-939A-D751A5D050F1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0864FDFB-537E-4EC1-939A-D751A5D050F1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0864FDFB-537E-4EC1-939A-D751A5D050F1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0864FDFB-537E-4EC1-939A-D751A5D050F1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

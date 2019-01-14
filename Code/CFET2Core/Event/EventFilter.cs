@@ -61,6 +61,8 @@ namespace Jtext103.CFET2.Core.Event
         {
             SourcesAndTypes.AddRange(oldFilter.SourcesAndTypes);
             (resourceRegexMatches, eventTypeRegexMatches) = makeRegexFilter(SourcesAndTypes);
+            Host = oldFilter.Host;
+            PerformanceLevel = oldFilter.PerformanceLevel;
         }
 
         /// <summary>

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -314,7 +315,27 @@ namespace Jtext103.CFET2.Core.Sample
             {
                 return (TVal)Convert.ChangeType(Context[KeyOfVal], typeof(TVal));
             }
-            return (TVal)Context[KeyOfVal];
+
+            try
+            {
+                return (TVal)Context[KeyOfVal];
+            }
+            catch (System.Exception)
+            {
+
+            }
+
+            try
+            {
+                var str = JsonConvert.SerializeObject(Context[KeyOfVal]);
+                return JsonConvert.DeserializeObject<TVal>(str);
+            }
+            catch (System.Exception)
+            {
+                return default(TVal);
+            }
+
+
         }
 
         /// <summary>

@@ -38,6 +38,7 @@ namespace Jtext103.CFET2.Core
 
         internal static void KillMe()
         {
+            instance.MyEventHub.Dispose();
             instance = null;
             //do we need to unlock the host?
             hostLock = false;

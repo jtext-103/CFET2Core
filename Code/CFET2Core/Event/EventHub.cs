@@ -140,6 +140,7 @@ namespace Jtext103.CFET2.Core.Event
                 }
                 //no matching protocol, print log
                 logger.Error("No matching remote event hub for: " + filter.Host);
+                return null;
             }
             //sub local event
             var token = new Token(this);

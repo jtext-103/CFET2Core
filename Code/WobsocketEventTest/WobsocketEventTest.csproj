@@ -64,6 +64,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BasicRemoteSubTest.cs" />
+    <Compile Include="Dummy\EventEcho.cs" />
     <Compile Include="Dummy\EventTestThing.cs" />
     <Compile Include="Dummy\Payload.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

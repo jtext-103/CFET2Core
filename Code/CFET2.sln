@@ -15,6 +15,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebsocketEventThing", "Webs
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WobsocketEventTest", "WobsocketEventTest\WobsocketEventTest.csproj", "{0864FDFB-537E-4EC1-939A-D751A5D050F1}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebSocketRTTTest", "WebSocketRTTTest\WebSocketRTTTest.csproj", "{6AF289F4-EBA4-429D-9EA7-7D7507744A29}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -45,6 +47,10 @@ Global
 		{0864FDFB-537E-4EC1-939A-D751A5D050F1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0864FDFB-537E-4EC1-939A-D751A5D050F1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0864FDFB-537E-4EC1-939A-D751A5D050F1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6AF289F4-EBA4-429D-9EA7-7D7507744A29}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6AF289F4-EBA4-429D-9EA7-7D7507744A29}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6AF289F4-EBA4-429D-9EA7-7D7507744A29}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6AF289F4-EBA4-429D-9EA7-7D7507744A29}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

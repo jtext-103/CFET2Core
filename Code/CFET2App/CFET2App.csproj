@@ -63,8 +63,8 @@
     <Reference Include="Nancy.ViewEngines.Razor, Version=1.4.2.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Nancy.Viewengines.Razor.1.4.3\lib\net40\Nancy.ViewEngines.Razor.dll</HintPath>
     </Reference>
-    <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.11.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.12.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />
@@ -130,6 +130,14 @@
     <ProjectReference Include="..\NancyHttpCommunicationModule\NancyHttpCommunicationModule.csproj">
       <Project>{ac799159-b72b-4341-8255-8ff9a0b2400a}</Project>
       <Name>NancyHttpCommunicationModule</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\WebsocketEventThing\WebsocketEventThing.csproj">
+      <Project>{3f4abc97-2510-4a7b-bdb7-97b9296df7f0}</Project>
+      <Name>WebsocketEventThing</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\WebSocketRTTTest\WebSocketRTTTest.csproj">
+      <Project>{6af289f4-eba4-429d-9ea7-7d7507744a29}</Project>
+      <Name>WebSocketRTTTest</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

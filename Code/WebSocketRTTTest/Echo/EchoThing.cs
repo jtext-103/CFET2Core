@@ -14,15 +14,18 @@ namespace WebSocketRTTTest
     {
         private string host;
 
+        private int channelStart;
+
         private int channelCount;
 
         private int subEventLevel;
 
         private int senderRecived;
 
-        public EchoThing(int channelCount = 1, int subEventLevel = 0)
+        public EchoThing(int channelStart = 0, int channelCount = 1, int subEventLevel = 0)
         {
             this.subEventLevel = subEventLevel;
+            this.channelStart = channelStart;
             this.channelCount = channelCount;
             senderRecived = 0;
         }
@@ -34,7 +37,7 @@ namespace WebSocketRTTTest
 
         public override void Start()
         {
-            for(int i = 0; i < channelCount; i++)
+            for(int i = channelStart; i < channelCount; i++)
             {
                 MyHub.EventHub.Subscribe(new EventFilter(@"/sender/idtest/" + i.ToString(), EventFilter.DefaultEventType, subEventLevel, host), eventHandler);
             }

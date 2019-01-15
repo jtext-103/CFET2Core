@@ -42,7 +42,7 @@ namespace Jtext103.CFET2.CFET2App
             MyHub.TryAddThing(sender, "/", "sender", "ws://127.0.0.1:8081");
 
             //RTTTestEcho
-            var echo = new EchoThing(100, 0);
+            var echo = new EchoThing(0, 100, 0);
             MyHub.TryAddThing(echo, "/", "echo", "ws://127.0.0.1:8081");
 
 

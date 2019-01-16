@@ -7,6 +7,7 @@ using Jtext103.CFET2.Core;
 using Jtext103.CFET2.WebsocketEvent;
 using Jtext103.CFET2.Core.Attributes;
 using Jtext103.CFET2.Core.Event;
+using System.Threading;
 
 namespace WebSocketRTTTest
 {

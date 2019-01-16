@@ -46,18 +46,19 @@ namespace WebSocketRTTTest
 
         public override void Start()
         {
-            foreach(var s in host)
+            foreach (var s in host)
             {
-                if(payloadKind == 0)
+                if (payloadKind == 0)
                 {
                     MyHub.EventHub.Subscribe(new EventFilter(@"/echo/callback", EventFilter.DefaultEventType, myTestConfig.EventLevel, s), eventHandlerGuid);
                 }
-                else if(payloadKind == 1)
+                else if (payloadKind == 1)
                 {
                     MyHub.EventHub.Subscribe(new EventFilter(@"/echo/callback", EventFilter.DefaultEventType, myTestConfig.EventLevel, s), eventHandlerInt);
-                }  
+                }
             }
-            //MyHub.EventHub.Subscribe(new EventFilter(@"/echo/callback", EventFilter.DefaultEventType), eventHandlerGuid);
+            ////MyHub.EventHub.Subscribe(new EventFilter(@"/echo/callback", EventFilter.DefaultEventType), eventHandlerGuid);
+            //MyHub.EventHub.Subscribe(new EventFilter(@"/echo/callback", EventFilter.DefaultEventType), eventHandlerInt);
         }
 
         [Cfet2Method]

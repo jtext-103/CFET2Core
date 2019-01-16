@@ -33,19 +33,19 @@ namespace Jtext103.CFET2.CFET2App
 
             //websocket
             WebsocketEventThing remoteHub = new WebsocketEventThing();
-            //MyHub.TryAddThing(remoteHub, @"/", "WsEvent", new WebsocketEventConfig { Host = "ws://192.168.0.221:12036" });
-            MyHub.TryAddThing(remoteHub, @"/", "WsEvent", new WebsocketEventConfig { Host = "ws://127.0.0.1:8081" });
+            MyHub.TryAddThing(remoteHub, @"/", "WsEvent", new WebsocketEventConfig { Host = "ws://192.168.0.221:12036" });
+            //MyHub.TryAddThing(remoteHub, @"/", "WsEvent", new WebsocketEventConfig { Host = "ws://127.0.0.1:8081" });
             MyHub.EventHub.RemoteEventHubs.Add(remoteHub);
 
             //RTTTestSender
-            var sender = new SenderThing(1, 1, 100, 2, 2, 0);
-            //MyHub.TryAddThing(sender, "/", "sender", "ws://192.168.0.241:12036");
-            MyHub.TryAddThing(sender, "/", "sender", new string[] { "ws://127.0.0.1:8081" });
+            var sender = new SenderThing(1, 1, 10, 1000, 0, 1);
+            MyHub.TryAddThing(sender, "/", "sender", new string[] { "ws://192.168.0.116:12036" });
+            //MyHub.TryAddThing(sender, "/", "sender", new string[] { "ws://127.0.0.1:8081" });
 
             //RTTTestEcho
-            var echo = new EchoThing(0, 1, 2, 0);
-            //MyHub.TryAddThing(echo, "/", "echo", "ws://192.168.0.241:12036");
-            MyHub.TryAddThing(echo, "/", "echo", "ws://127.0.0.1:8081");
+            //var echo = new EchoThing(0, 50, 2, 1);
+            ////MyHub.TryAddThing(echo, "/", "echo", "ws://192.168.0.221:12036");
+            //MyHub.TryAddThing(echo, "/", "echo", "ws://127.0.0.1:8081");
 
 
         }

@@ -14,19 +14,22 @@ namespace WebSocketRTTTest
     {
         private string host;
 
+        private int senderRecived;
+
         private int channelStart;
 
         private int channelCount;
 
-        private int subEventLevel;
+        private int eventLevel;
 
-        private int senderRecived;
+        private int payloadKind;
 
-        public EchoThing(int channelStart = 0, int channelCount = 1, int subEventLevel = 0)
+        public EchoThing(int channelStart = 0, int channelCount = 1, int eventLevel = 0, int payloadKind = 0)
         {
-            this.subEventLevel = subEventLevel;
+            this.eventLevel = eventLevel;
             this.channelStart = channelStart;
             this.channelCount = channelCount;
+            this.payloadKind = payloadKind;
             senderRecived = 0;
         }
 
@@ -39,7 +42,8 @@ namespace WebSocketRTTTest
         {
             for(int i = channelStart; i < channelCount; i++)
             {
-                MyHub.EventHub.Subscribe(new EventFilter(@"/sender/idtest/" + i.ToString(), EventFilter.DefaultEventType, subEventLevel, host), eventHandler);
+                MyHub.EventHub.Subscribe(new EventFilter(@"/sender/idtest/" + i.ToString(), EventFilter.DefaultEventType, eventLevel, host), eventHandler);
+                //MyHub.EventHub.Subscribe(new EventFilter(@"/sender/idtest/" + i.ToString(), EventFilter.DefaultEventType), eventHandler);
             }
         }
 
@@ -48,7 +52,14 @@ namespace WebSocketRTTTest
             senderRecived++;      
             string channel = e.Source.Substring(e.Source.LastIndexOf("/") + 1, e.Source.Length - e.Source.LastIndexOf("/") - 1);
             //Console.WriteLine("GotSender:" + senderRecived +"\tChannel:" + channel);
-            MyHub.EventHub.Publish(Path + "/callback", EventFilter.DefaultEventType, e.Sample.GetVal<Guid>());
+            if(payloadKind == 0)
+            {
+                MyHub.EventHub.Publish(Path + "/callback", EventFilter.DefaultEventType, e.Sample.GetVal<Guid>());
+            }
+            else if(payloadKind == 1)
+            {
+                MyHub.EventHub.Publish(Path + "/callback", EventFilter.DefaultEventType, e.Sample.GetVal<int>());
+            }
         }
 
         [Cfet2Method]

@@ -30,20 +30,20 @@ namespace WebSocketRTTTest
         /// <summary>
         /// 订阅echo端的事件级别
         /// </summary>
-        public int SubEventLevel { get; set; }
+        public int EventLevel { get; set; }
 
         /// <summary>
         /// 每个Event发布后等待的毫秒数
         /// </summary>
         public int MsRandomBetweenEvent { get; set; }
 
-        public TestConfig(int taskCount, int channelPerTask, int eventPerChannel, int msRandomBetweenEvent, int subEventLevel)
+        public TestConfig(int taskCount, int channelPerTask, int eventPerChannel, int msRandomBetweenEvent, int eventLevel)
         {
             TaskCount = taskCount;
             ChannelPerTask = channelPerTask;
             EventPerChannel = eventPerChannel;
             MsRandomBetweenEvent = msRandomBetweenEvent;
-            SubEventLevel = subEventLevel;
+            EventLevel = eventLevel;
         }
     }
 }

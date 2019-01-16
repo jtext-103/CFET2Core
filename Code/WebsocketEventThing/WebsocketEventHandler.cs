@@ -40,7 +40,7 @@ namespace Jtext103.CFET2.WebsocketEvent
             try
             {
                 request = JsonConvert.DeserializeObject<EventRequest>(e.Data);
-                Debug.WriteLine("recived a remote subscription");
+                //Debug.WriteLine("recived a remote subscription");
             }
             catch (Exception)
             {
@@ -135,6 +135,11 @@ namespace Jtext103.CFET2.WebsocketEvent
                             pushMsg = JsonConvert.SerializeObject(new RemoteEventArgLevel1(e));
                             break;
                         //level 0 is default
+                        case 2:
+                            ///for max performance just push the object val
+                            pushMsg = JsonConvert.SerializeObject(e.Sample.ObjectVal);
+                            break;
+                        //level 0 is default
                         default:
                             //for max infomation, pusht he whole event arg
                             var pushEvent = new EventArg(e.Source, e.EventType, e.Sample, ParentThing.Config.Host);
@@ -142,13 +147,7 @@ namespace Jtext103.CFET2.WebsocketEvent
                             break;
                     }
                     //send via web socket
-                    Subscription[id].Session.Context.WebSocket.SendAsync(pushMsg, (result) =>
-                    {
-                        if (!result)
-                        {
-                            logger.Error("push failed!  conection error");
-                        }
-                    });
+                    Subscription[id].Session.Context.WebSocket.Send(pushMsg);
                 } 
             }
             catch (Exception)

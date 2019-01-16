@@ -1,4 +1,5 @@
 ﻿using Jtext103.CFET2.Core.Event;
+using Jtext103.CFET2.Core.Sample;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Concurrent;
@@ -35,7 +36,7 @@ namespace Jtext103.CFET2.WebsocketEvent
 
         private void onEventArrival(object sender, MessageEventArgs e)
         {
-            Debug.WriteLine("recieved: "+e.Data);
+            //Debug.WriteLine("recieved: "+e.Data);
             EventArg eventArg;
             switch (EventFilter.PerformanceLevel)
             {                
@@ -44,6 +45,14 @@ namespace Jtext103.CFET2.WebsocketEvent
                     eventArg = JsonConvert.DeserializeObject<RemoteEventArgLevel1>(e.Data).ConvertToEventArg(Host);
                     eventArg.Sample.IsRemote = true;
                     eventArg.Sample.SetPath (eventArg.Source);
+                    Handler(eventArg);
+                    break;
+                case 2:
+                    var objVal = JsonConvert.DeserializeObject<object>(e.Data);
+                    //todo the source need to be joint or ?
+                    eventArg = new EventArg(EventFilter.SourcesAndTypes[0].Source, EventFilter.SourcesAndTypes[0].EventType,new Status<object>(objVal));
+                    eventArg.Sample.IsRemote = true;
+                    eventArg.Sample.SetPath(eventArg.Source);
                     Handler(eventArg);
                     break;
                 default:
@@ -110,13 +119,17 @@ namespace Jtext103.CFET2.WebsocketEvent
             setIsSending(true);
             while (WebSocket.ReadyState != WebSocketState.Open)
             {
+                var random = new Random();
+                double around = 0.5 + random.Next(0, 1000) / 1000.0;
+                Thread.Sleep((int)(100 * around));
                 if (isClosing)
                 {
                     return;
                 }
                 WebSocket.Connect();
                 Debug.WriteLine("ConnectionState: " + WebSocket.ReadyState.ToString());
-                Thread.Sleep(500);
+                around = 0.5 + random.Next(0, 1000) / 1000.0;
+                Thread.Sleep((int)(400 * around));
             }
             //connected!
             Debug.WriteLine("Connected sending subscription: " + WebSocket.ReadyState.ToString());

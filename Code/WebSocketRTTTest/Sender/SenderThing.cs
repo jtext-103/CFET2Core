@@ -102,7 +102,7 @@ namespace WebSocketRTTTest
             string line;
             for(int i = 0; i < channelCount * eventPerChannel; i++)
             {
-                line = i++ + "," + delay[i].ToString();
+                line = i + "," + delay[i].ToString();
                 sw.WriteLine(line);
             }
             sw.Flush();

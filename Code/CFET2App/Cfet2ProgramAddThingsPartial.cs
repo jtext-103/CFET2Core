@@ -38,7 +38,7 @@ namespace Jtext103.CFET2.CFET2App
             MyHub.EventHub.RemoteEventHubs.Add(remoteHub);
 
             //RTTTestSender
-            var sender = new SenderThing(1, 100, 100, 0);
+            var sender = new SenderThing(1, 1000, 5, 0);
             MyHub.TryAddThing(sender, "/", "sender", new string[] { "ws://192.168.0.116:12036" });
             //MyHub.TryAddThing(sender, "/", "sender", new string[] { "ws://127.0.0.1:8081" });
 

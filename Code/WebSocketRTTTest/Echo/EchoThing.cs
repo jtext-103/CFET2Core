@@ -23,14 +23,11 @@ namespace WebSocketRTTTest
 
         private int eventLevel;
 
-        private int payloadKind;
-
-        public EchoThing(int channelStart = 0, int channelCount = 1, int eventLevel = 0, int payloadKind = 0)
+        public EchoThing(int channelStart = 0, int channelCount = 1, int eventLevel = 0)
         {
             this.eventLevel = eventLevel;
             this.channelStart = channelStart;
             this.channelCount = channelCount;
-            this.payloadKind = payloadKind;
             senderRecived = 0;
         }
 
@@ -50,17 +47,11 @@ namespace WebSocketRTTTest
 
         private void eventHandler(EventArg e)
         {
+            MyHub.EventHub.Publish(Path + "/callback", EventFilter.DefaultEventType, e.Sample.ObjectVal);
+
             senderRecived++;      
             string channel = e.Source.Substring(e.Source.LastIndexOf("/") + 1, e.Source.Length - e.Source.LastIndexOf("/") - 1);
-            //Console.WriteLine("GotSender:" + senderRecived +"\tChannel:" + channel);
-            if(payloadKind == 0)
-            {
-                MyHub.EventHub.Publish(Path + "/callback", EventFilter.DefaultEventType, e.Sample.GetVal<Guid>());
-            }
-            else if(payloadKind == 1)
-            {
-                MyHub.EventHub.Publish(Path + "/callback", EventFilter.DefaultEventType, e.Sample.GetVal<int>());
-            }
+            //Console.WriteLine("GotSender:" + senderRecived +"\tChannel:" + channel);   
         }
 
         [Cfet2Method]

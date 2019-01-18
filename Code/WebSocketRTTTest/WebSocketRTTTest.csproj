@@ -44,7 +44,6 @@
     <Compile Include="Echo\EchoThing.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Sender\SenderThing.cs" />
-    <Compile Include="Sender\TestConfig.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\CFET2Core\CFET2Core.csproj">

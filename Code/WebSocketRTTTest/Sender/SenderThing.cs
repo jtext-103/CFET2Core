@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -13,30 +14,26 @@ namespace WebSocketRTTTest
 {
     public class SenderThing : Thing
     {
-        private TestConfig myTestConfig;
+        private int channelCount;
+        private int eventPerChannel;
+        private int msBetweenEvent;
+        private int eventLevel;
 
         private string[] host;
 
         private int callbackRecived;
 
-        private object dicLock = new object();
+        private List<Stopwatch> stopwatches;
 
-        private Dictionary<Guid, long> eventBeginTimeGuid;
-        private Dictionary<int, long> eventBeginTimeInt;
-
-        private Dictionary<Guid, long> eventEndTimeGuid;
-        private Dictionary<int, long> eventEndTimeInt;
-
-        private Dictionary<Guid, double> eventDelayGuid;
-        private Dictionary<int, double> eventDelayInt;
-
-        private int payloadKind;
+        private List<long> delay;
 
 
-        public SenderThing(int taskCount = 1, int channelPerTask = 10, int eventPerChannel = 10, int msRandomBetweenEvent = 50, int eventLevel = 0, int payloadKind = 0)
+        public SenderThing(int channelCount = 1, int eventPerChannel = 100, int msBetweenEvent = 50, int eventLevel = 0)
         {
-            myTestConfig = new TestConfig(taskCount, channelPerTask, eventPerChannel, msRandomBetweenEvent, eventLevel);
-            this.payloadKind = payloadKind;
+            this.channelCount = channelCount;
+            this.eventPerChannel = eventPerChannel;
+            this.msBetweenEvent = msBetweenEvent;
+            this.eventLevel = eventLevel;  
         }
 
         public override void TryInit(object echoHost)
@@ -48,209 +45,64 @@ namespace WebSocketRTTTest
         {
             foreach (var s in host)
             {
-                if (payloadKind == 0)
-                {
-                    MyHub.EventHub.Subscribe(new EventFilter(@"/echo/callback", EventFilter.DefaultEventType, myTestConfig.EventLevel, s), eventHandlerGuid);
-                }
-                else if (payloadKind == 1)
-                {
-                    MyHub.EventHub.Subscribe(new EventFilter(@"/echo/callback", EventFilter.DefaultEventType, myTestConfig.EventLevel, s), eventHandlerInt);
-                }
+                MyHub.EventHub.Subscribe(new EventFilter(@"/echo/callback", EventFilter.DefaultEventType, eventLevel, s), eventHandler);
             }
-            ////MyHub.EventHub.Subscribe(new EventFilter(@"/echo/callback", EventFilter.DefaultEventType), eventHandlerGuid);
-            //MyHub.EventHub.Subscribe(new EventFilter(@"/echo/callback", EventFilter.DefaultEventType), eventHandlerInt);
+            //MyHub.EventHub.Subscribe(new EventFilter(@"/echo/callback", EventFilter.DefaultEventType), eventHandler);
         }
 
         [Cfet2Method]
         public void Begin()
         {
-            if (payloadKind == 0)
+            callbackRecived = 0;
+            stopwatches = new List<Stopwatch>();
+            for(int i = 0; i < channelCount * eventPerChannel; i++)
             {
-                BeginGuid();
+                stopwatches.Add(new Stopwatch());
             }
-            else if (payloadKind == 1)
+            for (int i = 0; i < channelCount; i++)
             {
-                BeginInt();
+                for (int j = 0; j < eventPerChannel; j++)
+                {
+                    FireOne(i, i * eventPerChannel + j);
+                    stopwatches[i * eventPerChannel + j].Start();
+                    Thread.Sleep(msBetweenEvent);
+                }
             }
         }
 
         [Cfet2Method]
         public void Write()
         {
-            if (payloadKind == 0)
+            delay = new List<long>();
+            for(int i = 0; i < callbackRecived; i++)
             {
-                WriteGuid();
+                delay.Add(new long());
+                delay[i] = (long)(stopwatches[i].ElapsedTicks / 3.914);
+                Console.WriteLine("Id:" + i + "\tDelay(us):" + delay[i]);
             }
-            else if (payloadKind == 1)
-            {
-                WriteInt();
-            }
+            SaveFile();
         }
 
-        private void eventHandlerGuid(EventArg e)
-        {
+        private void eventHandler(EventArg e)
+        { 
+            stopwatches[callbackRecived].Stop();
             callbackRecived++;
             //Console.WriteLine("GotCallback:" + callbackRecived);
-            Guid guid = e.Sample.GetVal<Guid>();
-            lock (dicLock)
-            {
-                eventEndTimeGuid.Add(guid, DateTime.Now.Ticks);
-            }
         }
 
-        private void eventHandlerInt(EventArg e)
+        private void FireOne(int channel, int id)
         {
-            callbackRecived++;
-            //Console.WriteLine("GotCallback:" + callbackRecived);
-            int intId = e.Sample.GetVal<int>();
-            lock (dicLock)
-            {
-                eventEndTimeInt.Add(intId, DateTime.Now.Ticks);
-            }
-        }
-
-        private void BeginGuid()
-        {
-            eventBeginTimeGuid = new Dictionary<Guid, long>();
-            eventEndTimeGuid = new Dictionary<Guid, long>();
-            eventDelayGuid = new Dictionary<Guid, double>();
-            callbackRecived = 0;
-            for (int i = 0; i < myTestConfig.TaskCount; i++)
-            {
-                int j = i;
-                Task.Run(() => FireTaskGuid(j));
-            }
-        }
-
-        private void BeginInt()
-        {
-            eventBeginTimeInt = new Dictionary<int, long>();
-            eventEndTimeInt = new Dictionary<int, long>();
-            eventDelayInt = new Dictionary<int, double>();
-            callbackRecived = 0;
-            for (int i = 0; i < myTestConfig.TaskCount; i++)
-            {
-                int j = i;
-                Task.Run(() => FireTaskInt(j));
-            }
-        }
-
-        private void FireTaskGuid(int task)
-        {
-            Guid guid;
-            for (int j = 0; j < myTestConfig.EventPerChannel; j++)
-            {
-                for (int i = 0; i < myTestConfig.ChannelPerTask; i++)
-                {
-                    guid = FireOneGuid(task * myTestConfig.ChannelPerTask + i);
-                    lock (dicLock)
-                    {
-                        eventBeginTimeGuid.Add(guid, DateTime.Now.Ticks);
-                    }
-                    var random = new Random();
-                    double around = 0.5 + random.Next(0, 1000) / 1000.0;
-                    Thread.Sleep((int)(myTestConfig.MsRandomBetweenEvent * around));
-                }
-            }
-        }
-
-        private void FireTaskInt(int task)
-        {
-            int intId;
-            int chNo;
-            for (int j = 0; j < myTestConfig.EventPerChannel; j++)
-            {
-                for (int i = 0; i < myTestConfig.ChannelPerTask; i++)
-                {
-                    chNo = task * myTestConfig.ChannelPerTask + i;
-                    intId = FireOneInt(chNo, (chNo + 10000) * 10000 + j);
-                    lock (dicLock)
-                    {
-                        eventBeginTimeInt.Add(intId, DateTime.Now.Ticks);
-                    }
-                    var random = new Random();
-                    double around = 0.5 + random.Next(0, 1000) / 1000.0;
-                    Thread.Sleep((int)(myTestConfig.MsRandomBetweenEvent * around));
-                }
-            }
-        }
-
-        private Guid FireOneGuid(int channel)
-        {
-            var id = Guid.NewGuid();
             MyHub.EventHub.Publish(Path + "/idtest/" + channel.ToString(), EventFilter.DefaultEventType, id);
-            return id;
         }
 
-        private int FireOneInt(int channel, int i)
-        {
-            MyHub.EventHub.Publish(Path + "/idtest/" + channel.ToString(), EventFilter.DefaultEventType, i);
-            return i;
-        }
-
-        private void WriteGuid()
-        {
-            lock (dicLock)
-            {
-                int i = 0;
-                foreach (var s in eventBeginTimeGuid)
-                {
-                    eventDelayGuid.Add(s.Key, Math.Round((eventEndTimeGuid[s.Key] - s.Value) / 10.0, 0));
-                    Console.WriteLine("No:" + i++ + "\tGuid:" + s.Key + "\tDelay(us):" + eventDelayGuid[s.Key]);
-
-                    //eventDelayGuid.Add(s.Key, Math.Round((eventEndTimeGuid[s.Key] - s.Value) / 10000.0, 0));
-                    //Console.WriteLine("No:" + i++ + "\tGuid:" + s.Key + "\tDelay(ms):" + eventDelayGuid[s.Key]);
-
-                    //eventDelayGuid.Add(s.Key, (eventEndTimeGuid[s.Key] - s.Value) * 100);
-                    //Console.WriteLine("No:" + i++ + "\tGuid:" + s.Key + "\tDelay(ns):" + eventDelayGuid[s.Key]);
-                }
-            }
-            SaveFileGuid();
-        }
-
-        private void WriteInt()
-        {
-            lock (dicLock)
-            {
-                int i = 0;
-                foreach (var s in eventBeginTimeInt)
-                {
-                    eventDelayInt.Add(s.Key, Math.Round((eventEndTimeInt[s.Key] - s.Value) / 10.0, 0));
-                    Console.WriteLine("No:" + i++ + "\tintId:" + s.Key + "\tDelay(us):" + eventDelayInt[s.Key]);
-
-                    //eventDelayInt.Add(s.Key, Math.Round((eventEndTimeInt[s.Key] - s.Value) / 10000.0, 0));
-                    //Console.WriteLine("No:" + i++ + "\tintId:" + s.Key + "\tDelay(ms):" + eventDelayInt[s.Key]);
-
-                    //eventDelayInt.Add(s.Key, (eventEndTimeInt[s.Key] - s.Value) * 100);
-                    //Console.WriteLine("No:" + i++ + "\tintId:" + s.Key + "\tDelay(ns):" + eventDelayInt[s.Key]);
-                }
-            }
-            SaveFileInt();
-        }
-
-        private void SaveFileGuid()
+        private void SaveFile()
         {
             FileStream fs = new FileStream(System.IO.Directory.GetCurrentDirectory() + "result.csv", FileMode.Create);
             StreamWriter sw = new StreamWriter(fs);
             string line;
-            foreach (var s in eventDelayGuid)
+            for(int i = 0; i < channelCount * eventPerChannel; i++)
             {
-                line = s.Key.ToString() + "," + s.Value.ToString();
-                sw.WriteLine(line);
-            }
-            sw.Flush();
-            sw.Close();
-            fs.Close();
-        }
-
-        private void SaveFileInt()
-        {
-            FileStream fs = new FileStream(System.IO.Directory.GetCurrentDirectory() + "result.csv", FileMode.Create);
-            StreamWriter sw = new StreamWriter(fs);
-            string line;
-            foreach (var s in eventDelayInt)
-            {
-                line = s.Key.ToString() + "," + s.Value.ToString();
+                line = i++ + "," + delay[i].ToString();
                 sw.WriteLine(line);
             }
             sw.Flush();

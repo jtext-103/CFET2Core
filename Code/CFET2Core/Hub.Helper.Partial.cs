@@ -90,12 +90,23 @@ namespace Jtext103.CFET2.Core
         }
 
 
+        //BUG in linux
+        //private static bool IsRemoteUri(Uri uri) => uri.IsAbsoluteUri == true && uri.Scheme != "cfet";
+
         /// <summary>
         /// return if a uri is a remote request
         /// </summary>
         /// <param name="uri"></param>
         /// <returns></returns>
-        private static bool IsRemoteUri(Uri uri) => uri.IsAbsoluteUri == true && uri.Scheme != "cfet";
+        private static bool IsRemoteUri(Uri uri)
+        {
+            if (uri.IsAbsoluteUri == false) return false;
+            if (uri.Scheme == "cfet") return false;
+
+            //in linux, all path like "/pc" will be convert to file:///pc
+            if (uri.IsFile == true) return false;
+            return true;
+        }
 
         #endregion
     }

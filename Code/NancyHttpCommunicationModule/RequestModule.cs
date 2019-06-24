@@ -14,6 +14,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Text.RegularExpressions;
 
 namespace Jtext103.CFET2.NancyHttpCommunicationModule
 {
@@ -92,7 +93,13 @@ namespace Jtext103.CFET2.NancyHttpCommunicationModule
             }
             if (!isFromBrowser())
             {
-                return JsonConvert.SerializeObject(result);
+                //删除掉ISample中多余的东西，很可能以后要改这里
+                var httpResult = JsonConvert.SerializeObject(result, Formatting.None);
+                var regexMatch = Regex.Match(httpResult, "\"CFET2CORE_SAMPLE_VAL\"(.*?)\"CFET2CORE_SAMPLE_PATH\"");
+                httpResult = httpResult.Replace(regexMatch.Value, "\"CFET2CORE_SAMPLE_VAL\":null,\"CFET2CORE_SAMPLE_PATH\"");
+                regexMatch = Regex.Match(httpResult, "\"Val\"(.*?)\"IsValid\"");
+                httpResult = httpResult.Replace(regexMatch.Value, "\"Val\":null,\"IsValid\"");
+                return httpResult;
             }
             viewSelector.GetViewPath(this.Request, result, ref viewPath, ref fakeSample);
             return View[viewPath, result];

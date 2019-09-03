@@ -57,7 +57,7 @@ namespace Jtext103.CFET2.Core.Test.Event
             hub.Publish("/t/s1", "changed", 1);
             hub.Publish("/t/s2", "changed", 1);
             hub.Publish("/t/s2", "changed", 1);
-            Thread.Sleep(50);
+            Thread.Sleep(100);
             token.Dispose();
             token2.Dispose();
             hub.Publish("/t/s1", "changed", 1);

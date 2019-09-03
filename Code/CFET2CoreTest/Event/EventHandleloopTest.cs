@@ -101,7 +101,7 @@ namespace Jtext103.CFET2.Core.Test.Event
                 );
 
 
-            Thread.Sleep(100);
+            Thread.Sleep(200);
             hub.Dispose();
             Thread.Sleep(1500);
             //assert

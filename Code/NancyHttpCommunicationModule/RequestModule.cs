@@ -11,9 +11,11 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.IO.Compression;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Text.RegularExpressions;
 
 namespace Jtext103.CFET2.NancyHttpCommunicationModule
 {
@@ -92,10 +94,36 @@ namespace Jtext103.CFET2.NancyHttpCommunicationModule
             }
             if (!isFromBrowser())
             {
-                return JsonConvert.SerializeObject(result);
+                //这里之前是result，导致冗余，数据大时序列化时间过长
+                var response = JsonConvert.SerializeObject(result.Context);
+                return Response.AsText(response);
             }
             viewSelector.GetViewPath(this.Request, result, ref viewPath, ref fakeSample);
             return View[viewPath, result];
+        }
+
+        static string GZipCompressString(string rawString)
+        {
+            if (string.IsNullOrEmpty(rawString) || rawString.Length == 0)
+            {
+                return "";
+            }
+            else
+            {
+                byte[] rawData = System.Text.Encoding.UTF8.GetBytes(rawString.ToString());
+                byte[] zippedData = Compress(rawData);
+                return (string)(Convert.ToBase64String(zippedData));
+            }
+
+        }
+
+        static byte[] Compress(byte[] rawData)
+        {
+            MemoryStream ms = new MemoryStream();
+            GZipStream compressedzipStream = new GZipStream(ms, CompressionMode.Compress, true);
+            compressedzipStream.Write(rawData, 0, rawData.Length);
+            compressedzipStream.Close();
+            return ms.ToArray();
         }
 
         private bool isFromBrowser()
@@ -103,10 +131,10 @@ namespace Jtext103.CFET2.NancyHttpCommunicationModule
             var accept = this.Request.Headers.Accept;
             foreach (var i in accept)
             {
-                if(i.Item1 == "text/html")
-                return true;
+                if (i.Item1 == "text/html")
+                    return true;
             }
             return false;
-        }                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       
+        }
     }
 }

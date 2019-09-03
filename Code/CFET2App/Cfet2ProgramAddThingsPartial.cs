@@ -28,8 +28,8 @@ namespace Jtext103.CFET2.CFET2App
             myContentCopyer.StartCopy();
 
             //example thing
-            //var pc = new PcMonitorThing();
-            //MyHub.TryAddThing(pc, "/", "pc");
+            var pc = new PcMonitorThing();
+            MyHub.TryAddThing(pc, "/", "pc");
 
             //websocket
             WebsocketEventThing remoteHub = new WebsocketEventThing();

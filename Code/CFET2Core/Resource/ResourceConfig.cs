@@ -44,12 +44,12 @@ namespace Jtext103.CFET2.Core.Resource
         {
             try
             {
-                return tryGetFromThing(inputs).ToConfig().SetPath(Path);
+                return tryGetFromThing(inputs).ToConfig();
             }
             catch (System.Exception exception)
             {
                 //return SampleBase<object>.GetInvalideSample(exception.Message);
-                return SampleBase<object>.GetInvalideSample(exception.ToString()).SetPath(Path);
+                return SampleBase<object>.GetInvalideSample(exception.ToString()).SetPath(Path).ToConfig();
             }
         }
 
@@ -73,7 +73,7 @@ namespace Jtext103.CFET2.Core.Resource
 
         /// <summary>
         /// Set is tricky. Note, Important, You must always pass a value not a sample to set a config. 
-        /// But the thing may implements ths config as property of type sample (which is not recommanded unless necessary), to the Set here will automaticlly wrap the value into sample. 
+        /// But the thing may implements the config as property of type sample (which is not recommanded unless necessary), to the Set here will automaticlly wrap the value into sample. 
         /// And if it is a Method Set, the arguments must have only no sample type, not poiunt to accept sample, since the sample is for get only
         /// </summary>
         /// <param name="inputs">the input to set the config, if it is a property set of method with only one parameter as the value to be set (config value), then there are only one para nneded, 
@@ -81,15 +81,16 @@ namespace Jtext103.CFET2.Core.Resource
         /// <returns></returns>
         public virtual object Set(params object[] inputs)
         {
+            var member = actionImplementedBy(ConfigAction.Set);
             try
             {
-                var member = actionImplementedBy(ConfigAction.Set);
                 //property set
                 if (member.MemberType == MemberTypes.Property)
                 {
                     if (inputs.Length != 1)
                     {
-                        throw new BadResourceRequestException();
+                        return new SampleBase<MemberInfo>(member).AddErrorMessage(BadResourceRequestException.DefualtMessage)
+                        .AddErrorMessage("Should not have more than 1 parameters!").SetPath(Path).ToConfig();
                     }
                     var setter = member as PropertyInfo;
                     //sample or not
@@ -102,7 +103,7 @@ namespace Jtext103.CFET2.Core.Resource
                     //return the newlly set value
                     return Get();
                 }
-                //method set just all no sample allowed
+                //method set, no sample allowed
                 var realInput = inputs.MapInputDictinary((MethodInfo)member);
                 InvokeResoureMethod(realInput, ((MethodInfo)member));
                 return Get(realInput.RangeSubset(0, realInput.Length-1));
@@ -110,7 +111,8 @@ namespace Jtext103.CFET2.Core.Resource
             catch (System.Exception exception)
             {
                 //return SampleBase<object>.GetInvalideSample(exception.Message);
-                return SampleBase<object>.GetInvalideSample(exception.ToString()).SetPath(Path);
+                return new SampleBase<MemberInfo>(member).AddErrorMessage(BadResourceRequestException.DefualtMessage)
+                        .AddErrorMessage(exception.Message).SetPath(Path).ToConfig();
             }
 
         }

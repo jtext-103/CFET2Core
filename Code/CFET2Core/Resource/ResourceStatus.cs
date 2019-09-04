@@ -138,7 +138,8 @@ namespace Jtext103.CFET2.Core.Resource
             {
                 if (inputs.Length != 0) //should not have any parameters
                 {
-                    throw new BadResourceRequestException();
+                    return new SampleBase<PropertyInfo>(PropertyGet).AddErrorMessage(BadResourceRequestException.DefualtMessage)
+                        .AddErrorMessage("Should not have any parameters!").SetPath(Path).ToStatus();
                 }
                 return PropertyGet.GetValue(ParentResource.TheThing);
             }
@@ -152,6 +153,7 @@ namespace Jtext103.CFET2.Core.Resource
         /// helper invoke an method in a resource.
         /// </summary>
         /// <param name="inputs"></param>
+        /// <param name="method"></param>
         /// <returns></returns>
         protected object InvokeResoureMethod(object[] inputs,MethodInfo method)
         {
@@ -159,8 +161,9 @@ namespace Jtext103.CFET2.Core.Resource
             var methodParameters = method.GetParameters();
             if (inputs.Length > methodParameters.Count()) //parameters number not match
             {
-                //return the parametes list
-                return new SampleBase<ParameterInfo[]>(methodParameters).AddErrorMessage(BadResourceRequestException.DefualtMessage).AddErrorMessage("Excessive inputs!!");
+                //return the MethodInfo list
+                return new SampleBase<MethodInfo>(method).AddErrorMessage(BadResourceRequestException.DefualtMessage)
+                    .AddErrorMessage("Excessive inputs!!").SetPath(Path).ToStatus();
             }
             //if so cast (map) the input and invoke
             //cast, convert 
@@ -171,8 +174,8 @@ namespace Jtext103.CFET2.Core.Resource
             }
             catch (System.Exception e)
             {
-                return new SampleBase<List<string>>(methodParameters.FormatParameters()).AddErrorMessage(e.Message)
-                    .AddErrorMessage(BadResourceRequestException.DefualtMessage); ;
+                return new SampleBase<MethodInfo>(method).AddErrorMessage(e.Message)
+                    .AddErrorMessage(BadResourceRequestException.DefualtMessage).SetPath(Path).ToStatus();
             }
 
             return method.Invoke(ParentResource.TheThing, mappedInputs);

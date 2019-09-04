@@ -24,7 +24,8 @@ namespace Jtext103.CFET2.Core.Resource
         public override object Get(params object[] inputs)
         {
             var parameters = MethodInvoke.GetParameters();
-            return new SampleBase<ParameterInfo[]>(parameters).AddErrorMessage(BadResourceRequestException.DefualtMessage).ToMethod().SetPath(Path); 
+            return new SampleBase<MethodInfo>(MethodInvoke).AddErrorMessage(BadResourceRequestException.DefualtMessage)
+                .AddErrorMessage("Method Only support invoke!").ToMethod().SetPath(Path); 
         }
 
         public virtual object Invoke(params object[] inputs)
@@ -37,7 +38,7 @@ namespace Jtext103.CFET2.Core.Resource
             }
             catch (System.Exception exception)
             {
-                //return SampleBase<object>.GetInvalideSample(exception.Message);
+                //return SampleBase<object>.GetInvalideSample(exception.Message); seem will never hit this line
                 return SampleBase<object>.GetInvalideSample(exception.ToString()).SetPath(Path);
             }
 

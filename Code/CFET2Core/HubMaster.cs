@@ -102,6 +102,9 @@ namespace Jtext103.CFET2.Core
                 case CfetMiddlewareBase midWare:
                     midWare.InjectHub(new Hub(midWare));
                     return;
+                case Pipeline pipeline:
+                    pipeline.InjectHub(new Hub(pipeline));
+                    return;
                 default:
                     break;
             }

@@ -76,7 +76,7 @@
     <Compile Include="HubTest\SamplePathTest.cs" />
     <Compile Include="MethodInvokeTest.cs" />
     <None Include="PipelineTEst\AddParametersListTest.cs" />
-    <None Include="PipelineTEst\PipelineProcessTest.cs" />
+    <Compile Include="PipelineTEst\PipelineProcessTest.cs" />
     <Compile Include="ResouceProbingConfig.cs" />
     <Compile Include="ResouceProbingStatus.cs" />
     <Compile Include="ResourceProbingMethod.cs" />

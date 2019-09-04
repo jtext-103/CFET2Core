@@ -90,6 +90,24 @@ namespace Jtext103.CFET2.Core
 
 
         /// <summary>
+        /// set the pipeline for the master hub
+        /// </summary>
+        /// <param name="pipeline"></param>
+        public void SetPipeline(Pipeline pipeline)
+        {
+            myMaster.MyPipeline = pipeline;
+            HubMaster.InjectHubToModule(pipeline);
+        }
+
+        /// <summary>
+        /// start the pipe line, after start you can not stop or modifiy the pipeline
+        /// </summary>
+        public void StartPipeline()
+        {
+            Pipeline.Start();
+        }
+
+        /// <summary>
         /// this should only be called by host, it will call the start method on the things
         /// </summary>
         public void StartThings()

@@ -96,12 +96,14 @@
     <Compile Include="Middleware\CfetMiddlewareBase.cs" />
     <Compile Include="Middleware\ICfet2Middleware.cs" />
     <Compile Include="Middleware\Pipeline.cs" />
+    <Compile Include="Middleware\ResourceInfoMidware.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="CommunicationManager.cs" />
     <Compile Include="ResourceRequest.cs" />
     <Compile Include="Resource\DictionaryInputsIndicator.cs" />
     <Compile Include="Resource\ResourceBase.cs" />
     <Compile Include="Resource\ResourceConfig.cs" />
+    <Compile Include="Resource\ResourceInfo.cs" />
     <Compile Include="Resource\ResourceMethod.cs" />
     <Compile Include="Resource\ResourceStatus.cs" />
     <Compile Include="Resource\ResourceThing.cs" />

@@ -245,6 +245,18 @@ namespace Jtext103.CFET2.Core.Resource
                 throw new BadThingImplementaionException("At resource: " + Name + "member not allowed to be ");
             }
         }
+
+        public override ResourceInfo Info
+        {
+            get
+            {
+                var info = new ResourceInfo();
+                info.Type = ResourceTypes.Config;
+                info.Implementations.Add(AccessAction.get, actionImplementedBy(ConfigAction.Get));
+                info.Implementations.Add(AccessAction.set, actionImplementedBy(ConfigAction.Set));
+                return info;
+            }
+        }
     }
 
 }

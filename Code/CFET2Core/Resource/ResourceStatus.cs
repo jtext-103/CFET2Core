@@ -148,6 +148,17 @@ namespace Jtext103.CFET2.Core.Resource
             return InvokeResoureMethod(realInput, MethodGet);
         }
 
+        public override ResourceInfo Info
+        {
+            get
+            {
+                var info = new ResourceInfo();
+                info.Type = ResourceTypes.Status;
+                info.Implementations.Add(AccessAction.get, (PropertyGet == null) ? (MemberInfo)MethodGet : (MemberInfo)PropertyGet);
+                return info;
+            }
+        }
+
         #region helper
         /// <summary>
         /// helper invoke an method in a resource.

@@ -15,10 +15,9 @@ namespace Jtext103.CFET2.Core.Middleware
         /// <summary>
         /// holds midware and process the sample with them
         /// </summary>
-        public Pipeline(Hub hub)
+        public Pipeline()
         {
             midwares = new List<ICfet2Middleware>();
-            InjectHub(hub);
         }
         private List<ICfet2Middleware> midwares;
 

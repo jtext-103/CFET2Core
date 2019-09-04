@@ -72,6 +72,16 @@ namespace Jtext103.CFET2.Core.Resource
             }
         }
 
+        public override ResourceInfo Info
+        {
+            get
+            {
+                var info = new ResourceInfo();
+                info.Type = ResourceTypes.Method;
+                info.Implementations.Add(AccessAction.invoke, MethodInvoke);
+                return info;
+            }
+        }
     }
 
 }

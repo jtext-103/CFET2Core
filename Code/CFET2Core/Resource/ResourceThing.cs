@@ -179,6 +179,16 @@ namespace Jtext103.CFET2.Core.Resource
             throw new NotImplementedException("this should not be called");
         }
 
+        public override ResourceInfo Info
+        {
+            get
+            {
+                var info = new ResourceInfo();
+                info.Type = ResourceTypes.Thing;
+                return info;
+            }
+        }
+
         #region helpers
 
         /// <summary>

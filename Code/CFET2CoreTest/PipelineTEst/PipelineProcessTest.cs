@@ -9,11 +9,12 @@ using System.Diagnostics;
 using Jtext103.CFET2.Core.Exception;
 using System.Linq;
 using Jtext103.CFET2.Core.Attributes;
+using Jtext103.CFET2.Core.Test.TestDummies;
 
 namespace Jtext103.CFET2.Core.Test.PipelineTEst
 {
     [TestClass]
-    public class PipelineProcessTest: CFET2Host
+    public class PipelineProcessTest : CFET2Host
     {
         [TestInitialize]
         public void init()
@@ -47,12 +48,12 @@ namespace Jtext103.CFET2.Core.Test.PipelineTEst
             a.Should().Be(5);
         }
 
-        [TestMethod]
-        public void MiddlewareShouldAddTheChildThingAndItsOwnResourcePathToSample()
-        {
-            int b = 5;
-            b.Should().Be(5);
-        }
+        //[TestMethod]
+        //public void MiddlewareShouldAddTheChildThingAndItsOwnResourcePathToSample()
+        //{
+        //    int b = 5;
+        //    b.Should().Be(5);
+        //}
         //[TestMethod]
         //public void ResourceRequestShouldBeAccessCorrectly()
         //{
@@ -77,7 +78,7 @@ namespace Jtext103.CFET2.Core.Test.PipelineTEst
         //    ISample resource4 = MyHub.TryAccessResourceSampleWithUri(req4);
         //    resource4.IsValid.Should().BeTrue();
 
-           
+
         //    ResourceRequest req5 = new ResourceRequest(MyHub, @"/thing2/thing3/thing4", AccessAction.get, new object[] { }, null, extrarequest);
         //    ISample resource5 = MyHub.TryAccessResourceSampleWithUri(req5);
         //    resource5.IsValid.Should().BeTrue();

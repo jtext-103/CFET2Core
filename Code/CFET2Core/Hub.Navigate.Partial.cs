@@ -19,31 +19,44 @@ namespace Jtext103.CFET2.Core
         /// <summary>
         /// find the resource object of a given uri, all the parameters are ignored
         /// </summary>
-        /// <param name="uri">uri, can have route parameters or querries but will be ignored</param>
+        /// <param name="path">uri, can have route parameters or querries but will be ignored, only local uri is accepted</param>
         /// <returns>the resource object</returns>
-        public ResourceBase FindLocalResourceWithUri(string uri)
+        public ResourceBase FindLocalResourceWithPath(string path)
         {
-            throw new NotImplementedException("");
+            var realPath = extractResourcePath(path, new List<object>());
+            return GetLocalResouce(realPath);
         }
 
         /// <summary>
         /// find the parent of resource object of a given uri, all the parameters are ignored
         /// </summary>
-        /// <param name="uri"></param>
+        /// <param name="path">uri, can have route parameters or querries but will be ignored, only local uri is accepted</param>
         /// <returns></returns>
-        public ResourceBase FindLocalParentWithUri(string uri)
+        public ResourceBase FindLocalParentWithPath(string path)
         {
-            throw new NotImplementedException("");
+            path = (new Uri(CommonConstants.LocalBaseUri, path)).GetParentPath().ParentPath;
+            var realPath = extractResourcePath(path, new List<object>());
+            return GetLocalResouce(realPath);
         }
 
         /// <summary>
         /// find the children of resource object of a given uri, all the parameters are ignored
         /// </summary>
-        /// <param name="uri"></param>
+        /// <param name="path"></param>
         /// <returns>the children resource objects</returns>
-        public IEnumerable<ResourceBase> FindLocalChildWithUri(string uri)
+        public IEnumerable<ResourceBase> FindLocalChildWithUri(string path)
         {
-            throw new NotImplementedException("");
+            foreach (var resource in myMaster.Resources)
+            {
+                if (resource.Key.StartsWith(path))
+                {
+                    var child = resource.Key.Substring(path.Length);
+                    if (child.IndexOf(@"/") <= 0)
+                    {
+                        yield return resource.Value;
+                    }
+                }
+            }
         }
 
     }

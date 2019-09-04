@@ -28,6 +28,11 @@ namespace Jtext103.CFET2.Core.Resource
 
         public ResourceTypes ResourceType { get; protected set; } = ResourceTypes.Abstract;
 
+        /// <summary>
+        /// get the describtion of this 
+        /// </summary>
+        public virtual ResourceInfo Info{ get;}
+
         public virtual object Get(params object[] inputs)
         {
             throw new NotImplementedException();
@@ -44,7 +49,6 @@ namespace Jtext103.CFET2.Core.Resource
         {
             return this.Get(new DictionaryInputsIndicator(), inputDict);
         }
-
     }
 
 

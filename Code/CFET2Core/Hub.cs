@@ -21,8 +21,8 @@ namespace Jtext103.CFET2.Core
     {
         internal Hub(CFET2Module module)
         {
+            //todo depending on the module types disable some function of the hub
             MyCfet2Module = module;
-            myMaster.MyPipeline = new Pipeline(this);
         }
 
 
@@ -44,9 +44,15 @@ namespace Jtext103.CFET2.Core
 
 
         /// <summary>
-        /// access the mast pipeline
+        /// access the master's pipeline
         /// </summary>
-        public Pipeline Pipeline { get; set; }
+        public Pipeline Pipeline
+        {
+            get
+            {
+                return myMaster.MyPipeline;
+            }
+        }
 
         /// <summary>
         /// the cfet module that holds this hub

@@ -28,7 +28,7 @@ namespace Jtext103.CFET2.Core
 
         internal EventHub MyEventHub { get; } = new EventHub();
 
-        internal Pipeline MyPipeline { get; set; }
+        internal Pipeline MyPipeline { get; set; } = new Pipeline();
 
         //public Dictionary<string, CommunicationModule> CommunicationModules {get;}=new Dictionary<string,CommunicationModule>(StringComparer.InvariantCultureIgnoreCase);
         internal CommunicationManager MyCommunicationManager = new CommunicationManager();

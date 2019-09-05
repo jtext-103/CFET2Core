@@ -75,15 +75,13 @@
     <Compile Include="HubTest\HubRequestParsingTest.cs" />
     <Compile Include="HubTest\SamplePathTest.cs" />
     <Compile Include="MethodInvokeTest.cs" />
-    <None Include="PipelineTEst\AddParametersListTest.cs" />
-    <Compile Include="PipelineTEst\PipelineProcessTest.cs" />
+    <Compile Include="PipelineTEst\AddParametersListTest.cs" />
     <Compile Include="ResouceProbingConfig.cs" />
     <Compile Include="ResouceProbingStatus.cs" />
     <Compile Include="ResourceProbingMethod.cs" />
     <Compile Include="TestDummies\BadConfigThings.cs" />
     <Compile Include="TestDummies\DisposibleThing.cs" />
     <Compile Include="TestDummies\DummyComm.cs" />
-    <Compile Include="TestDummies\TestAddParametersListThing.cs" />
     <Compile Include="TestDummies\TestGetChildThing.cs" />
     <Compile Include="TestDummies\TestThingConfig.cs" />
     <Compile Include="TestDummies\TestThingMethod.cs" />

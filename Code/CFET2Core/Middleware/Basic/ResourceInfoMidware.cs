@@ -9,7 +9,7 @@ using Jtext103.CFET2.Core.Sample;
 namespace Jtext103.CFET2.Core.Middleware.Basic
 {
     /// <summary>
-    /// this plugin adds resource info like input and return type into the sample 
+    /// this plugin adds resource info like input and return type into the sample, see TestAddParametersListThing for use case
     /// </summary>
     public class ResourceInfoMidware : CfetMiddlewareBase
     {
@@ -62,14 +62,14 @@ namespace Jtext103.CFET2.Core.Middleware.Basic
             switch (info)
             {
                 case MethodInfo methodInfo:
-                    actionInfo.OutputType = methodInfo.ReturnType.ToString();
+                    actionInfo.OutputType = methodInfo.ReturnType.Name.ToString();
                     foreach (var param in methodInfo.GetParameters())
                     {
-                        actionInfo.Parameters.Add(param.Name, param.ParameterType.ToString());
+                        actionInfo.Parameters.Add(param.Name, param.ParameterType.Name.ToString());
                     }
                     break;
                 case PropertyInfo propInfo:
-                    actionInfo.OutputType = propInfo.ReflectedType.ToString();
+                    actionInfo.OutputType = propInfo.PropertyType.Name.ToString();
                     break;
                 default:
                     break;

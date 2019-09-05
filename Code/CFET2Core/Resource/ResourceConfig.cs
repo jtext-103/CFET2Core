@@ -44,7 +44,7 @@ namespace Jtext103.CFET2.Core.Resource
         {
             try
             {
-                return tryGetFromThing(inputs).ToConfig();
+                return tryGetFromThing(inputs).ToConfig().SetPath(Path);
             }
             catch (System.Exception exception)
             {
@@ -90,7 +90,7 @@ namespace Jtext103.CFET2.Core.Resource
                     if (inputs.Length != 1)
                     {
                         return new SampleBase<MemberInfo>(member).AddErrorMessage(BadResourceRequestException.DefualtMessage)
-                        .AddErrorMessage("Should not have more than 1 parameters!").SetPath(Path).ToConfig();
+                        .AddErrorMessage("Should not have more than 1 parameters!").ToConfig().SetPath(Path);
                     }
                     var setter = member as PropertyInfo;
                     //sample or not

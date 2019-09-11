@@ -9,7 +9,7 @@ namespace Jtext103.CFET2.Core.Sample
 {
     public class Config<T> : Status<T>
     {
-        public override ResourceTypes ResourceType { get; set; } = ResourceTypes.Config;
+        
         #region static fields
         public static readonly string KEYOFSUPORTEDACTION = "CFET2CORE_SAMPLE_SUPORTACTION";
 

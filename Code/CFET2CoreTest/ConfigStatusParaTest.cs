@@ -157,13 +157,13 @@ namespace Jtext103.CFET2.Core.Test
 
             //assert todo test sample are equal
             con1s.As<ISample>().IsValid.Should().Be(false); //set failure
-            con1s.As<ISample>().ErrorMessages.Should().ContainSingle(BadResourceRequestException.DefualtMessage);
+            con1s.As<ISample>().ErrorMessages.Should().BeEquivalentTo(new string [] { BadResourceRequestException.DefualtMessage, "Should not have more than 1 parameters!"});
             con2s.As<ISample>().IsValid.Should().Be(false);
-            con2s.As<ISample>().ErrorMessages.Should().ContainSingle(BadResourceRequestException.DefualtMessage);
+            con2s.As<ISample>().ErrorMessages.Should().BeEquivalentTo(new string[] { BadResourceRequestException.DefualtMessage,  "Should not have any parameters!"});
 
             con1.As<ISample>().ObjectVal.Should().Be(1);
             con2.As<ISample>().IsValid.Should().Be(false);  //get failure
-            con2.As<ISample>().ErrorMessages.Should().ContainSingle(BadResourceRequestException.DefualtMessage);
+            con2.As<ISample>().ErrorMessages.Should().BeEquivalentTo(new string[] { BadResourceRequestException.DefualtMessage, "Should not have any parameters!" });
 
             status2ParaS.As<ISample>().IsValid.Should().Be(false); //get failure
             status2ParaS.As<ISample>().ErrorMessages.Should().Contain(BadResourceRequestException.DefualtMessage);

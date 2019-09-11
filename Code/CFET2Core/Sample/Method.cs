@@ -13,7 +13,7 @@ namespace Jtext103.CFET2.Core.Sample
     /// <typeparam name="T"></typeparam>
     public class Method<T> : SampleBase<T>
     {
-        public override ResourceTypes ResourceType { get; set; } = ResourceTypes.Method;
+     
         #region ctor
         public Method():base()
         {

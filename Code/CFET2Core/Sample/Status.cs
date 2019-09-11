@@ -12,7 +12,7 @@ namespace Jtext103.CFET2.Core.Sample
     /// <typeparam name="T"></typeparam>
     public class Status<T>:SampleBase<T>
     {
-        public override ResourceTypes ResourceType { get; set; } = ResourceTypes.Status;
+  
         #region ctor
 
         public Status():base()

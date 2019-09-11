@@ -50,7 +50,7 @@ namespace CFET2CoreTest
             dynamic sM = statusM.Get();
             //[obsolete:this status does not take parameter but feeding it one should not course any problem , todo add event rasing for this minor error]
             //now wrong parameters will result in a invalid sample
-            dynamic sMPIvalid = statusM.Get(1);
+            var sMPIvalid = statusM.Get(1) as ISample;
             dynamic sM1 = statusM1.Get(1);
 
 

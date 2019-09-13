@@ -57,7 +57,7 @@ namespace Jtext103.CFET2.NancyHttpCommunicationModule
         {
             if (shouldReturnView)
             {
-                return View[viewPath];
+                return View["index"];
             }
 
             if (isFromBrowser())

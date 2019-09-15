@@ -50,8 +50,7 @@ namespace Jtext103.CFET2.Core
             {
                 if (resource.Key.StartsWith(path))
                 {
-                    var child = resource.Key.Substring(path.Length);
-                    if (child.IndexOf(@"/") <= 0)
+                    if (FindLocalParentWithPath(resource.Value.Path).Path==path)
                     {
                         yield return resource.Value;
                     }

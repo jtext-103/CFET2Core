@@ -1,0 +1,13 @@
+//这个niNonSync每张卡要不一样
+var niNonSync = new Jtext103.CFET2.Things.DAQAIThing.AIThing();
+
+//这个除了niNonSync不一样其余都一样
+niNonSync.basicAI = new Jtext103.CFET2.Things.NiAiLib.NIAI();
+niNonSync.DataFileFactory = new JTextDAQDataFileOperator.HDF5.HDF5DataFileFactory();
+
+//这个括号里面的不一样
+host.MyHub.TryAddThing(niNonSync, 	//上面的niNonSync
+	@"/",       			//Thing挂载路径，都一样，不要改！！！
+	"Card0",    		//卡名，也就是在网页上看到的卡名称
+	//下面引号中的要改，前面的是配置文件路径，后面的是采集数据保存到本地的路径
+	new { ConfigFilePath = @"D:\Run\ConfigFile\DAQFamilyBucket\niNonSync.txt", DataFileParentDirectory = @"D:\Data\ni\Card0" });

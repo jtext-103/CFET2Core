@@ -1,0 +1,7 @@
+var aiManagement = new Jtext103.CFET2.Things.DAQAIThing.AIManagementThing();
+
+//监控EPCIS
+//host.MyHub.TryAddThing(aiManagement, @"/", "aimanagement", @"D:\Run\ConfigFile\DAQFamilyBucket\AIManagement.json");
+
+//不监控EPCIS，上下只能有一个
+host.MyHub.TryAddThing(aiManagement, @"/", "aimanagement", @"D:\Run\ConfigFile\DAQFamilyBucket\AIManagementNoEPCIS.json");

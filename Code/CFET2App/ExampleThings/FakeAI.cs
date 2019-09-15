@@ -57,12 +57,12 @@ namespace Jtext103.CFET2.CFET2App.ExampleThings
             myFakeAICard.TryArm();
         }
 
-
+        
         [Cfet2Method]
         public void TryStop()
         {
             myFakeAICard.TryStop();
-        }
+        }        
     }
 
     public class FakeAICard
@@ -82,21 +82,21 @@ namespace Jtext103.CFET2.CFET2App.ExampleThings
 
         public void TryArm()
         {
-            if (AIState == Status.Idle)
+            if(AIState == Status.Idle)
             {
                 LatestData = new double[ChannelCount];
                 myAcuqisition = new Thread(FakeAcquisition);
                 myAcuqisition.Start();
                 AIState = Status.Running;
-            }
+            }        
         }
 
         private void FakeAcquisition()
         {
             Random rd = new Random();
-            while (true)
+            while(true)
             {
-                for (int i = 0; i < LatestData.Length; i++)
+                for(int i = 0; i < LatestData.Length; i++)
                 {
                     LatestData[i] = rd.NextDouble() + i;
                 }
@@ -106,7 +106,7 @@ namespace Jtext103.CFET2.CFET2App.ExampleThings
 
         public void TryStop()
         {
-            if (AIState == Status.Running)
+            if(AIState == Status.Running)
             {
                 myAcuqisition.Abort();
                 myAcuqisition.DisableComObjectEagerCleanup();

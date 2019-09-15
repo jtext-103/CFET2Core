@@ -1,0 +1,3 @@
+var testThing = new JtextTestThing.TestThing();
+testThing.MyRely = new TestRely.Rely();
+host.MyHub.TryAddThing(testThing, "/", "tt", new JtextTestThing.NameAndAge { Name = "wyxchina", Age = 11 });

@@ -1,0 +1,1399 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Jtext103.CFET2Core</name>
+    </assembly>
+    <members>
+        <member name="T:Jtext103.CFET2.Core.Attributes.Cfet2AttributeBase">
+            <summary>
+            this is the base class for all Cfet2 resource Attribute
+            a cfet resource can be a status or a config or a method.
+            </summary>
+        </member>
+        <member name="P:Jtext103.CFET2.Core.Attributes.Cfet2AttributeBase.Name">
+            <summary>
+            the name of thes cfet resource, this will be used in making up tha route for the resource, it can be null, so use nameof of the property of method instade
+            </summary>
+        </member>
+        <member name="T:Jtext103.CFET2.Core.Attributes.Cfet2ConfigAttribute">
+            <summary>
+            By defual config  support get set and even you accidential change it, it will just ignore missing get and set, it will support this any way
+            Note: a config can return either sample of bare bone values when people get, they always get samples. when getting a config, it the same as getting a status. but when user set or add of delete config it all ways be the bare bone value.
+            for GetAndSet, they are preserved for property with public getter and setter, the type can be sample or bare bone value.
+            </summary>
+        </member>
+        <member name="T:Jtext103.CFET2.Core.Attributes.ConfigAction">
+            <summary>
+            /By defual config  support get set and even you accidential change it, it will just ignore missing get and set, it will support this any way
+            Note: a config can return either sample of bare bone values when people get, they always get samples. when getting a config, it the same as getting a status. but when user set or add of delete config it all ways be the bare bone value.
+            for GetAndSet, they are preserved for property with public getter and setter, the type can be sample or bare bone value.
+            </summary>
+        </member>
+        <member name="T:Jtext103.CFET2.Core.Attributes.Cfet2MethodAttribute">
+            <summary>
+            this indecates that it is a method for a thing
+            </summary>
+        </member>
+        <member name="T:Jtext103.CFET2.Core.Attributes.Cfet2StatusAttribute">
+            <summary>
+            this indecates that it is a status for a thing
+            </summary>
+        </member>
+        <member name="T:Jtext103.CFET2.Core.CFET2Host">
+            <summary>
+            all host applications have to derive from this to accecpt an hub-proxy-
+            </summary>
+        </member>
+        <member name="T:Jtext103.CFET2.Core.CFET2Module">
+            <summary>
+            this is the base class that user may implemented to use cfet
+            do not instatiate this class!! do not derive from this class directly!!! 
+            derive from CommunicationModule,CFET2Host and Thing
+            </summary>
+        </member>
+        <member name="P:Jtext103.CFET2.Core.CFET2Module.MyHub">
+            <summary>
+            all CFET2 Modules has this to consume the sfet2 service
+            </summary>
+        </member>
+        <member name="T:Jtext103.CFET2.Core.Event.EventArg">
+            <summary>
+            when a event is published this will be created to contain everything the event is about
+            </summary>
+        </member>
+        <member name="P:Jtext103.CFET2.Core.Event.EventArg.PerformanceLevel">
+            <summary>
+            the fill over head of event arg, so performanceLevel is 0
+            </summary>
+        </member>
+        <member name="P:Jtext103.CFET2.Core.Event.EventArg.Host">
+            <summary>
+            only applicable to remote event pushing, the host including protocol
+            </summary>
+        </member>
+        <member name="P:Jtext103.CFET2.Core.Event.EventArg.Source">
+            <summary>
+            a string that indicate the resources generated this event
+            </summary>
+        </member>
+        <member name="P:Jtext103.CFET2.Core.Event.EventArg.EventType">
+            <summary>
+            a string to specify the event tyep you interested in
+            </summary>
+        </member>
+        <member name="P:Jtext103.CFET2.Core.Event.EventArg.Sample">
+            <summary>
+            the payload of the event wrapped in sample
+            </summary>
+        </member>
+        <member name="M:Jtext103.CFET2.Core.Event.EventArg.#ctor(System.String,System.String,Jtext103.CFET2.Core.Sample.ISample)">
+            <summary>
+            
+            </summary>
+            <param name="source"></param>
+            <param name="type">if type is "" then match any type</param>
+            <param name="sample"></param>
+        </member>
+        <member name="M:Jtext103.CFET2.Core.Event.EventArg.#ctor(System.String,System.String,Jtext103.CFET2.Core.Sample.ISample,System.String)">
+            <summary>
+            
+            </summary>
+            <param name="source"></param>
+            <param name="type"></param>
+            <param name="sample"></param>
+            <param name="host"></param>
+        </member>
+        <member name="T:Jtext103.CFET2.Core.Event.EventFilter">
+            <summary>
+            a event filter to select the event you have subscribed
+            </summary>
+        </member>
+        <member name="P:Jtext103.CFET2.Core.Event.EventFilter.SourcesAndTypes">
+            <summary>
+            a collection of  SourceAndTypeFilter, any mathch will fire the handler, donot add to list!! it will not work use AddSourceAndTpye method!!
+            </summary>
+        </member>
+        <member name="P:Jtext103.CFET2.Core.Event.EventFilter.Host">
+            <summary>
+            the remote host of the event publisher
+            </summary>
+        </member>
+        <member name="P:Jtext103.CFET2.Core.Event.EventFilter.PerformanceLevel">
+            <summary>
+            only applicable for remote event, 0 for lowest full sample,, 1 for minimum overhead
+            </summary>
+        </member>
+        <member name="M:Jtext103.CFET2.Core.Event.EventFilter.#ctor">
+            <summary>
+            create an empty filter
+            </summary>
+        </member>
+        <member name="M:Jtext103.CFET2.Core.Event.EventFilter.#ctor(System.String,System.String)">
+            <summary>
+            create a event filter with the input
+            </summary>
+            <param name="resource">IgnoreCase</param>
+            <param name="eventType">IgnoreCase</param>
+        </member>
+        <member name="M:Jtext103.CFET2.Core.Event.EventFilter.#ctor(Jtext103.CFET2.Core.Event.EventFilter)">
+            <summary>
+            create a event filter with the input
+            </summary>
+        </member>
+        <member name="M:Jtext103.CFET2.Core.Event.EventFilter.#ctor(System.String,System.String,System.Int32,System.String)">
+            <summary>
+            create a event filter with the input
+            </summary>
+            <param name="resource">IgnoreCase</param>
+            <param name="eventType">IgnoreCase</param>
+            <param name="performanceLevel"></param>
+            <param name="host">the remote host incluting protocol</param>
+        </member>
+        <member name="M:Jtext103.CFET2.Core.Event.EventFilter.AddSourceAndType(System.String,System.String)">
+            <summary>
+            
+            </summary>
+            <param name="resource"></param>
+            <param name="eventType"></param>
+        </member>
+        <member name="M:Jtext103.CFET2.Core.Event.EventFilter.Predicate(Jtext103.CFET2.Core.Event.EventArg)">
+            <summary>
+            returen if a event matches the filter
+            </summary>
+            <param name="eventArg">the event to filter</param>
+            <returns>is this event match the event filter, if so it means it need to be handled</returns>
+        </member>
+        <member name="T:Jtext103.CFET2.Core.Event.EventHub">
+            <summary>
+            let things to subscribe and publish events
+            </summary>
+        </member>
+        <member name="M:Jtext103.CFET2.Core.Event.EventHub.#ctor">
+            <summary>
+            create the event
+            </summary>
+        </member>
+        <member name="P:Jtext103.CFET2.Core.Event.EventHub.RemoteEventHubs">
+            <summary>
+            the remote event thing that the event hub uses
+            </summary>
+        </member>
+        <member name="M:Jtext103.CFET2.Core.Event.EventHub.Init">
+            <summary>
+            init the event hub: start the event handling loop
+            </summary>
+        </member>
+        <member name="M:Jtext103.CFET2.Core.Event.EventHub.eventHandleLoop">
+            <summary>
+            the ifinit loop of handling event
+            </summary>
+        </member>
+        <member name="P:Jtext103.CFET2.Core.Event.EventHub.subDict">
+            <summary>
+            dictionary for subscribes
+            </summary>
+        </member>
+        <member name="M:Jtext103.CFET2.Core.Event.EventHub.Publish(System.String,System.String,System.Object)">
+            <summary>
+            publis a event, not that the payload you are supplying will be wrapped in a status sample if it is not a sample already.
+            </summary>
+            <param name="source">the source resource path</param>
+            <param name="eventType"></param>
+            <param name="payload">the event value, will be wrapped in status sample if it not a sample</param>
+        </member>
+        <member name="M:Jtext103.CFET2.Core.Event.EventHub.Publish(Jtext103.CFET2.Core.Event.EventArg)">
+            <summary>
+            publis a event, not that the payload you are supplying will be wrapped in a status sample if it is not a sample already.
+            </summary>
+            <param name="eventArg"></param>
+        </member>
+        <member name="M:Jtext103.CFET2.Core.Event.EventHub.newPendingEvent">
+            <summary>
+            release the blocked event handling loop
+            </summary>
+        </member>
+        <member name="M:Jtext103.CFET2.Core.Event.EventHub.Subscribe(Jtext103.CFET2.Core.Event.EventFilter,System.Action{Jtext103.CFET2.Core.Event.EventArg})">
+            <summary>
+            
+            </summary>
+            <param name="filter"></param>
+            <param name="handler"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Jtext103.CFET2.Core.Event.EventHub.Unsubscribe(Jtext103.CFET2.Core.Event.Token)">
+            <summary>
+            unsbcribe an event
+            </summary>
+            <param name="token"></param>
+        </member>
+        <member name="M:Jtext103.CFET2.Core.Event.EventHub.Dispose">
+            <summary>
+            kill the handling loop 
+            </summary>
+        </member>
+        <member name="T:Jtext103.CFET2.Core.Event.IRemoteEventHub">
+            <summary>
+            an remote event thing interface, this interface allow the local event hub to forward event to remote event thing and subscribe to remote event
+            </summary>
+        </member>
+        <member name="P:Jtext103.CFET2.Core.Event.IRemoteEventHub.Protocol">
+            <summary>
+            the protocol this thing support
+            </summary>
+        </member>
+        <member name="M:Jtext103.CFET2.Core.Event.IRemoteEventHub.Subscribe(Jtext103.CFET2.Core.Event.Token,Jtext103.CFET2.Core.Event.EventFilter,System.Action{Jtext103.CFET2.Core.Event.EventArg})">
+            <summary>
+            let the remote event thing handle the subscription to remote event
+            </summary>
+            <param name="token"></param>
+            <param name=""></param>
+            <param name="handler"></param>
+        </member>
+        <member name="M:Jtext103.CFET2.Core.Event.IRemoteEventHub.Unsbscribe(Jtext103.CFET2.Core.Event.Token)">
+            <summary>
+            unsubscribe the remote evnet
+            </summary>
+            <param name="token"></param>
+        </member>
+        <member name="T:Jtext103.CFET2.Core.Event.SourceAndTypeFilter">
+            <summary>
+            store the source and type string for a event filter, regex expression that indicate the resources you interested in
+            </summary>
+        </member>
+        <member name="P:Jtext103.CFET2.Core.Event.SourceAndTypeFilter.Source">
+            <summary>
+            filter the source of the event
+            </summary>
+        </member>
+        <member name="P:Jtext103.CFET2.Core.Event.SourceAndTypeFilter.EventType">
+            <summary>
+            filter the type of the event, a regex expression to specify the event tyep you interested in
+            </summary>
+        </member>
+        <member name="T:Jtext103.CFET2.Core.Event.Token">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Jtext103.CFET2.Core.Event.Token.Id">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:Jtext103.CFET2.Core.Event.Token.Dispose">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:Jtext103.CFET2.Core.Event.Token.#ctor(Jtext103.CFET2.Core.Event.EventHub)">
+            <summary>
+            
+            </summary>
+            <param name="eventHub"></param>
+        </member>
+        <member name="P:Jtext103.CFET2.Core.Event.Token.IsRemote">
+            <summary>
+            is this token point to a remote subscription
+            </summary>
+        </member>
+        <member name="P:Jtext103.CFET2.Core.Event.Token.Protocol">
+            <summary>
+            the remote subscription protocol
+            </summary>
+        </member>
+        <member name="T:Jtext103.CFET2.Core.Event.Subscriber">
+            <summary>
+            a subscriber created for an event
+            </summary>
+        </member>
+        <member name="M:Jtext103.CFET2.Core.Event.Subscriber.#ctor(Jtext103.CFET2.Core.Event.EventFilter,System.Action{Jtext103.CFET2.Core.Event.EventArg})">
+            <summary>
+            when subscribeed to an event , this will be created for it
+            </summary>
+            <param name="filter"></param>
+            <param name="handler"></param>
+        </member>
+        <member name="P:Jtext103.CFET2.Core.Event.Subscriber.Handler">
+            <summary>
+            the action to handle the event
+            </summary>
+        </member>
+        <member name="T:Jtext103.CFET2.Core.Exception.GeneralCfet2Exception">
+            <summary>
+            when user provide wrong parameters to request a resource
+            </summary>
+        </member>
+        <member name="T:Jtext103.CFET2.Core.Exception.BadResourceRequestException">
+            <summary>
+            when user provide wrong parameters to request a resource
+            </summary>
+        </member>
+        <member name="T:Jtext103.CFET2.Core.Exception.BadThingImplementaionException">
+            <summary>
+            when user provide a thing that is unable to be handled by CFET2
+            </summary>
+        </member>
+        <member name="T:Jtext103.CFET2.Core.Exception.WrongResourceActionException">
+            <summary>
+            when user provide wrong parameters to request a resource
+            </summary>
+        </member>
+        <member name="M:Jtext103.CFET2.Core.Extension.HeplerExtensions.TryConvertTo(System.Object,System.Type,System.Boolean)">
+            <summary>
+            this is a helper, 
+            first it will try convertable for primitives
+            convert an object to a specified type, this will try its best to convert using JSON and Jobject Jarray, 
+            if convert is not possible by the json string is not deserializable into target type, exception will be thrown,
+            if convert is not possible by the target object not matching the deserialized object, it will try its best to fit properties into the target, 
+            those can not be fitted will remain its defualt value.
+            </summary>
+            <param name="sourceObj"></param>
+            <param name="targetType"></param>
+            <param name="forceConvert">force convert to another type even it is assignable, default is false means if it is assignabl to the target 
+            type no convertion will happen, just return</param>
+            <returns>object of the target type</returns>
+        </member>
+        <member name="M:Jtext103.CFET2.Core.Extension.HeplerExtensions.MapInputDictinary(System.Object[],System.Reflection.MethodInfo)">
+            <summary>
+            helper it maps the dictionary (parameter name,parameters into a right sequence input array)
+            </summary>
+            <param name="inputs">if the first is DictionaryInputsIndicator then this will do the trick else it does nothing</param>
+            <param name="methodParameters"></param>
+            <returns>input array in the order of the method parameters</returns>
+        </member>
+        <member name="M:Jtext103.CFET2.Core.Extension.HeplerExtensions.MapInputParameters(System.Object[],System.Reflection.ParameterInfo[])">
+            <summary>
+            this is a helper, 
+            map the inputs object to the coorected type according to the parameters for a method,
+            if the object is not mapped sussesfully the original object will just be put into place(todo? throw exceptions?)
+            </summary>
+            <param name="inputs">the orignal input</param>
+            <param name="methodParameters">the parameters for a method</param>
+            <returns>mapped parameters</returns>
+        </member>
+        <member name="M:Jtext103.CFET2.Core.Extension.HeplerExtensions.FormatParameters(System.Reflection.ParameterInfo[])">
+            <summary>
+            return a readble parameter info list
+            </summary>
+            <param name="parameters"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Jtext103.CFET2.Core.Extension.HeplerExtensions.RangeSubset``1(``0[],System.Int32,System.Int32)">
+            <summary>
+            get a sub set of a array
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="array"></param>
+            <param name="startIndex"></param>
+            <param name="length"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Jtext103.CFET2.Core.Extension.HeplerExtensions.GetParentPath(System.Uri,System.Boolean)">
+            <summary>
+            get the parent path of an uri
+            </summary>
+            <param name="absolutUri"></param>
+            <param name="isDirectory">if the parent is a directory, if not the trailing / is removed</param>
+            <returns></returns>
+        </member>
+        <member name="M:Jtext103.CFET2.Core.Extension.HeplerExtensions.ExtractParamsFromQuery(System.Uri)">
+            <summary>
+            get parameters form a query string
+            </summary>
+            <param name="absolutUri"></param>
+            <param name="isDirectory">if the parent is a directory, if not the trailing / is removed</param>
+            <returns></returns>
+        </member>
+        <member name="T:Jtext103.CFET2.Core.Hub">
+            <summary>
+            a proxy object for HubMaster, every cfet2 module has one to consume cfet2 service
+            </summary>
+        </member>
+        <member name="P:Jtext103.CFET2.Core.Hub.myMaster">
+            <summary>
+            all thing stored in a flat structure, will become obsolete when hierarchy is done
+            </summary>
+        </member>
+        <member name="P:Jtext103.CFET2.Core.Hub.Pipeline">
+            <summary>
+            access the master's pipeline
+            </summary>
+        </member>
+        <member name="P:Jtext103.CFET2.Core.Hub.MyCfet2Module">
+            <summary>
+            the cfet module that holds this hub
+            </summary>
+        </member>
+        <member name="P:Jtext103.CFET2.Core.Hub.EventHub">
+            <summary>
+            this is a reference to the MasterHub's Event hub
+            </summary>
+        </member>
+        <member name="M:Jtext103.CFET2.Core.Hub.GetAllLocalResources">
+            <summary>
+            get all resources
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Jtext103.CFET2.Core.Hub.GetLocalResouce(System.String)">
+            <summary>
+            get an resource objet of provided resource path,
+            it could be thing, status, config,  and so on
+            </summary>
+            <param name="resourcePath">the path of the thing, in unix file path fasion</param>
+            <returns>will return null it the path points to nothing</returns>
+        </member>
+        <member name="M:Jtext103.CFET2.Core.Hub.TryGetLocalResouceSample(System.String,System.Object[])">
+            <summary>
+            get an sample of that resource objet of provided resource uri, the uri must be a resource locator and contains no parameters
+            it could be thing, status, config,  and so on, will thrown is the resource not found, give invalid sample
+            </summary>
+            <param name="resourcePath">the path to a locol resource, there is not input in it, todo: 1 support regex, 2. support relative path, easy</param>
+            <param name="inputs">input parameter in array</param>
+            <returns></returns>
+        </member>
+        <member name="M:Jtext103.CFET2.Core.Hub.TryGetLocalResouceSample(System.String,System.Collections.Generic.Dictionary{System.String,System.Object})">
+            <summary>
+            get an sample of that resource objet of provided resource uri, the uri must be a resource locator and contains no parameters
+            it could be thing, status, config,  and so on, will thrown is the resource not found, give invalid sample
+            </summary>
+            <param name="resourcePath">the path to a locol resource, there is not input in it</param>
+            <param name="inputDict">input parameter in dictionary</param>
+            <returns></returns>
+        </member>
+        <member name="M:Jtext103.CFET2.Core.Hub.TrySetLocalResouceSample(System.String,System.Object[])">
+            <summary>
+            only config resource support set
+            </summary>
+            <param name="resourcePath">the path to a locol resource, there is not input in it, todo: 1 support regex, 2. support relative path, easy</param>
+            <param name="inputs">input parameter in array</param>
+            <returns></returns>
+        </member>
+        <member name="M:Jtext103.CFET2.Core.Hub.TrySetLocalResouceSample(System.String,System.Collections.Generic.Dictionary{System.String,System.Object})">
+            <summary>
+            
+            </summary>
+            <param name="resourcePath">the path to a locol resource, there is not input in it</param>
+            <param name="inputDict">input parameter in dictionary</param>
+            <returns></returns>
+        </member>
+        <member name="M:Jtext103.CFET2.Core.Hub.TryInvokeLocalResouceSample(System.String,System.Object[])">
+            <summary>
+            only method resource support set
+            </summary>
+            <param name="resourcePath">the path to a locol resource, there is not input in it, todo: 1 support regex, 2. support relative path, easy</param>
+            <param name="inputs">input parameter in array</param>
+            <returns></returns>
+        </member>
+        <member name="M:Jtext103.CFET2.Core.Hub.TryInvokeLocalResouceSample(System.String,System.Collections.Generic.Dictionary{System.String,System.Object})">
+            <summary>
+            invole a resource, localy, meaning no communicatin module will be invoked
+            </summary>
+            <param name="resourcePath">the path to a locol resource, there is not input in it</param>
+            <param name="inputDict">input parameter in dictionary</param>
+            <returns>result sample</returns>
+        </member>
+        <member name="M:Jtext103.CFET2.Core.Hub.TryAccessResourceSampleWithUri(Jtext103.CFET2.Core.ResourceRequest)">
+            <summary>
+            
+            </summary>
+            <param name="request"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Jtext103.CFET2.Core.Hub.TryGetResourceSampleWithUri(System.String,System.Object[])">
+            <summary>
+            get a sample using a uri, the inputs are parameters to the resource, if you are using parameters in uri, then you can 
+            have only one input, if you have more than one inputs, the uri must points to a resource without any route parameters and query string, 
+            </summary>
+            <param name="requestUri">the uri to access a resource, it can contain route parameters or query string parameters</param>
+            <param name="inputs">if contain more than one inputs, then query string (if any) in uri will be ignored, the path of URI is point to a resource, route parameters will not be recognize</param>
+            <returns></returns>
+        </member>
+        <member name="M:Jtext103.CFET2.Core.Hub.TryGetResourceSampleWithUri(System.String,System.Collections.Generic.Dictionary{System.String,System.Object})">
+            <summary>
+            get the resource with dictionary input, using this, you can not use the route parameter, but you can still use query string parameters, the duplicated keys will be overrided by the inputDict 
+            this is as if you have query string inthe uri but its in the input dict.
+            </summary>
+            <param name="requestUri"></param>
+            <param name="inputDict"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Jtext103.CFET2.Core.Hub.TrySetResourceSampleWithUri(System.String,System.Object[])">
+            <summary>
+            set a sample using a uri, the inputs are parameters to the resource, if you are using parameters in uri, then you can 
+            have only one input, if you have more than one inputs, the uri must points to a resource without any route parameters and query string, 
+            </summary>
+            <param name="requestUri">the uri to access a resource, it can contain route parameters or query string parameters</param>
+            <param name="inputs">if contain more than one inputs, then query string (if any) in uri will be ignored, the path of URI is point to a resource, route parameters will not be recognize</param>
+            <returns></returns>
+        </member>
+        <member name="M:Jtext103.CFET2.Core.Hub.TrySetResourceSampleWithUri(System.String,System.Collections.Generic.Dictionary{System.String,System.Object})">
+            <summary>
+            set the resource with dictionary input, using this, you can not use the route parameter, but you can still use query string parameters, the duplicated keys will be overrided by the inputDict 
+            this is as if you have query string inthe uri but its in the input dict.
+            </summary>
+            <param name="requestUri"></param>
+            <param name="inputDict"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Jtext103.CFET2.Core.Hub.TryInvokeSampleResourceWithUri(System.String,System.Object[])">
+            <summary>
+            set a sample using a uri, the inputs are parameters to the resource, if you are using parameters in uri, then you can 
+            have only one input, if you have more than one inputs, the uri must points to a resource without any route parameters and query string, 
+            </summary>
+            <param name="requestUri">the uri to access a resource, it can contain route parameters or query string parameters</param>
+            <param name="inputs">if contain more than one inputs, then query string (if any) in uri will be ignored, the path of URI is point to a resource, route parameters will not be recognize</param>
+            <returns></returns>
+        </member>
+        <member name="M:Jtext103.CFET2.Core.Hub.TryInvokeSampleResourceWithUri(System.String,System.Collections.Generic.Dictionary{System.String,System.Object})">
+            <summary>
+            set the resource with dictionary input, using this, you can not use the route parameter, but you can still use query string parameters, the duplicated keys will be overrided by the inputDict 
+            this is as if you have query string inthe uri but its in the input dict.
+            </summary>
+            <param name="requestUri"></param>
+            <param name="inputDict"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Jtext103.CFET2.Core.Hub.ParseLocalRequest(System.Uri,System.Object[])">
+            <summary>
+            get inpus or inputdict from the request uri, check the inputdict==null to see which input use, if not null use it otherwise use inputs public for test
+            </summary>
+            <param name="requestUri"></param>
+            <param name="inputs"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Jtext103.CFET2.Core.Hub.extractResourcePath(System.String,System.Collections.Generic.List{System.Object})">
+            <summary>
+            beside extract a path to a resource it also populate the input with route parameters
+            </summary>
+            <param name="resourcePath"></param>
+            <param name="routeInputs">output the route parameter</param>
+            <returns></returns>
+        </member>
+        <member name="M:Jtext103.CFET2.Core.Hub.IsRemoteUri(System.Uri)">
+            <summary>
+            return if a uri is a remote request
+            </summary>
+            <param name="uri"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Jtext103.CFET2.Core.Hub.KillMaster">
+            <summary>
+            for test only, only can only called by host
+            </summary>
+        </member>
+        <member name="M:Jtext103.CFET2.Core.Hub.StartCommunication">
+            <summary>
+            start the communication this should done before start all things after all things been added
+            </summary>
+        </member>
+        <member name="M:Jtext103.CFET2.Core.Hub.TryAddCommunicationModule(Jtext103.CFET2.Core.Communication.CommunicationModule)">
+            <summary>
+            add the communication module to the hub.
+            </summary>
+            <param name="communicationModule"></param>
+        </member>
+        <member name="M:Jtext103.CFET2.Core.Hub.TryAddThing(Jtext103.CFET2.Core.Thing,System.String,System.String,System.Object)">
+            <summary>
+            add a thing object into the cfet app, will thrown if not sucesesful, 
+            also you things are init here,hub is injected here then the TryInit is called here
+            </summary>
+            <param name="thing">the thing you want to add</param>
+            <param name="name">the name of the thing</param>
+            <param name="mountPath">the path you want your thing be mounted, the path will be /[mountpath]/[name]</param>
+            <param name="initObject"></param>
+        </member>
+        <member name="M:Jtext103.CFET2.Core.Hub.StartPipeline">
+            <summary>
+            start the pipe line, after start you can not stop or modifiy the pipeline
+            </summary>
+        </member>
+        <member name="M:Jtext103.CFET2.Core.Hub.StartThings">
+            <summary>
+            this should only be called by host, it will call the start method on the things
+            </summary>
+        </member>
+        <member name="M:Jtext103.CFET2.Core.Hub.DisposeThings">
+            <summary>
+            this should only be called by host, it will call the start method on the things
+            </summary>
+        </member>
+        <member name="M:Jtext103.CFET2.Core.Hub.LoadThingsFromDiretoryConfig(System.String)">
+            <summary>
+            load configs of all thing fomr a directory, the diretory is the "/" each folder represents a thing, 
+            the folder name is the instance name of the thing, the folder contains a config.json file for the thing, 
+            there could be a dll in the folder if it want to load the thing using its own dll instead of ones in the ThingAssembliesPath
+            folders without a config.json file is an empty node that hold other things
+            todo hierachy, now all the things is all flat
+            </summary>
+            <param name="configRoot">the root diretory that contains all thing configs</param>
+        </member>
+        <member name="M:Jtext103.CFET2.Core.Hub.FindLocalResourceWithPath(System.String)">
+            <summary>
+            find the resource object of a given uri, all the parameters are ignored
+            </summary>
+            <param name="path">uri, can have route parameters or querries but will be ignored, only local uri is accepted</param>
+            <returns>the resource object</returns>
+        </member>
+        <member name="M:Jtext103.CFET2.Core.Hub.FindLocalParentWithPath(System.String)">
+            <summary>
+            find the parent of resource object of a given uri, all the parameters are ignored
+            </summary>
+            <param name="path">uri, can have route parameters or querries but will be ignored, only local uri is accepted</param>
+            <returns></returns>
+        </member>
+        <member name="M:Jtext103.CFET2.Core.Hub.FindLocalChildWithUri(System.String)">
+            <summary>
+            find the children of resource object of a given uri, all the parameters are ignored
+            </summary>
+            <param name="path"></param>
+            <returns>the children resource objects</returns>
+        </member>
+        <member name="T:Jtext103.CFET2.Core.HubMaster">
+            <summary>
+            the hub master hold all raw resource, the hub does not, so to control the access right of the hub
+            </summary>
+        </member>
+        <member name="P:Jtext103.CFET2.Core.HubMaster.ThingAssembliesPath">
+            <summary>
+            the directory that holds all the assembly dlls for thing that later loaded into the Hub
+            </summary>
+        </member>
+        <member name="P:Jtext103.CFET2.Core.HubMaster.Resources">
+            <summary>
+            all thing stored in a flat structure, will become obsolete when hierarchy is done, 
+            the dict is case insensitive,  
+            the key is the path to the resource
+            </summary>
+        </member>
+        <member name="F:Jtext103.CFET2.Core.HubMaster.thingPathes">
+            <summary>
+            just for start and dispose, you can start and dispose in the order of you added it
+            </summary>
+        </member>
+        <member name="M:Jtext103.CFET2.Core.HubMaster.InjectHubToModule(System.Object)">
+            <summary>
+            inject a hub-proxy- into a object it can be an thing or an communication or an CFET host
+            </summary>
+            <param name="targetModule"></param>
+        </member>
+        <member name="T:Jtext103.CFET2.Core.Communication.ICommunication">
+            <summary>
+            this interface is for communication modules like DDS or REST
+            </summary>
+        </member>
+        <member name="P:Jtext103.CFET2.Core.Communication.ICommunication.MyHub">
+            <summary>
+            remember to inject the hub into the communication module
+            </summary>
+        </member>
+        <member name="P:Jtext103.CFET2.Core.Communication.ICommunication.ProtocalName">
+            <summary>
+            the protocal name this module can handle, like for dds is DDS for REST is HTTP
+            </summary>
+        </member>
+        <member name="T:Jtext103.CFET2.Core.Communication.CommunicationModule">
+            <summary>
+            implement cross process/machine resource access
+            </summary>
+        </member>
+        <member name="P:Jtext103.CFET2.Core.Communication.CommunicationModule.ProtocolNames">
+            <summary>
+            the protocal name this module can handle, like for dds is DDS for REST is HTTP
+            </summary>
+        </member>
+        <member name="M:Jtext103.CFET2.Core.Communication.CommunicationModule.Start">
+            <summary>
+            this is called after all things have been started, 
+            </summary>
+        </member>
+        <member name="T:Jtext103.CFET2.Core.Log.Cfet2LogManager">
+            <summary>
+            let thing to create log
+            </summary>
+        </member>
+        <member name="M:Jtext103.CFET2.Core.Log.Cfet2LogManager.SetLogProvider(Jtext103.CFET2.Core.Log.ICfet2LogProvider)">
+            <summary>
+            before any thing heppend set the log, once set it can never be changed
+            </summary>
+            <param name="logProvider"></param>
+        </member>
+        <member name="M:Jtext103.CFET2.Core.Log.Cfet2LogManager.GetLogger(System.String)">
+            <summary>
+            get the logger
+            </summary>
+            <param name="name"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Jtext103.CFET2.Core.Log.ICfet2Logger">
+            <summary>
+            just expose Ilogger in cfet2, so user don't have to reference nlog
+            </summary>
+        </member>
+        <member name="P:Jtext103.CFET2.Core.Log.Cfet2Logger.Logger">
+            <summary>
+            hold the Nlog logger
+            </summary>
+        </member>
+        <member name="M:Jtext103.CFET2.Core.Log.Cfet2Logger.#ctor(NLog.Logger)">
+            <summary>
+            
+            </summary>
+            <param name="logger">NLOG Logger</param>
+        </member>
+        <member name="M:Jtext103.CFET2.Core.Log.NlogProvider.GetLogger(System.String)">
+            <summary>
+            get the logger with a spercific name
+            </summary>
+            <param name="name"></param>
+        </member>
+        <member name="T:Jtext103.CFET2.Core.Middleware.Basic.ActionInfo">
+            <summary>
+            a simple readable version of member info
+            </summary>
+        </member>
+        <member name="P:Jtext103.CFET2.Core.Middleware.Basic.ActionInfo.Parameters">
+            <summary>
+            the parameters 
+            </summary>
+        </member>
+        <member name="T:Jtext103.CFET2.Core.Middleware.Basic.ResourceInfoMidware">
+            <summary>
+            this plugin adds resource info like input and return type into the sample, see TestAddParametersListThing for use case
+            </summary>
+        </member>
+        <member name="F:Jtext103.CFET2.Core.Middleware.Basic.ResourceInfoMidware.OutputType">
+            <summary>
+            the string key in context indicating the outpyt type
+            </summary>
+        </member>
+        <member name="F:Jtext103.CFET2.Core.Middleware.Basic.ResourceInfoMidware.ResourceType">
+            <summary>
+            the string key in context indicating the resource type
+            </summary>
+        </member>
+        <member name="F:Jtext103.CFET2.Core.Middleware.Basic.ResourceInfoMidware.Actions">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:Jtext103.CFET2.Core.Middleware.Basic.ResourceInfoMidware.Process(Jtext103.CFET2.Core.Sample.ISample,Jtext103.CFET2.Core.ResourceRequest)">
+            <summary>
+            get the resour info from the resource put in to the context
+            </summary>
+            <param name="input">the input sample</param>
+            <param name="request">note: todo there is a flag indecating weather this plugin is activate</param>
+            <returns></returns>
+        </member>
+        <member name="T:Jtext103.CFET2.Core.Middleware.CfetMiddlewareBase">
+            <summary>
+            the  base to all cfet2 middle ware whic is used to process the samples
+            </summary>
+        </member>
+        <member name="M:Jtext103.CFET2.Core.Middleware.CfetMiddlewareBase.Process(Jtext103.CFET2.Core.Sample.ISample,Jtext103.CFET2.Core.ResourceRequest)">
+            <summary>
+            process the sample,
+            </summary>
+            <param name="input">the sample to be processed</param>
+            <param name="request">the request object that requested the origninal sample</param>
+            <returns>a precessed sample</returns>
+        </member>
+        <member name="T:Jtext103.CFET2.Core.Middleware.ICfet2Middleware">
+            <summary>
+            all the middleware that controlled by pipleline need to implement this interface
+            </summary>
+        </member>
+        <member name="M:Jtext103.CFET2.Core.Middleware.ICfet2Middleware.Process(Jtext103.CFET2.Core.Sample.ISample,Jtext103.CFET2.Core.ResourceRequest)">
+            <summary>
+            process the sample
+            </summary>
+            <param name="input"></param>
+            <param name="request">the request to the sample</param>
+            <returns></returns>
+        </member>
+        <member name="T:Jtext103.CFET2.Core.Middleware.Pipeline">
+            <summary>
+            a container for cfet2 middleware, it runs 
+            </summary>
+        </member>
+        <member name="M:Jtext103.CFET2.Core.Middleware.Pipeline.#ctor">
+            <summary>
+            holds midware and process the sample with them
+            </summary>
+        </member>
+        <member name="P:Jtext103.CFET2.Core.Middleware.Pipeline.Started">
+            <summary>
+            if the pipeline is started, if true
+            </summary>
+        </member>
+        <member name="M:Jtext103.CFET2.Core.Middleware.Pipeline.BatchProcess(Jtext103.CFET2.Core.Sample.ISample,Jtext103.CFET2.Core.ResourceRequest)">
+            <summary>
+            let all the sample be processed by the midware, sequentially
+            </summary>
+            <param name="input">the sample to be processed</param>
+            <param name="request">the request that get this sample</param>
+            <returns></returns>
+        </member>
+        <member name="M:Jtext103.CFET2.Core.Middleware.Pipeline.Start">
+            <summary>
+            you can not add midware after invoke this
+            </summary>
+        </member>
+        <member name="M:Jtext103.CFET2.Core.Middleware.Pipeline.AddMiddleware(Jtext103.CFET2.Core.Middleware.ICfet2Middleware)">
+            <summary>
+            add a middle ware tot he end of the pipeline
+            </summary>
+            <param name="midware"></param>
+        </member>
+        <member name="T:Jtext103.CFET2.Core.CommunicationManager">
+            <summary>
+            manages all the remote protocols
+            </summary>
+        </member>
+        <member name="M:Jtext103.CFET2.Core.CommunicationManager.GetMouduleFor(System.String)">
+            <summary>
+            return the communication module for the protocol
+            </summary>
+            <param name="protocol"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Jtext103.CFET2.Core.CommunicationManager.TryAddCommunicationModule(Jtext103.CFET2.Core.Communication.CommunicationModule)">
+            <summary>
+            add module to the manager, and register the protocol name with the module
+            </summary>
+            <param name="module"></param>
+        </member>
+        <member name="T:Jtext103.CFET2.Core.ResourceRequest">
+            <summary>
+            the request object that used to access a resource
+            </summary>
+        </member>
+        <member name="M:Jtext103.CFET2.Core.ResourceRequest.#ctor(System.String,Jtext103.CFET2.Core.AccessAction,System.Object[],System.Collections.Generic.Dictionary{System.String,System.Object},System.Collections.Generic.Dictionary{System.String,System.String},System.Boolean)">
+            <summary>
+            constructor         
+            </summary>
+        </member>
+        <member name="P:Jtext103.CFET2.Core.ResourceRequest.RequestUri">
+            <summary>
+            the request uri
+            </summary>
+        </member>
+        <member name="P:Jtext103.CFET2.Core.ResourceRequest.InputArray">
+            <summary>    
+            the input parameter in array
+            </summary>
+        </member>
+        <member name="P:Jtext103.CFET2.Core.ResourceRequest.InputDict">
+            <summary>
+            the input parameter in dictionary
+            </summary>
+        </member>
+        <member name="P:Jtext103.CFET2.Core.ResourceRequest.Action">
+            <summary>
+            the access action 
+            </summary>
+        </member>
+        <member name="P:Jtext103.CFET2.Core.ResourceRequest.UsingInputDict">
+            <summary>
+            to define use dictionary or not
+            </summary>
+        </member>
+        <member name="P:Jtext103.CFET2.Core.ResourceRequest.ExtraRequests">
+            <summary>
+            extrarequest about pipeline
+            </summary>
+        </member>
+        <member name="T:Jtext103.CFET2.Core.AccessAction">
+            <summary>
+            the type  of the http request 
+            </summary>
+        </member>
+        <member name="T:Jtext103.CFET2.Core.Resource.DictionaryInputsIndicator">
+            <summary>
+            this object does nothing other then indicate the next object in this input are a dictionary that needs to be maped to the inputs
+            </summary>
+        </member>
+        <member name="T:Jtext103.CFET2.Core.Resource.ResourceBase">
+            <summary>
+            the base of all resources, holds basic info
+            the cfet2hub hold a original instance of the resources, and will make a cpoy of it the cpoy can be modified accoding to permission control 
+            (todo: implement the copy, now just give everyone the orignal)
+            </summary>
+        </member>
+        <member name="P:Jtext103.CFET2.Core.Resource.ResourceBase.Path">
+            <summary>
+            the path to this resource
+            </summary>
+        </member>
+        <member name="P:Jtext103.CFET2.Core.Resource.ResourceBase.IsOriginal">
+            <summary>
+            is this the orignal copy
+            </summary>
+        </member>
+        <member name="P:Jtext103.CFET2.Core.Resource.ResourceBase.Info">
+            <summary>
+            get the describtion of this 
+            </summary>
+        </member>
+        <member name="M:Jtext103.CFET2.Core.Resource.ResourceBase.Get(System.Collections.Generic.Dictionary{System.String,System.Object})">
+            <summary>
+            get the value of the resource, you provide a dictionary as an input,
+            the key is the parameter name, 
+            failed to return a value then no exception will be thrown but you get a invalide sample.
+            </summary>
+            <param name="inputDict"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Jtext103.CFET2.Core.Resource.ResourceConfig">
+            <summary>
+            manage a config resource
+            </summary>
+        </member>
+        <member name="P:Jtext103.CFET2.Core.Resource.ResourceConfig.PropertySet">
+            <summary>
+            set sample to this property
+            </summary>
+        </member>
+        <member name="P:Jtext103.CFET2.Core.Resource.ResourceConfig.MethodSet">
+            <summary>
+            set sample value using this mehtod
+            </summary>
+        </member>
+        <member name="M:Jtext103.CFET2.Core.Resource.ResourceConfig.Get(System.Object[])">
+            <summary>
+            get the value of the resource, you can provide o or many parameters to further locate the resource,
+            if the resouce requires a parameter but you failed to provide one or the input is invalid or anything the bad happened and the thing
+            failed to return a value then no exception will be thrown but you get a invalide sample(todo!!).
+            </summary>
+            <param name="input"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Jtext103.CFET2.Core.Resource.ResourceConfig.Set(System.Collections.Generic.Dictionary{System.String,System.Object})">
+            <summary>
+            get the value of the resource, you provide a dictionary as an input,
+            the key is the parameter name, note you can use the key CommonConst.TheLastInputsKey as the key for the last object if you dont know its parameter name, 
+            in this case you still need to provide the rest parameters witht he name, those is the locators, the last one is the value to be set, 
+            parameter in the dictionary not matching tha parameter name in the method will be dropped, 
+            failed to return a value then no exception will be thrown but you get a invalide sample.
+            </summary>
+            <param name="inputDict"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Jtext103.CFET2.Core.Resource.ResourceConfig.Set(System.Object[])">
+            <summary>
+            Set is tricky. Note, Important, You must always pass a value not a sample to set a config. 
+            But the thing may implements the config as property of type sample (which is not recommanded unless necessary), to the Set here will automaticlly wrap the value into sample. 
+            And if it is a Method Set, the arguments must have only no sample type, not poiunt to accept sample, since the sample is for get only
+            </summary>
+            <param name="inputs">the input to set the config, if it is a property set of method with only one parameter as the value to be set (config value), then there are only one para nneded, 
+            if there are more parameter the value must be of the last one, all preceeding ones are the locators</param>
+            <returns></returns>
+        </member>
+        <member name="M:Jtext103.CFET2.Core.Resource.ResourceConfig.CheckConfigImplementation">
+            <summary>
+            check if this config has both set and get, will throw eception when failed
+            </summary>
+        </member>
+        <member name="M:Jtext103.CFET2.Core.Resource.ResourceConfig.actionImplementedBy(Jtext103.CFET2.Core.Attributes.ConfigAction)">
+            <summary>
+            return 
+            </summary>
+            <param name="action"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Jtext103.CFET2.Core.Resource.ResourceConfig.tryAssignImplemationSet(System.Reflection.MemberInfo)">
+            <summary>
+            try to assign coorisponding implemeation to right property
+            </summary>
+            <param name="member"></param>
+        </member>
+        <member name="T:Jtext103.CFET2.Core.Resource.ResourceInfo">
+            <summary>
+            describe the resource
+            </summary>
+        </member>
+        <member name="F:Jtext103.CFET2.Core.Resource.ResourceInfo.Implementations">
+            <summary>
+            the implementions of this resource
+            </summary>
+        </member>
+        <member name="M:Jtext103.CFET2.Core.Resource.ResourceMethod.Invoke(System.Collections.Generic.Dictionary{System.String,System.Object})">
+            <summary>
+            invoke the method with parameters in dictionery,
+            get the value of the resource, you provide a dictionary as an input,
+            the key is the parameter name, note you can use the key CommonConst.TheLastInputsKey as the key for the last object if you dont know its parameter name, 
+            parameter in the dictionary not matching tha parameter name in the method will be dropped, 
+            failed to return a value then no exception will be thrown but you get a invalide sample.
+            </summary>
+            <param name="inputDict"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Jtext103.CFET2.Core.Resource.ResourceStatus">
+            <summary>
+            the resource for status, this is read only,
+            it support property getter, method 
+            NOTE: VERY IMPORTANT!:
+            One thing can only have a resource of the same name, 
+            for status it can be implemented by the thing either as a proptery or a method returning a sample and takes 0 or 1 parameter.
+            </summary>
+        </member>
+        <member name="P:Jtext103.CFET2.Core.Resource.ResourceStatus.PropertyGet">
+            <summary>
+            get sample value from this property
+            </summary>
+        </member>
+        <member name="P:Jtext103.CFET2.Core.Resource.ResourceStatus.MethodGet">
+            <summary>
+            get sample value from the return value of this methods
+            </summary>
+        </member>
+        <member name="P:Jtext103.CFET2.Core.Resource.ResourceStatus.ParentResource">
+            <summary>
+            hold the parent resource thing for invoke the thing implementations
+            </summary>
+        </member>
+        <member name="M:Jtext103.CFET2.Core.Resource.ResourceStatus.#ctor(System.String,Jtext103.CFET2.Core.Resource.ResourceThing)">
+            <summary>
+            
+            </summary>
+            <param name="name">the name of this source</param>
+            <param name="resourceThing">the parent thing of this resource</param>
+        </member>
+        <member name="M:Jtext103.CFET2.Core.Resource.ResourceStatus.AddImplementation(System.Reflection.MemberInfo)">
+            <summary>
+            why it's not the constructure?
+            becourse this my be called multiple times to add more implementations into the resource
+            </summary>
+            <param name="key"></param>
+            <param name="value"></param>
+        </member>
+        <member name="M:Jtext103.CFET2.Core.Resource.ResourceStatus.Get(System.Object[])">
+            <summary>
+            get the value of the resource, you can provide 0 or 1 input parameter,
+            if the resouce requires a parameter but you failed to provide one or the input is invalid or anything the bad happened and the thing
+            failed to return a value then no exception will be thrown but you get a invalide sample.
+            </summary>
+            <param name="inputs">input for the status</param>
+            <returns>status in sample</returns>
+        </member>
+        <member name="M:Jtext103.CFET2.Core.Resource.ResourceStatus.tryAssignImplemationGet(System.Reflection.MemberInfo)">
+            <summary>
+            try to assign coorisponding implemeation to right property
+            </summary>
+            <param name="member"></param>
+        </member>
+        <member name="M:Jtext103.CFET2.Core.Resource.ResourceStatus.tryGetFromThing(System.Object[])">
+            <summary>
+            this is useful that for method and config they all allow get, this can be reused
+            </summary>
+            <param name="inputs"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Jtext103.CFET2.Core.Resource.ResourceStatus.InvokeResoureMethod(System.Object[],System.Reflection.MethodInfo)">
+            <summary>
+            helper invoke an method in a resource.
+            </summary>
+            <param name="inputs"></param>
+            <param name="method"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Jtext103.CFET2.Core.Resource.ResourceStatus.GetMandatoryParameterCount(System.Reflection.ParameterInfo[])">
+            <summary>
+            return the madatory parameter count
+            </summary>
+            <param name="parameterInfo"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Jtext103.CFET2.Core.Resource.ResourceThing">
+            <summary>
+            this resource represent the thing, you can probe and access other reource of this thing
+            </summary>
+        </member>
+        <member name="P:Jtext103.CFET2.Core.Resource.ResourceThing.TheThing">
+            <summary>
+            holds the instance of a thing, it's publuc get yet, todo: make access control of it
+            all the resource must be related to a thing
+            </summary>
+        </member>
+        <member name="P:Jtext103.CFET2.Core.Resource.ResourceThing.Resources">
+            <summary>
+            the config, status, method of this thing
+            this does not include child thing
+            ,todo make it private afte some test
+            , the resource name is case insensitive
+            </summary>
+        </member>
+        <member name="P:Jtext103.CFET2.Core.Resource.ResourceThing.DefualtStatus">
+            <summary>
+            the defualt status, if set get this thing will be getting this
+            </summary>
+        </member>
+        <member name="M:Jtext103.CFET2.Core.Resource.ResourceThing.#ctor(Jtext103.CFET2.Core.Thing,System.String,System.Object)">
+            <summary>
+            thing must have a unique name on the same level
+            </summary>
+            <param name="theThing"></param>
+            <param name="name"></param>
+            <param name="initObject">the object of initial configuration</param>
+        </member>
+        <member name="M:Jtext103.CFET2.Core.Resource.ResourceThing.Get(System.Object[])">
+            <summary>
+            return defualt status or empty status sample indicating thing
+            </summary>
+            <param name="inputs">input for the status</param>
+            <returns>status in sample</returns>
+        </member>
+        <member name="M:Jtext103.CFET2.Core.Resource.ResourceThing.tryGetFromThing(System.Object[])">
+            <summary>
+            get thing itself
+            </summary>
+            <param name="inputs"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Jtext103.CFET2.Core.Resource.ResourceThing.extractMenbers(System.Type)">
+            <summary>
+            extract all the members for later use
+            </summary>
+        </member>
+        <member name="P:Jtext103.CFET2.Core.Sample.Config`1.SupportedActions">
+            <summary>
+            user can get the availabe status of the sample by only the resource can set if
+            </summary>
+        </member>
+        <member name="T:Jtext103.CFET2.Core.Sample.ISample">
+            <summary>
+            a simple inter face for all samples
+            </summary>
+        </member>
+        <member name="P:Jtext103.CFET2.Core.Sample.ISample.ObjectVal">
+            <summary>
+            get the value of the sample as an object
+            </summary>
+        </member>
+        <member name="M:Jtext103.CFET2.Core.Sample.ISample.GetVal``1">
+            <summary>
+            get the value of the sample as the tpye of TVal
+            </summary>
+            <typeparam name="TVal">it can be smple cast of complex convert</typeparam>
+            <returns></returns>
+        </member>
+        <member name="P:Jtext103.CFET2.Core.Sample.ISample.Context">
+            <summary>
+            the context of the sample, every thing should be stored here, other property just get/set value from it
+            </summary>
+        </member>
+        <member name="P:Jtext103.CFET2.Core.Sample.ISample.IsValid">
+            <summary>
+            if this sample is a valid sample, if not you should not use the Value in this sample.
+            </summary>
+        </member>
+        <member name="P:Jtext103.CFET2.Core.Sample.ISample.IsRemote">
+            <summary>
+            if this sample is from a remote host
+            </summary>
+        </member>
+        <member name="M:Jtext103.CFET2.Core.Sample.ISample.AddErrorMessage(System.String)">
+            <summary>
+            add an error message to the sample, indicating what's wrong with this sample. 
+            one called, the sample became invalid
+            </summary>
+            <param name="msg"></param>
+        </member>
+        <member name="P:Jtext103.CFET2.Core.Sample.ISample.ErrorMessages">
+            <summary>
+            if this sample is invalid, this field usually contains error message of this sample.
+            </summary>
+        </member>
+        <member name="P:Jtext103.CFET2.Core.Sample.ISample.Path">
+            <summary>
+            tha path of the resource that generate the sample works mainly on get sample
+            </summary>
+        </member>
+        <member name="M:Jtext103.CFET2.Core.Sample.ISample.SetPath(System.String)">
+            <summary>
+            the the path of the sample by the resources, use in get action, this is a fluent function
+            </summary>
+            <param name="path"></param>
+        </member>
+        <member name="P:Jtext103.CFET2.Core.Sample.ISample.ResourceType">
+            <summary>
+            the type of the sample todo: rename this and implement in sample base as return the type name
+            </summary>
+        </member>
+        <member name="T:Jtext103.CFET2.Core.Sample.Method`1">
+            <summary>
+            the method return value is put in the value field
+            </summary>
+            <typeparam name="T"></typeparam>
+        </member>
+        <member name="T:Jtext103.CFET2.Core.Sample.SampleBase`1">
+            <summary>
+            the resource sample
+            </summary>
+            <typeparam name="T"></typeparam>
+        </member>
+        <member name="M:Jtext103.CFET2.Core.Sample.SampleBase`1.GetInvalideSample(System.String)">
+            <summary>
+            return an invalid sample
+            </summary>
+            <param name="errorMessage"></param>
+            <returns></returns>
+        </member>
+        <member name="P:Jtext103.CFET2.Core.Sample.SampleBase`1.Context">
+            <summary>
+            holds the context dictionary, note that all the value that a sample holds should be in the context
+            </summary>
+        </member>
+        <member name="P:Jtext103.CFET2.Core.Sample.SampleBase`1.Val">
+            <summary>
+            the value of this sample
+            </summary>
+        </member>
+        <member name="P:Jtext103.CFET2.Core.Sample.SampleBase`1.IsValid">
+            <summary>
+            if the thing failed to prove a sample, a empty sampple with IsValid=false will be returned,
+             instead of throwing exception
+            </summary>
+        </member>
+        <!-- 对于成员“P:Jtext103.CFET2.Core.Sample.SampleBase`1.ErrorMessages”忽略有格式错误的 XML 注释 -->
+        <member name="P:Jtext103.CFET2.Core.Sample.SampleBase`1.Path">
+            <summary>
+            the path of the resouce that generate this sample 
+            </summary>
+        </member>
+        <member name="P:Jtext103.CFET2.Core.Sample.SampleBase`1.IsRemote">
+            <summary>
+            is this sample from a remote host
+            </summary>
+        </member>
+        <member name="M:Jtext103.CFET2.Core.Sample.SampleBase`1.SetPath(System.String)">
+            <summary>
+            set the path of the resouce that generate this sample
+            </summary>
+            <param name="path"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Jtext103.CFET2.Core.Sample.SampleBase`1.ToString">
+            <summary>
+            override the to string, return the Val.tostring
+            </summary>
+            <returns>sample Value in string</returns>
+        </member>
+        <member name="M:Jtext103.CFET2.Core.Sample.SampleBase`1.#ctor(`0)">
+            <summary>
+            create the sample with an initial value
+            </summary>
+            <param name="initVal"></param>
+        </member>
+        <member name="M:Jtext103.CFET2.Core.Sample.SampleBase`1.#ctor(`0,Jtext103.CFET2.Core.Sample.ResourceTypes)">
+            <summary>
+            create the sample with an initial value and the thing type 
+            </summary>
+            <param name="initVal"></param>
+            <param name="thingType"></param>
+        </member>
+        <member name="M:Jtext103.CFET2.Core.Sample.SampleBase`1.#ctor(`0,System.Boolean)">
+            <summary>
+            create the sample with an initial value, and specifies the isValid state
+            </summary>
+            <param name="initVal"></param>
+            <param name="isValid"></param>
+        </member>
+        <member name="M:Jtext103.CFET2.Core.Sample.SampleBase`1.#ctor(System.Collections.Generic.Dictionary{System.String,System.Object})">
+            <summary>
+            To clone a sample from a given sample context
+            </summary>
+        </member>
+        <member name="M:Jtext103.CFET2.Core.Sample.SampleBase`1.#ctor">
+            <summary>
+            reserved for deserialzation do not use derectly
+            </summary>
+        </member>
+        <member name="P:Jtext103.CFET2.Core.Sample.SampleBase`1.ObjectVal">
+            <summary>
+            simple return Val as an object
+            </summary>
+        </member>
+        <member name="M:Jtext103.CFET2.Core.Sample.SampleBase`1.CastValue``1">
+            <summary>
+            
+            </summary>
+            <summary>
+            return a copy of this sample but the val in different generic type. 
+            note, if the val in orignal sample can not be cast into the target type there will be a exception when you access the val
+            </summary>
+            <typeparam name="Tval"></typeparam>
+            <returns></returns>
+        </member>
+        <member name="M:Jtext103.CFET2.Core.Sample.SampleBase`1.AddErrorMessage(System.String)">
+            <summary>
+            after called this sample is set to be invalid
+            </summary>
+            <param name="msg"></param>
+        </member>
+        <member name="T:Jtext103.CFET2.Core.Sample.SampleExtension">
+            <summary>
+            extesion method related to sample
+            </summary>
+        </member>
+        <member name="M:Jtext103.CFET2.Core.Sample.SampleExtension.ToSample(System.Object,System.Type)">
+            <summary>
+            wrap any object into a sample of given type,
+            if it is already a sample the ignore
+            </summary>
+            <param name="val"></param>
+            <param name="genericSampleType">genericSampleType, status? config ?</param>
+            <returns>wrapped sample</returns>
+        </member>
+        <member name="M:Jtext103.CFET2.Core.Sample.SampleExtension.ToStatus(System.Object)">
+            <summary>
+            wrap any object into a status sample, if it is a sample aready then does nothing but cast
+            </summary>
+            <param name="val"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Jtext103.CFET2.Core.Sample.SampleExtension.ToMethod(System.Object)">
+            <summary>
+            wrap any object into a method sample, if it is a sample aready then does nothing but cast
+            </summary>
+            <param name="val"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Jtext103.CFET2.Core.Sample.SampleExtension.ToConfig(System.Object)">
+            <summary>
+            wrap any object into a config sample, if it is a sample aready then does nothing but cast
+            </summary>
+            <param name="val"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Jtext103.CFET2.Core.Sample.Status`1">
+            <summary>
+            represent a 
+            </summary>
+            <typeparam name="T"></typeparam>
+        </member>
+        <member name="M:Jtext103.CFET2.Core.Thing.TryInit(System.Object)">
+            <summary>
+            this get called just after add thing is called, that's the thing is instantiated and probed, now you don't have a proper hub 
+            </summary>
+            <param name="initObj"></param>
+        </member>
+        <member name="M:Jtext103.CFET2.Core.Thing.Start">
+            <summary>
+            this get called just after all thing is added, that's the thing is instantiated and probed, now you do have a proper hub 
+            </summary>
+        </member>
+        <member name="P:Jtext103.CFET2.Core.Thing.Path">
+            <summary>
+            the path to the thing this is valid only after the thing is added to the hub
+            </summary>
+        </member>
+        <member name="M:Jtext103.CFET2.Core.Thing.GetPathFor(System.String)">
+            <summary>
+            return the path for a resouce in this thing
+            </summary>
+            <param name="resourceName"></param>
+            <returns></returns>
+        </member>
+    </members>
+</doc>

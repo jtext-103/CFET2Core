@@ -21,11 +21,12 @@ namespace Jtext103.CFET2.NancyHttpCommunicationModule
 {
     public class RequestModule : NancyModule
     {
-        private ViewSelector viewSelector = new ViewSelector();
+        //private ViewSelector viewSelector = new ViewSelector();
+
+        string viewPath = "/view";
 
         public RequestModule()
         {
-            //空请求也放在ViewSelector中
             Get["/"] = r =>
             {
                 return GetResponse(AccessAction.get);
@@ -33,6 +34,10 @@ namespace Jtext103.CFET2.NancyHttpCommunicationModule
 
             Get["/{name*}"] = r =>
             {
+                if (Request.Url.Path.StartsWith(viewPath))
+                {
+                    return GetResponse(AccessAction.get, true);
+                }
                 return GetResponse(AccessAction.get);
             };
 
@@ -45,63 +50,113 @@ namespace Jtext103.CFET2.NancyHttpCommunicationModule
             {
                 return GetResponse(AccessAction.set);
             };
+
         }
 
-        private object GetResponse(AccessAction action)
+        private object GetResponse(AccessAction action, bool shouldReturnView = false)
         {
-            //无论是否从浏览器请求，都先请求一个 ISample 出来
-            ResourceRequest request = new ResourceRequest(this.Request.Url.Path + this.Request.Url.Query.ToString(), action, null, null, null);
-            ISample result;
+            if (shouldReturnView)
+            {
+                return View["index"];
+            }
 
-            Status<string> fakeSample = null;
-            string viewPath = null;
+            if (isFromBrowser())
+            {
+                string requestPath = this.Request.Url.Path;
+                if(requestPath[0] == '/')
+                {
+                    requestPath = requestPath.Substring(1, requestPath.Length - 1);
+                }
+                string queryString = this.Request.Url.Query.ToString();
+                string hashTag = viewPath + "#" + requestPath + queryString;
+                return Response.AsRedirect(hashTag, Nancy.Responses.RedirectResponse.RedirectType.Permanent);                
+            }
+            else
+            {
+                ResourceRequest request = new ResourceRequest(this.Request.Url.Path + this.Request.Url.Query.ToString(), action, null, null, null);
+                ISample result;
 
-            //这里的逻辑是，如果先从 Hub 获取 ISample，然后，如果请求不是来自浏览器则直接返回获取的 ISample（不管是不是 Vaild）或者错误信息；
-            //如果请求来自浏览器，则将 ISample（区分是否存在，也就是是否被 catch） 交给 ViewSelector ，然后 ViewSelector 返回对应的视图
-            //也就是说，只要请求不是来自浏览器，则在这段程序中全部处理了并返回 C# 类型；如果请求来自浏览器，则全部返回 View
-            try
-            {
-                result = NancyServer.TheHub.TryAccessResourceSampleWithUri(request);
-            }
-            //只有没有从Hub中获取到ISample才会去设置fakeSample
-            catch (ResourceDoesNotExistException e)
-            {
-                if (!isFromBrowser())
+                try
                 {
-                    var response = new NotFoundResponse();
-                    response.StatusCode = HttpStatusCode.NotFound;
-                    return response;
+                    result = NancyServer.TheHub.TryAccessResourceSampleWithUri(request);
                 }
-                else
+                catch (ResourceDoesNotExistException e)
                 {
-                    viewSelector.GetViewPath(this.Request, null, ref viewPath, ref fakeSample);
-                    return View[viewPath, fakeSample];
+                        var response = new NotFoundResponse();
+                        response.StatusCode = HttpStatusCode.NotFound;
+                        return response;
                 }
-            }
-            catch (Exception e)
-            {
-                if (!isFromBrowser())
+                catch (Exception e)
                 {
-                    var response = new NotFoundResponse();
-                    response.StatusCode = HttpStatusCode.BadRequest;
-                    return response;
+                        var response = new NotFoundResponse();
+                        response.StatusCode = HttpStatusCode.BadRequest;
+                        return response;
+
                 }
-                else
-                {
-                    viewSelector.GetViewPath(this.Request, null, ref viewPath, ref fakeSample);
-                    return View[viewPath, fakeSample];
-                }
+
+                var rightResponse = JsonConvert.SerializeObject(result.Context);
+                return Response.AsText(rightResponse);
             }
-            if (!isFromBrowser())
-            {
-                //这里之前是result，导致冗余，数据大时序列化时间过长
-                var response = JsonConvert.SerializeObject(result.Context);
-                return Response.AsText(response);
-            }
-            viewSelector.GetViewPath(this.Request, result, ref viewPath, ref fakeSample);
-            return View[viewPath, result];
         }
 
+        #region GetResponseOldVersion
+        //private object GetResponse(AccessAction action)
+        //{
+        //    //无论是否从浏览器请求，都先请求一个 ISample 出来
+        //    ResourceRequest request = new ResourceRequest(this.Request.Url.Path + this.Request.Url.Query.ToString(), action, null, null, null);
+        //    ISample result;
+
+        //    Status<string> fakeSample = null;
+        //    string viewPath = null;
+
+        //    //这里的逻辑是，如果先从 Hub 获取 ISample，然后，如果请求不是来自浏览器则直接返回获取的 ISample（不管是不是 Vaild）或者错误信息；
+        //    //如果请求来自浏览器，则将 ISample（区分是否存在，也就是是否被 catch） 交给 ViewSelector ，然后 ViewSelector 返回对应的视图
+        //    //也就是说，只要请求不是来自浏览器，则在这段程序中全部处理了并返回 C# 类型；如果请求来自浏览器，则全部返回 View
+        //    try
+        //    {
+        //        result = NancyServer.TheHub.TryAccessResourceSampleWithUri(request);
+        //    }
+        //    //只有没有从Hub中获取到ISample才会去设置fakeSample
+        //    catch (ResourceDoesNotExistException e)
+        //    {
+        //        if (!isFromBrowser())
+        //        {
+        //            var response = new NotFoundResponse();
+        //            response.StatusCode = HttpStatusCode.NotFound;
+        //            return response;
+        //        }
+        //        else
+        //        {
+        //            viewSelector.GetViewPath(this.Request, null, ref viewPath, ref fakeSample);
+        //            return View[viewPath, fakeSample];
+        //        }
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        if (!isFromBrowser())
+        //        {
+        //            var response = new NotFoundResponse();
+        //            response.StatusCode = HttpStatusCode.BadRequest;
+        //            return response;
+        //        }
+        //        else
+        //        {
+        //            viewSelector.GetViewPath(this.Request, null, ref viewPath, ref fakeSample);
+        //            return View[viewPath, fakeSample];
+        //        }
+        //    }
+        //    if (!isFromBrowser())
+        //    {
+        //        //这里之前是result，导致冗余，数据大时序列化时间过长
+        //        var response = JsonConvert.SerializeObject(result.Context);
+        //        return Response.AsText(response);
+        //    }
+        //    viewSelector.GetViewPath(this.Request, result, ref viewPath, ref fakeSample);
+        //    return View[viewPath, result];
+        //}
+        #endregion
+
+        #region GZipNotFinished
         static string GZipCompressString(string rawString)
         {
             if (string.IsNullOrEmpty(rawString) || rawString.Length == 0)
@@ -125,6 +180,7 @@ namespace Jtext103.CFET2.NancyHttpCommunicationModule
             compressedzipStream.Close();
             return ms.ToArray();
         }
+        #endregion
 
         private bool isFromBrowser()
         {

@@ -34,8 +34,7 @@ namespace Jtext103.CFET2.CFET2App.ExampleThings
                     MyHub.EventHub.Publish(GetPathFor("Base"), "changed", _base);
                 }
             }
-        } 
-        
+        }
 
         [Cfet2Status]
         public int Value(int input) => input* Base;
@@ -64,13 +63,13 @@ namespace Jtext103.CFET2.CFET2App.ExampleThings
             { 
                 staticConfig = initObj.ToString();
             }
-            Console.WriteLine("useless init with : "+ staticConfig);
+            //Console.WriteLine("useless init with : "+ staticConfig);
         }
 
         public override void Start()
         {
             base.Start();
-            Console.WriteLine("useless start with : " + staticConfig);
+            //Console.WriteLine("useless start with : " + staticConfig);
         }
 
     }

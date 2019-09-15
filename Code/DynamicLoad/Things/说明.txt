@@ -1,0 +1,2 @@
+要挂载的Thing，结尾必须是Thing.txt，比如Card0Thing.txt，其中.txt是文件后缀
+如果不想挂载那个Thing，改个名也行，或者放到这个Backup文件夹中

@@ -64,6 +64,8 @@
     <Compile Include="Attributes\Cfet2ConfigAttribute.cs" />
     <Compile Include="Attributes\Cfet2MethodAttribute.cs" />
     <Compile Include="Attributes\Cfet2StatusAttribute.cs" />
+    <Compile Include="BasicThings\CustomView\CustomViewConfig.cs" />
+    <Compile Include="BasicThings\CustomView\CustomViewThing.cs" />
     <Compile Include="CFET2Host.cs" />
     <Compile Include="CFET2Module.cs" />
     <Compile Include="CommonConstants.cs" />

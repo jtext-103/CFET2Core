@@ -3,8 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27130.2027
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CFET2App", "CFET2App\CFET2App.csproj", "{C6D481AC-3D71-47D2-8B2F-5BACFA34F1D8}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CFET2Core", "CFET2Core\CFET2Core.csproj", "{D4FAF7F3-C9C0-45EE-B559-8CC7E3A5F36D}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CFET2CoreTest", "Cfet2CoreTest\CFET2CoreTest.csproj", "{27BA7F8F-E14B-4342-B519-5BAA079F6CB2}"
@@ -17,16 +15,14 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WobsocketEventTest", "Wobso
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebSocketRTTTest", "WebSocketRTTTest\WebSocketRTTTest.csproj", "{6AF289F4-EBA4-429D-9EA7-7D7507744A29}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CFET2App", "CFET2App\CFET2App.csproj", "{C6D481AC-3D71-47D2-8B2F-5BACFA34F1D8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{C6D481AC-3D71-47D2-8B2F-5BACFA34F1D8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{C6D481AC-3D71-47D2-8B2F-5BACFA34F1D8}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{C6D481AC-3D71-47D2-8B2F-5BACFA34F1D8}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{C6D481AC-3D71-47D2-8B2F-5BACFA34F1D8}.Release|Any CPU.Build.0 = Release|Any CPU
 		{D4FAF7F3-C9C0-45EE-B559-8CC7E3A5F36D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{D4FAF7F3-C9C0-45EE-B559-8CC7E3A5F36D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D4FAF7F3-C9C0-45EE-B559-8CC7E3A5F36D}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -51,6 +47,10 @@ Global
 		{6AF289F4-EBA4-429D-9EA7-7D7507744A29}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6AF289F4-EBA4-429D-9EA7-7D7507744A29}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6AF289F4-EBA4-429D-9EA7-7D7507744A29}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C6D481AC-3D71-47D2-8B2F-5BACFA34F1D8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C6D481AC-3D71-47D2-8B2F-5BACFA34F1D8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C6D481AC-3D71-47D2-8B2F-5BACFA34F1D8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C6D481AC-3D71-47D2-8B2F-5BACFA34F1D8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

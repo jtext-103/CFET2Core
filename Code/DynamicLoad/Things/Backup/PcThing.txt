@@ -1,0 +1,2 @@
+var pcThing = new Jtext103.CFET2.CFET2App.ExampleThings.PcMonitorThing();
+host.MyHub.TryAddThing(pcThing, "/", "pc");

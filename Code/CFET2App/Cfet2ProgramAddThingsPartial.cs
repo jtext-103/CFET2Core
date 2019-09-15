@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Jtext103.CFET2.Core.BasicThings;
 
 namespace Jtext103.CFET2.CFET2App
 {
@@ -17,6 +18,10 @@ namespace Jtext103.CFET2.CFET2App
             //var loader = new DynamicThingsLoader(this);
 
             //you can add Thing by coding here
+
+            //CustomView 
+            var customView = new CustomViewThing();
+            MyHub.TryAddThing(customView, "/", "customView", "./CustomView");
 
             //nancy HTTP
             var nancyCM = new NancyCommunicationModule(new Uri("http://localhost:9001"));

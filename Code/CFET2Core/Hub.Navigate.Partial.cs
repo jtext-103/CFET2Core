@@ -48,7 +48,7 @@ namespace Jtext103.CFET2.Core
         {
             foreach (var resource in myMaster.Resources)
             {
-                if (resource.Key.StartsWith(path))
+                if (resource.Key.StartsWith(path) && resource.Key!=path && resource.Key[path.Length].ToString()=="/")
                 {
                     if (FindLocalParentWithPath(resource.Value.Path).Path==path)
                     {

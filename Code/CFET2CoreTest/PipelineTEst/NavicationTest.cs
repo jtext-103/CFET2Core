@@ -67,7 +67,7 @@ namespace UnitTestProject2.PipelineTEst
             req1 = new ResourceRequest(@"/st", AccessAction.get, null, null, null);
             sample = MyHub.TryAccessResourceSampleWithUri(req1);
             sample.Context[NavigationMidware.ParentPath].Should().Be("");
-            ((IEnumerable<string>)sample.Context[NavigationMidware.ChildrenPath]).ShouldBeEquivalentTo(new string[] { "/st/cfg", "/st/mth", "/st/StatusP", "/st/StatusM", "/st/StatusM1", "/st/Status2Para" });
+            ((IEnumerable<string>)sample.Context[NavigationMidware.ChildrenPath]).ShouldBeEquivalentTo(new string[] { "/st/cfg", "/st/mth", "/st/StatusP", "/st/StatusM", "/st/StatusM1", "/st/Status2Para", "/st/node/mth" });
         }
 
         [TestMethod]
@@ -77,6 +77,16 @@ namespace UnitTestProject2.PipelineTEst
             ISample sample = MyHub.TryAccessResourceSampleWithUri(req1);
             sample.Context[NavigationMidware.ParentPath].Should().Be("/st");
             ((IEnumerable<string>)sample.Context[NavigationMidware.ChildrenPath]).Should().Contain(new string[] { "/st/node/mth/mth", "/st/node/mth/MethodReturnVoid" });
+
+        }
+
+        [TestMethod]
+        public void ShouldWorkOnRealFakeNode_todo()
+        {
+            ResourceRequest req1 = new ResourceRequest(@"/st/node", AccessAction.get, null, null, null);
+            ISample sample = MyHub.TryAccessResourceSampleWithUri(req1);
+            sample.Context[NavigationMidware.ParentPath].Should().Be("/st");
+            ((IEnumerable<string>)sample.Context[NavigationMidware.ChildrenPath]).Should().BeEquivalentTo(new string[] { "/st/node/mth"});
 
         }
 

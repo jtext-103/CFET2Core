@@ -74,6 +74,7 @@
     <Compile Include="HubTest\HubGetTest.cs" />
     <Compile Include="HubTest\HubRequestParsingTest.cs" />
     <Compile Include="HubTest\SamplePathTest.cs" />
+    <Compile Include="HubTest\ParamsTest.cs" />
     <Compile Include="MethodInvokeTest.cs" />
     <Compile Include="PipelineTEst\AddParametersListTest.cs" />
     <Compile Include="PipelineTEst\NavicationTest.cs" />
@@ -86,6 +87,7 @@
     <Compile Include="TestDummies\TestGetChildThing.cs" />
     <Compile Include="TestDummies\TestThingConfig.cs" />
     <Compile Include="TestDummies\TestThingMethod.cs" />
+    <Compile Include="TestDummies\TestThingParams.cs" />
     <Compile Include="TestDummies\TestThingStatus.cs" />
     <Compile Include="TestDummies\ThingWithDefualtParameters.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

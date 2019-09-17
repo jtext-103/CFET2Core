@@ -7,7 +7,7 @@ using Jtext103.CFET2.Core.Sample;
 using Jtext103.CFET2.Core.Test.TestDummies;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace UnitTestProject2.PipelineTEst
+namespace Jtext103.CFET2.Core.Test.PipelineTEst
 {
     [TestClass]
     public class NavicationTest:CFET2Host
@@ -31,6 +31,12 @@ namespace UnitTestProject2.PipelineTEst
             // /st/node/mth
             // /st/node/mth/mth
             MyHub.StartPipeline();
+        }
+
+        [TestCleanup]
+        public void clean()
+        {
+            Hub.KillMaster();
         }
 
         [TestMethod]

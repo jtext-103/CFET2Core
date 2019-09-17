@@ -63,10 +63,6 @@ namespace Jtext103.CFET2.NancyHttpCommunicationModule
             if (isFromBrowser())
             {
                 string requestPath = this.Request.Url.Path;
-                if(requestPath[0] == '/')
-                {
-                    requestPath = requestPath.Substring(1, requestPath.Length - 1);
-                }
                 string queryString = this.Request.Url.Query.ToString();
                 string hashTag = viewPath + "#" + requestPath + queryString;
                 return Response.AsRedirect(hashTag, Nancy.Responses.RedirectResponse.RedirectType.Permanent);                

@@ -96,6 +96,7 @@
     <Compile Include="Log\Nlog\Cfet2Logger.cs" />
     <Compile Include="Log\Nlog\NlogProvider.cs" />
     <Compile Include="Middleware\Basic\ActionInfo.cs" />
+    <Compile Include="Middleware\Basic\NavigationMidware.cs" />
     <Compile Include="Middleware\CfetMiddlewareBase.cs" />
     <Compile Include="Middleware\ICfet2Middleware.cs" />
     <Compile Include="Middleware\Pipeline.cs" />

@@ -16,11 +16,26 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Text.RegularExpressions;
+using Nancy.Conventions;
 
 namespace Jtext103.CFET2.NancyHttpCommunicationModule
 {
+    public class ApplicationBootstrapper : DefaultNancyBootstrapper
+    {
+        protected override void ConfigureConventions(NancyConventions nancyConventions)
+        {
+
+            nancyConventions.StaticContentsConventions.Add(StaticContentConventionBuilder.AddDirectory("/vue", "/vue"));
+            //nancyConventions.StaticContentsConventions.Add(StaticContentConventionBuilder.AddDirectory("js", "Views"));
+            //base.ConfigureConventions(nancyConventions);
+
+            base.ConfigureConventions(nancyConventions);
+        }
+    }
+
     public class RequestModule : NancyModule
     {
+
         //private ViewSelector viewSelector = new ViewSelector();
 
         string viewPath = "/view";

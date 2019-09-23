@@ -65,6 +65,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CustomBootstrapper.cs" />
     <Compile Include="NancyCommunicationModule.cs" />
     <Compile Include="NancyServer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

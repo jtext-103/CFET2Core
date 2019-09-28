@@ -33,7 +33,7 @@ namespace Jtext103.CFET2.NancyHttpCommunicationModule
             {
                 UrlReservations = new UrlReservations() { CreateAutomatically = true }
             };
-            using (var host = new NancyHost(UriHost, new DefaultNancyBootstrapper(), hostConfigs))
+            using (var host = new NancyHost(UriHost, new CustomBootstrapper(), hostConfigs))
             {
                 host.Start();
                 Console.WriteLine("Running on " + UriHost);

@@ -16,14 +16,16 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Text.RegularExpressions;
+using Nancy.Conventions;
 
 namespace Jtext103.CFET2.NancyHttpCommunicationModule
-{
+{ 
+
     public class RequestModule : NancyModule
     {
         //private ViewSelector viewSelector = new ViewSelector();
 
-        string viewPath = "/view";
+        string viewPath = "/views/index.html";
 
         public RequestModule()
         {
@@ -34,10 +36,6 @@ namespace Jtext103.CFET2.NancyHttpCommunicationModule
 
             Get["/{name*}"] = r =>
             {
-                if (Request.Url.Path.StartsWith(viewPath))
-                {
-                    return GetResponse(AccessAction.get, true);
-                }
                 return GetResponse(AccessAction.get);
             };
 
@@ -63,10 +61,6 @@ namespace Jtext103.CFET2.NancyHttpCommunicationModule
             if (isFromBrowser())
             {
                 string requestPath = this.Request.Url.Path;
-                if(requestPath[0] == '/')
-                {
-                    requestPath = requestPath.Substring(1, requestPath.Length - 1);
-                }
                 string queryString = this.Request.Url.Query.ToString();
                 string hashTag = viewPath + "#" + requestPath + queryString;
                 return Response.AsRedirect(hashTag, Nancy.Responses.RedirectResponse.RedirectType.Permanent);                

@@ -46,7 +46,7 @@ namespace Jtext103.CFET2.Core.Middleware.Basic
             var actions = input.Context[Actions] as Dictionary<string, ActionInfo>;
             foreach (var action in info.Implementations)
             {
-                actions[action.Key.ToString()] = generateActionInfo(action.Value);
+                actions[action.Key.ToString()] = generateActionInfo(action.Value, action.Key);
             }
             //if it is a config the set always have the same output type as get
             if (actions.Keys.Contains(AccessAction.set.ToString()))
@@ -56,7 +56,7 @@ namespace Jtext103.CFET2.Core.Middleware.Basic
             return input;
         }
 
-        private ActionInfo generateActionInfo(MemberInfo info)
+        private ActionInfo generateActionInfo(MemberInfo info, AccessAction action)
         {
             var actionInfo = new ActionInfo();
             switch (info)
@@ -70,6 +70,10 @@ namespace Jtext103.CFET2.Core.Middleware.Basic
                     break;
                 case PropertyInfo propInfo:
                     actionInfo.OutputType = propInfo.PropertyType.Name.ToString();
+                    if (action==AccessAction.set)
+                    {
+                        actionInfo.Parameters.Add(propInfo.Name, actionInfo.OutputType);
+                    }
                     break;
                 default:
                     break;

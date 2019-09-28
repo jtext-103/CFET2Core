@@ -25,6 +25,7 @@ namespace Jtext103.CFET2.Core.Test.PipelineTest
             MyHub.TryAddThing(new TestThingStatus(), @"/", "st");
             MyHub.TryAddThing(new TestThingConfig(), @"/", "cfg"); 
             MyHub.TryAddThing(new TestThingMethod(), @"/", "mth");
+            MyHub.StartThings();
             MyHub.StartPipeline();
         }
 
@@ -44,7 +45,17 @@ namespace Jtext103.CFET2.Core.Test.PipelineTest
             (sample.Context[ResourceInfoMidware.Actions] as Dictionary<string, ActionInfo>)[AccessAction.get.ToString()].OutputType.Should().Be("Int32");
             (sample.Context[ResourceInfoMidware.Actions] as Dictionary<string, ActionInfo>)[AccessAction.get.ToString()].Parameters.Count.Should().Be(0);
             (sample.Context[ResourceInfoMidware.Actions] as Dictionary<string, ActionInfo>)[AccessAction.set.ToString()].OutputType.Should().Be("Int32");
-            (sample.Context[ResourceInfoMidware.Actions] as Dictionary<string, ActionInfo>)[AccessAction.set.ToString()].Parameters.Count.Should().Be(0);
+            (sample.Context[ResourceInfoMidware.Actions] as Dictionary<string, ActionInfo>)[AccessAction.set.ToString()].Parameters["Config1"].Should().Be("Int32");
+
+            req1 = new ResourceRequest(@"/hostname", AccessAction.get, null, null, null);
+            sample = MyHub.TryAccessResourceSampleWithUri(req1);
+            sample.Context[ResourceInfoMidware.ResourceType].Should().Be("Config");
+            (sample.Context[ResourceInfoMidware.Actions] as Dictionary<string, ActionInfo>).Count.Should().Be(2);
+            (sample.Context[ResourceInfoMidware.Actions] as Dictionary<string, ActionInfo>)[AccessAction.get.ToString()].OutputType.Should().Be("String");
+            (sample.Context[ResourceInfoMidware.Actions] as Dictionary<string, ActionInfo>)[AccessAction.get.ToString()].Parameters.Count.Should().Be(0);
+            (sample.Context[ResourceInfoMidware.Actions] as Dictionary<string, ActionInfo>)[AccessAction.set.ToString()].OutputType.Should().Be("String");
+            (sample.Context[ResourceInfoMidware.Actions] as Dictionary<string, ActionInfo>)[AccessAction.set.ToString()].Parameters.Count.Should().Be(1);
+            (sample.Context[ResourceInfoMidware.Actions] as Dictionary<string, ActionInfo>)[AccessAction.set.ToString()].Parameters["HostName"].Should().Be("String");
         }
 
         [TestMethod]

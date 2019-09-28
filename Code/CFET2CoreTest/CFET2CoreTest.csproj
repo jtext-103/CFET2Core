@@ -8,7 +8,7 @@
     <ProjectGuid>{27BA7F8F-E14B-4342-B519-5BAA079F6CB2}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>UnitTestProject2</RootNamespace>
+    <RootNamespace>Jtext103.CFET2.Core.Test</RootNamespace>
     <AssemblyName>UnitTestProject2</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -75,9 +75,10 @@
     <Compile Include="HubTest\HubRequestParsingTest.cs" />
     <Compile Include="HubTest\SamplePathTest.cs" />
     <Compile Include="HubTest\ParamsTest.cs" />
+    <Compile Include="HubTest\RootThingTest.cs" />
     <Compile Include="MethodInvokeTest.cs" />
-    <Compile Include="PipelineTEst\AddParametersListTest.cs" />
-    <Compile Include="PipelineTEst\NavicationTest.cs" />
+    <Compile Include="PipelineTest\AddParametersListTest.cs" />
+    <Compile Include="PipelineTest\NavicationTest.cs" />
     <Compile Include="ResouceProbingConfig.cs" />
     <Compile Include="ResouceProbingStatus.cs" />
     <Compile Include="ResourceProbingMethod.cs" />

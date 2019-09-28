@@ -10,7 +10,7 @@ using System.Collections.Generic;
 using Jtext103.CFET2.Core.Exception;
 using System.Linq;
 
-namespace CFET2CoreTest
+namespace Jtext103.CFET2.Core.Test.HubTest
 {
     /// <summary>
     /// test basic probing and basic resource accessing of a status

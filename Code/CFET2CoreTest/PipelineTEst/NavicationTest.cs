@@ -7,7 +7,7 @@ using Jtext103.CFET2.Core.Sample;
 using Jtext103.CFET2.Core.Test.TestDummies;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace Jtext103.CFET2.Core.Test.PipelineTEst
+namespace Jtext103.CFET2.Core.Test.PipelineTest
 {
     [TestClass]
     public class NavicationTest:CFET2Host
@@ -25,11 +25,14 @@ namespace Jtext103.CFET2.Core.Test.PipelineTEst
             MyHub.TryAddThing(new TestThingMethod(), @"/st", "mth");
             MyHub.TryAddThing(new TestThingMethod(), @"/st/node", "mth");
             MyHub.TryAddThing(new TestThingMethod(), @"/st/node/mth/", "mth");
+            MyHub.TryAddThing(new TestThingMethod(), @"/node", "mth");
             // /st
             // /st/cfg
             // /st/mth
             // /st/node/mth
             // /st/node/mth/mth
+            // /node/mth
+            MyHub.StartThings();
             MyHub.StartPipeline();
         }
 
@@ -72,7 +75,7 @@ namespace Jtext103.CFET2.Core.Test.PipelineTEst
 
             req1 = new ResourceRequest(@"/st", AccessAction.get, null, null, null);
             sample = MyHub.TryAccessResourceSampleWithUri(req1);
-            sample.Context[NavigationMidware.ParentPath].Should().Be("");
+            sample.Context[NavigationMidware.ParentPath].Should().Be("/");
             ((IEnumerable<string>)sample.Context[NavigationMidware.ChildrenPath]).ShouldBeEquivalentTo(new string[] { "/st/cfg", "/st/mth", "/st/StatusP", "/st/StatusM", "/st/StatusM1", "/st/Status2Para", "/st/node/mth" });
         }
 
@@ -103,7 +106,7 @@ namespace Jtext103.CFET2.Core.Test.PipelineTEst
             ResourceRequest req1 = new ResourceRequest(@"/", AccessAction.get, null, null, null);
             ISample sample = MyHub.TryAccessResourceSampleWithUri(req1);
             sample.Context[NavigationMidware.ParentPath].Should().Be("");
-            ((IEnumerable<string>)sample.Context[NavigationMidware.ChildrenPath]).Should().Contain(new string[] { "/st" ,"st2"});
+            ((IEnumerable<string>)sample.Context[NavigationMidware.ChildrenPath]).Should().Contain(new string[] { "/st" ,"/st2","/node/mth"});
         }
 
 

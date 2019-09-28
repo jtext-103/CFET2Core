@@ -46,9 +46,10 @@ namespace Jtext103.CFET2.Core
         /// <returns>the children resource objects</returns>
         public IEnumerable<ResourceBase> FindLocalChildWithUri(string path)
         {
+            //check start with / if not looking for root's children
             foreach (var resource in myMaster.Resources)
             {
-                if (resource.Key.StartsWith(path) && resource.Key!=path && resource.Key[path.Length].ToString()=="/")
+                if (resource.Key.StartsWith(path) && resource.Key!=path && (resource.Key[path.Length].ToString()=="/" || path == "/"))
                 {
                     if (FindLocalParentWithPath(resource.Value.Path).Path==path)
                     {

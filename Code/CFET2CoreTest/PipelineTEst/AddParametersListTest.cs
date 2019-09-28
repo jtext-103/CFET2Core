@@ -12,7 +12,7 @@ using System.Linq;
 using Jtext103.CFET2.Core.Attributes;
 using Jtext103.CFET2.Core.Test.TestDummies;
 
-namespace Jtext103.CFET2.Core.Test.PipelineTEst
+namespace Jtext103.CFET2.Core.Test.PipelineTest
 {
     [TestClass]
     public class AddParametersListTest : CFET2Host

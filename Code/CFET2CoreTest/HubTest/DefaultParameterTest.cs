@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Jtext103.CFET2.Core.Test
+namespace Jtext103.CFET2.Core.Test.HubTest
 {
     [TestClass]
     public class DefaultParameterTest:CFET2Host

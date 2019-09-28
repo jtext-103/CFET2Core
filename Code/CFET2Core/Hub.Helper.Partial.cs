@@ -69,6 +69,11 @@ namespace Jtext103.CFET2.Core
         /// <returns></returns>
         private string extractResourcePath(string resourcePath, List<object> routeInputs)
         {
+            //just want the root thing
+            if (resourcePath==@"/")
+            {
+                return resourcePath;
+            }
             while (GetLocalResouce(resourcePath) == null)
             {
                 //loop go up and up the last segment in parameters

@@ -11,6 +11,7 @@ using Jtext103.CFET2.Core.Extension;
 using Jtext103.CFET2.Core.Communication;
 using Jtext103.CFET2.Core.Event;
 using Jtext103.CFET2.Core.Middleware;
+using Jtext103.CFET2.Core.BasicThings;
 
 namespace Jtext103.CFET2.Core
 {
@@ -58,12 +59,27 @@ namespace Jtext103.CFET2.Core
         /// <param name="initObject"></param>
         public void TryAddThing(Thing thing, string mountPath, string name, object initObject = null)
         {
+            addThing(thing, mountPath, name, initObject);
+        }
+
+
+        private void addThing(Thing thing, string mountPath, string name, object initObject = null,bool isRoot=false)
+        {
             //make the path for the thing
             if (mountPath.EndsWith(@"/") == false)
             {
                 mountPath = mountPath + @"/";
             }
+            if (string.IsNullOrEmpty(name) && isRoot==false)
+            {
+                throw new GeneralCfet2Exception("must name a thing");
+            }
             var thingPath = (mountPath + name);
+            // if adding root mount as root
+            if (isRoot == true)
+            {
+                thingPath = @"/";
+            }
             if (myMaster.Resources.ContainsKey(thingPath))
             {
                 throw new GeneralCfet2Exception("Duplacated path!!");
@@ -79,10 +95,11 @@ namespace Jtext103.CFET2.Core
             myMaster.Resources[thingPath] = tThing;
             myMaster.thingPathes.Add(thingPath);
             //add the resources of the thing to the dict
+            var pathSeperater = isRoot ? "" : @"/";
             foreach (var item in tThing.Resources)
             {
                 //make the path
-                var resPath = thingPath + @"/" + item.Key;
+                var resPath = thingPath + pathSeperater + item.Key;
                 item.Value.Path = resPath;
                 myMaster.Resources[resPath] = item.Value;
             }
@@ -111,6 +128,7 @@ namespace Jtext103.CFET2.Core
                     (thing as ResourceThing).TheThing.Start();
                 }
             }
+            addThing(new RootThing(), "/", "root", null, true);
         }
 
         /// <summary>
@@ -146,5 +164,7 @@ namespace Jtext103.CFET2.Core
         {
             throw new NotImplementedException();
         }
+
+
     }
 }

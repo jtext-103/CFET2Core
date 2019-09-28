@@ -24,7 +24,7 @@ namespace Jtext103.CFET2.Core.Test.HubTest
         }
 
         [TestMethod]
-        public void ShouldWorkWithJustParams()
+        public void ShouldWorkWithJustParams_todo()
         {
             ResourceRequest req1 = new ResourceRequest(@"/params/justparams/a/b/c/d/e", AccessAction.get, null, null, null);
             ISample sample = MyHub.TryAccessResourceSampleWithUri(req1);

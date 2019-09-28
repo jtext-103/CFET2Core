@@ -5,7 +5,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Jtext103.CFET2.Core.Test.TestDummies;
 using FluentAssertions;
 
-namespace Jtext103.CFET2.Core.Test
+namespace Jtext103.CFET2.Core.Test.HubTest
 {
     /// <summary>
     /// Summary description for SamplePathTest

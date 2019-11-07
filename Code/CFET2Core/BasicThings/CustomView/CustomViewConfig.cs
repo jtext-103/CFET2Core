@@ -10,7 +10,7 @@ namespace Jtext103.CFET2.Core.BasicThings.CustomView
 {
     public class CustomViewConfig
     {
-        static string matchFileName = @"\CustomViewConfig.json";
+        static string matchFileName = Path.DirectorySeparatorChar.ToString() + @"CustomViewConfig.json";
 
         public string DirPath { get; set; }
 

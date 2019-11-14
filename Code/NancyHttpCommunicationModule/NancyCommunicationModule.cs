@@ -7,7 +7,9 @@ using Jtext103.CFET2.Core.Communication;
 using Jtext103.CFET2.Core.Sample;
 using Jtext103.CFET2.Core.Attributes;
 using Newtonsoft.Json.Linq;
-
+using System.Net;
+using System.IO;
+using Newtonsoft.Json;
 
 namespace Jtext103.CFET2.NancyHttpCommunicationModule
 {
@@ -32,17 +34,45 @@ namespace Jtext103.CFET2.NancyHttpCommunicationModule
             myServer.Start();
         }
 
-        //目前没有完善
         #region
-        public override ISample TryGetResourceSampleWithUri(string requestUri, Dictionary<string, object> inputDict)
+        public override ISample TryGetResourceSampleWithUri(string requestUri, params object[] inputs)
         {
-            //string retString = myHttpRequest.HttpGet(requestUri, null, -1);
-            //return JObject.Parse(retString).ToObject<Status<Object>>();
-            throw new NotImplementedException();          
+            HttpWebRequest req = (HttpWebRequest)WebRequest.Create(requestUri);
+            req.Method = "GET";
+            HttpWebResponse resp;
+            try
+            {
+                resp = (HttpWebResponse)req.GetResponse();
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.ToString());
+            }
+            
+            Stream stream = resp.GetResponseStream();
+            StreamReader reader = new StreamReader(stream);
+            string content = reader.ReadToEnd();
+
+            ISample result = new SampleBase<object>() ;
+            try
+            {
+                result.Context = (JsonConvert.DeserializeObject<Dictionary<string, object>>(content));
+            }
+            catch (Exception e)
+            {
+                throw new Exception("Cannot convert response content to a ISample! Message: " + e.ToString());
+            }
+
+            return result;
         }
 
+        public override ISample TryGetResourceSampleWithUri(string requestUri, Dictionary<string, object> inputDict)
+        {
 
-        public override ISample TryGetResourceSampleWithUri(string requestUri, params object[] inputs)
+            throw new NotImplementedException();
+        }
+
+        public override ISample TryInvokeSampleResourceWithUri(string requestUri, params object[] inputs)
         {
             throw new NotImplementedException();
         }
@@ -52,17 +82,12 @@ namespace Jtext103.CFET2.NancyHttpCommunicationModule
             throw new NotImplementedException();
         }
 
-        public override ISample TryInvokeSampleResourceWithUri(string requestUri, params object[] inputs)
+        public override ISample TrySetResourceSampleWithUri(string requestUri, params object[] inputs)
         {
             throw new NotImplementedException();
         }
 
         public override ISample TrySetResourceSampleWithUri(string requestUri, Dictionary<string, object> inputDict)
-        {
-            throw new NotImplementedException();
-        }
-
-        public override ISample TrySetResourceSampleWithUri(string requestUri, params object[] inputs)
         {
             throw new NotImplementedException();
         }

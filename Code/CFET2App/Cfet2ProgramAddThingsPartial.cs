@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using Jtext103.CFET2.Core.BasicThings;
 using Nancy.Conventions;
 using Nancy;
+using Jtext103.CFET2.Core.Middleware.Basic;
 
 namespace Jtext103.CFET2.CFET2App
 {
@@ -19,18 +20,27 @@ namespace Jtext103.CFET2.CFET2App
             //If you don't want dynamic load things, please comment out the line below
             //var loader = new DynamicThingsLoader(this);
 
+            //------------------------------Pipeline------------------------------//
+            MyHub.Pipeline.AddMiddleware(new ResourceInfoMidware());
+            MyHub.Pipeline.AddMiddleware(new NavigationMidware());
+
+            //------------------------------Nancy HTTP通信模块------------------------------//
+            var nancyCM = new NancyCommunicationModule(new Uri("http://localhost:8002"));
+            MyHub.TryAddCommunicationModule(nancyCM);
+
             //you can add Thing by coding here
 
-            //CustomView 
+            //------------------------------Custom View------------------------------//
             var customView = new CustomViewThing();
-            MyHub.TryAddThing(customView, "/", "css", "./CustomView");
+            MyHub.TryAddThing(customView, "/", "customView", "./CustomView");
 
-            //nancy HTTP
-            var nancyCM = new NancyCommunicationModule(new Uri("http://localhost:9001"));
-            MyHub.TryAddCommunicationModule(nancyCM);
+            //you can add Thing by coding here
 
             var fakeAI = new FakeAIThing();
             MyHub.TryAddThing(fakeAI, "/", "fakeCard", 16);
+
+            var remoteRequester = new RemoteRequester();
+            MyHub.TryAddThing(remoteRequester, "/", "remote");
         }
     }
 }

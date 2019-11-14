@@ -34,9 +34,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Jtext103.CFET2Core, Version=2.0.6919.28896, Culture=neutral, processorArchitecture=AMD64">
-      <HintPath>..\packages\Jtext103.CFET2Core.2.0.6919.28896\lib\net451\Jtext103.CFET2Core.dll</HintPath>
-    </Reference>
     <Reference Include="Nancy, Version=1.4.1.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Nancy.1.4.1\lib\net40\Nancy.dll</HintPath>
     </Reference>
@@ -70,24 +67,18 @@
     <Compile Include="NancyServer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RequestModule.cs" />
-    <Compile Include="ViewSelector\Config.cs" />
-    <Compile Include="ViewSelector\ViewSelector.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config">
       <SubType>Designer</SubType>
     </None>
     <None Include="packages.config" />
-    <Content Include="Views\config.cshtml" />
-    <Content Include="Views\method.cshtml" />
-    <Content Include="Views\status.cshtml" />
-    <Content Include="Views\thing.cshtml" />
-    <Content Include="Views\ViewSelector.json" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\400.html" />
-    <Content Include="Views\404.html" />
-    <Content Include="Views\index.html" />
+    <ProjectReference Include="..\CFET2Core\CFET2Core.csproj">
+      <Project>{d4faf7f3-c9c0-45ee-b559-8cc7e3a5f36d}</Project>
+      <Name>CFET2Core</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

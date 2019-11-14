@@ -83,8 +83,9 @@ namespace Jtext103.CFET2.Core.Sample
 
         /// <summary>
         /// holds the context dictionary, note that all the value that a sample holds should be in the context
+        /// 临时更改
         /// </summary>
-        public Dictionary<string, object> Context { get; protected set; } = new Dictionary<string, object>();
+        public Dictionary<string, object> Context { get; set; } = new Dictionary<string, object>();
 
 
         #region context property

@@ -19,7 +19,7 @@ using System.Text.RegularExpressions;
 using Nancy.Conventions;
 
 namespace Jtext103.CFET2.NancyHttpCommunicationModule
-{ 
+{
 
     public class RequestModule : NancyModule
     {
@@ -63,7 +63,7 @@ namespace Jtext103.CFET2.NancyHttpCommunicationModule
                 string requestPath = this.Request.Url.Path;
                 string queryString = this.Request.Url.Query.ToString();
                 string hashTag = viewPath + "#" + requestPath + queryString;
-                return Response.AsRedirect(hashTag, Nancy.Responses.RedirectResponse.RedirectType.Permanent);                
+                return Response.AsRedirect(hashTag, Nancy.Responses.RedirectResponse.RedirectType.Permanent);
             }
             else
             {
@@ -76,79 +76,21 @@ namespace Jtext103.CFET2.NancyHttpCommunicationModule
                 }
                 catch (ResourceDoesNotExistException e)
                 {
-                        var response = new NotFoundResponse();
-                        response.StatusCode = HttpStatusCode.NotFound;
-                        return response;
+                    var response = new NotFoundResponse();
+                    response.StatusCode = HttpStatusCode.NotFound;
+                    return response;
                 }
                 catch (Exception e)
                 {
-                        var response = new NotFoundResponse();
-                        response.StatusCode = HttpStatusCode.BadRequest;
-                        return response;
-
+                    var response = new NotFoundResponse();
+                    response.StatusCode = HttpStatusCode.BadRequest;
+                    return response;
                 }
 
                 var rightResponse = JsonConvert.SerializeObject(result.Context);
                 return Response.AsText(rightResponse);
             }
         }
-
-        #region GetResponseOldVersion
-        //private object GetResponse(AccessAction action)
-        //{
-        //    //无论是否从浏览器请求，都先请求一个 ISample 出来
-        //    ResourceRequest request = new ResourceRequest(this.Request.Url.Path + this.Request.Url.Query.ToString(), action, null, null, null);
-        //    ISample result;
-
-        //    Status<string> fakeSample = null;
-        //    string viewPath = null;
-
-        //    //这里的逻辑是，如果先从 Hub 获取 ISample，然后，如果请求不是来自浏览器则直接返回获取的 ISample（不管是不是 Vaild）或者错误信息；
-        //    //如果请求来自浏览器，则将 ISample（区分是否存在，也就是是否被 catch） 交给 ViewSelector ，然后 ViewSelector 返回对应的视图
-        //    //也就是说，只要请求不是来自浏览器，则在这段程序中全部处理了并返回 C# 类型；如果请求来自浏览器，则全部返回 View
-        //    try
-        //    {
-        //        result = NancyServer.TheHub.TryAccessResourceSampleWithUri(request);
-        //    }
-        //    //只有没有从Hub中获取到ISample才会去设置fakeSample
-        //    catch (ResourceDoesNotExistException e)
-        //    {
-        //        if (!isFromBrowser())
-        //        {
-        //            var response = new NotFoundResponse();
-        //            response.StatusCode = HttpStatusCode.NotFound;
-        //            return response;
-        //        }
-        //        else
-        //        {
-        //            viewSelector.GetViewPath(this.Request, null, ref viewPath, ref fakeSample);
-        //            return View[viewPath, fakeSample];
-        //        }
-        //    }
-        //    catch (Exception e)
-        //    {
-        //        if (!isFromBrowser())
-        //        {
-        //            var response = new NotFoundResponse();
-        //            response.StatusCode = HttpStatusCode.BadRequest;
-        //            return response;
-        //        }
-        //        else
-        //        {
-        //            viewSelector.GetViewPath(this.Request, null, ref viewPath, ref fakeSample);
-        //            return View[viewPath, fakeSample];
-        //        }
-        //    }
-        //    if (!isFromBrowser())
-        //    {
-        //        //这里之前是result，导致冗余，数据大时序列化时间过长
-        //        var response = JsonConvert.SerializeObject(result.Context);
-        //        return Response.AsText(response);
-        //    }
-        //    viewSelector.GetViewPath(this.Request, result, ref viewPath, ref fakeSample);
-        //    return View[viewPath, result];
-        //}
-        #endregion
 
         #region GZipNotFinished
         static string GZipCompressString(string rawString)

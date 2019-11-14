@@ -120,6 +120,7 @@
     <Compile Include="ExampleThings\FakeAI.cs" />
     <Compile Include="ExampleThings\PcMonitorThing.cs" />
     <Compile Include="ExampleThings\ObjParam.cs" />
+    <Compile Include="ExampleThings\RemoteRequester.cs" />
     <Compile Include="ExampleThings\UseLessThing.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

@@ -34,11 +34,41 @@ namespace Jtext103.CFET2.NancyHttpCommunicationModule
             myServer.Start();
         }
 
-        #region
         public override ISample TryGetResourceSampleWithUri(string requestUri, params object[] inputs)
         {
+            return HTTPRequest("GET", requestUri, null, inputs);
+        }
+
+        public override ISample TryGetResourceSampleWithUri(string requestUri, Dictionary<string, object> inputDict)
+        {
+            return HTTPRequest("GET", requestUri, inputDict, null);
+        }
+
+        public override ISample TryInvokeSampleResourceWithUri(string requestUri, params object[] inputs)
+        {
+            return HTTPRequest("PUT", requestUri, null, inputs);
+        }
+
+        public override ISample TryInvokeSampleResourceWithUri(string requestUri, Dictionary<string, object> inputDict)
+        {
+            return HTTPRequest("PUT", requestUri, inputDict, null);
+        }
+
+        public override ISample TrySetResourceSampleWithUri(string requestUri, params object[] inputs)
+        {
+            return HTTPRequest("POST", requestUri, null, inputs);
+        }
+
+        public override ISample TrySetResourceSampleWithUri(string requestUri, Dictionary<string, object> inputDict)
+        {
+            return HTTPRequest("POST", requestUri, inputDict, null);
+        }
+
+        private ISample HTTPRequest(string method, string requestUri, Dictionary<string, object> inputDict, params object[] inputs)
+        {
             HttpWebRequest req = (HttpWebRequest)WebRequest.Create(requestUri);
-            req.Method = "GET";
+            req.Method = method;
+            req.ContentLength = 0;
             HttpWebResponse resp;
             try
             {
@@ -48,12 +78,12 @@ namespace Jtext103.CFET2.NancyHttpCommunicationModule
             {
                 throw new Exception(e.ToString());
             }
-            
+
             Stream stream = resp.GetResponseStream();
             StreamReader reader = new StreamReader(stream);
             string content = reader.ReadToEnd();
 
-            ISample result = new SampleBase<object>() ;
+            ISample result = new SampleBase<object>();
             try
             {
                 result.Context = (JsonConvert.DeserializeObject<Dictionary<string, object>>(content));
@@ -65,32 +95,5 @@ namespace Jtext103.CFET2.NancyHttpCommunicationModule
 
             return result;
         }
-
-        public override ISample TryGetResourceSampleWithUri(string requestUri, Dictionary<string, object> inputDict)
-        {
-
-            throw new NotImplementedException();
-        }
-
-        public override ISample TryInvokeSampleResourceWithUri(string requestUri, params object[] inputs)
-        {
-            throw new NotImplementedException();
-        }
-
-        public override ISample TryInvokeSampleResourceWithUri(string requestUri, Dictionary<string, object> inputDict)
-        {
-            throw new NotImplementedException();
-        }
-
-        public override ISample TrySetResourceSampleWithUri(string requestUri, params object[] inputs)
-        {
-            throw new NotImplementedException();
-        }
-
-        public override ISample TrySetResourceSampleWithUri(string requestUri, Dictionary<string, object> inputDict)
-        {
-            throw new NotImplementedException();
-        }
-        #endregion
     }
 }

@@ -18,12 +18,35 @@ namespace Jtext103.CFET2.CFET2App.ExampleThings
     public class RemoteRequester : Thing
     {
         [Cfet2Status]
-        public object Get(string requestUri)
+        public object Status(string requestUri)
         {
-
-            object result = MyHub.TryGetResourceSampleWithUri(requestUri);
+            //object result = MyHub.TryGetResourceSampleWithUri(requestUri);
             object val = MyHub.TryGetResourceSampleWithUri(requestUri).ObjectVal;
             return val;
+        }
+
+        [Cfet2Method]
+        public object Method(string requestUri)
+        {
+            //object result = MyHub.TryInvokeSampleResourceWithUri(requestUri);
+            object val = MyHub.TryInvokeSampleResourceWithUri(requestUri).ObjectVal;
+            return val;
+        }
+
+        [Cfet2Config(ConfigActions = ConfigAction.Get, Name = "Config")]
+        public object ConfigGetYourMother(string requestUri)
+        {
+            //object result = MyHub.TryGetResourceSampleWithUri(requestUri);
+            object val = MyHub.TryGetResourceSampleWithUri(requestUri).ObjectVal;
+            return val;
+        }
+
+        [Cfet2Config(ConfigActions = ConfigAction.Set, Name = "Config")]
+        public void ConfigSetYourSon(string requestUri, string param)
+        {
+            //object result = MyHub.TrySetResourceSampleWithUri(requestUri);
+            object val = MyHub.TrySetResourceSampleWithUri(requestUri + "/" + param).ObjectVal;
+            //return val;
         }
     }
 }

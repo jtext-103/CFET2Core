@@ -29,7 +29,7 @@ namespace Jtext103.CFET2.Core.Sample
 
         /// <summary>
         /// the context of the sample, every thing should be stored here, other property just get/set value from it
-        /// 临时更改
+        /// change "set" attribute to public
         /// </summary>
         Dictionary<string, object> Context { get; set; }
 

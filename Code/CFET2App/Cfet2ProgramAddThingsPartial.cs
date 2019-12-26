@@ -10,6 +10,7 @@ using Jtext103.CFET2.Core.BasicThings;
 using Nancy.Conventions;
 using Nancy;
 using Jtext103.CFET2.Core.Middleware.Basic;
+using Jtext103.CFET2.CFET2App.DynamicLoad;
 
 namespace Jtext103.CFET2.CFET2App
 {
@@ -18,7 +19,7 @@ namespace Jtext103.CFET2.CFET2App
         private void AddThings()
         {
             //If you don't want dynamic load things, please comment out the line below
-            //var loader = new DynamicThingsLoader(this);
+            var loader = new DynamicThingsLoader(this);
 
             //------------------------------Pipeline------------------------------//
             MyHub.Pipeline.AddMiddleware(new ResourceInfoMidware());

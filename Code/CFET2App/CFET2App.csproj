@@ -52,6 +52,9 @@
     <GenerateSerializationAssemblies>Auto</GenerateSerializationAssemblies>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Autofac, Version=4.9.4.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
+      <HintPath>..\packages\Autofac.4.9.4\lib\net45\Autofac.dll</HintPath>
+    </Reference>
     <Reference Include="CommandLine, Version=1.9.71.2, Culture=neutral, PublicKeyToken=de6f01bd326f8c32, processorArchitecture=MSIL">
       <HintPath>..\packages\CommandLineParser.1.9.71\lib\net45\CommandLine.dll</HintPath>
     </Reference>
@@ -113,9 +116,8 @@
     <Compile Include="cli\Options.cs" />
     <Compile Include="cli\InvokeCommand.cs" />
     <Compile Include="cli\SetCommand.cs" />
-    <Compile Include="DynamicLoad\Coder.cs" />
-    <Compile Include="DynamicLoad\Dller.cs" />
-    <Compile Include="DynamicLoad\ThingsLoader.cs" />
+    <Compile Include="DynamicLoad\DynamicThingsLoader.cs" />
+    <Compile Include="DynamicLoad\ThingModel.cs" />
     <Compile Include="ExampleThings\EventListener.cs" />
     <Compile Include="ExampleThings\FakeAI.cs" />
     <Compile Include="ExampleThings\PcMonitorThing.cs" />

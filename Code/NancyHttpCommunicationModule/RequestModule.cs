@@ -17,6 +17,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Text.RegularExpressions;
 using Nancy.Conventions;
+using MsgPack.Serialization;
 
 namespace Jtext103.CFET2.NancyHttpCommunicationModule
 {
@@ -87,36 +88,38 @@ namespace Jtext103.CFET2.NancyHttpCommunicationModule
                     return response;
                 }
 
-                var rightResponse = JsonConvert.SerializeObject(result.Context);
-                return Response.AsText(rightResponse);
+                if (this.Request.Headers.AcceptEncoding.Contains("MessagePack"))
+                {
+                    var serializer = MessagePackSerializer.Get<Dictionary<string, object>>();
+                    MemoryStream stream = new MemoryStream();
+                    serializer.Pack(stream, result.Context);
+
+                    SetData(stream);
+                    var rightResponse = new Nancy.Responses.StreamResponse(GetData, "application/octet-stream");
+                    rightResponse.Headers.Add(new KeyValuePair<string, string>("Content-Encoding", "MessagePack"));
+                    return rightResponse;
+                }
+                else
+                {
+                    var rightResponse = JsonConvert.SerializeObject(result.Context);
+                    return Response.AsText(rightResponse);
+                }
             }
         }
 
-        #region GZipNotFinished
-        static string GZipCompressString(string rawString)
+        //配合Nancy返回数据
+        Stream middle;
+        private void SetData(Stream stream)
         {
-            if (string.IsNullOrEmpty(rawString) || rawString.Length == 0)
-            {
-                return "";
-            }
-            else
-            {
-                byte[] rawData = System.Text.Encoding.UTF8.GetBytes(rawString.ToString());
-                byte[] zippedData = Compress(rawData);
-                return (string)(Convert.ToBase64String(zippedData));
-            }
-
+            middle = stream;
         }
-
-        static byte[] Compress(byte[] rawData)
+        private Stream GetData()
         {
-            MemoryStream ms = new MemoryStream();
-            GZipStream compressedzipStream = new GZipStream(ms, CompressionMode.Compress, true);
-            compressedzipStream.Write(rawData, 0, rawData.Length);
-            compressedzipStream.Close();
-            return ms.ToArray();
+            //非常非常非常非常重要！
+            middle.Position = 0;
+
+            return middle;
         }
-        #endregion
 
         private bool isFromBrowser()
         {

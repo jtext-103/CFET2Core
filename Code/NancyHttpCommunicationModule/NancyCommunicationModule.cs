@@ -10,6 +10,7 @@ using Newtonsoft.Json.Linq;
 using System.Net;
 using System.IO;
 using Newtonsoft.Json;
+using MsgPack.Serialization;
 
 namespace Jtext103.CFET2.NancyHttpCommunicationModule
 {
@@ -22,9 +23,18 @@ namespace Jtext103.CFET2.NancyHttpCommunicationModule
 
         NancyServer myServer;
 
+        public string AcceptEncoding;
+
         Uri uriHost;
-        public NancyCommunicationModule(Uri myUriHost)
+
+        /// <summary>
+        /// 设置 Nancy HTTP 通信模块实例
+        /// </summary>
+        /// <param name="myUriHost">本地 Host 地址</param>
+        /// <param name="accept">请求编码方式，默认为 "JSON"， 还支持 "MessagePack"</param>
+        public NancyCommunicationModule(Uri myUriHost, string accept = "JSON")
         {
+            AcceptEncoding = accept;
             uriHost = myUriHost;
         }
 
@@ -69,6 +79,13 @@ namespace Jtext103.CFET2.NancyHttpCommunicationModule
             HttpWebRequest req = (HttpWebRequest)WebRequest.Create(requestUri);
             req.Method = method;
             req.ContentLength = 0;
+
+            if (AcceptEncoding == "MessagePack")
+            {
+                //req.Headers.Set(HttpRequestHeader.Accept, "application/octet-stream");
+                req.Headers.Set(HttpRequestHeader.AcceptEncoding, "MessagePack");
+            }
+
             HttpWebResponse resp;
             try
             {
@@ -80,13 +97,25 @@ namespace Jtext103.CFET2.NancyHttpCommunicationModule
             }
 
             Stream stream = resp.GetResponseStream();
-            StreamReader reader = new StreamReader(stream);
-            string content = reader.ReadToEnd();
-
             ISample result = new SampleBase<object>();
+
             try
             {
-                result.Context = (JsonConvert.DeserializeObject<Dictionary<string, object>>(content));
+                if (AcceptEncoding == "MessagePack")
+                {
+                    MemoryStream realStream = new MemoryStream();
+                    stream.CopyTo(realStream);
+
+                    var deserializer = MessagePackSerializer.Get<Dictionary<string, object>>();
+                    realStream.Position = 0;
+                    result.Context = deserializer.Unpack(realStream);
+                }
+                else
+                {
+                    StreamReader reader = new StreamReader(stream);
+                    string content = reader.ReadToEnd();
+                    result.Context = (JsonConvert.DeserializeObject<Dictionary<string, object>>(content));
+                }
             }
             catch (Exception e)
             {

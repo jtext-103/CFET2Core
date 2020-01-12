@@ -26,7 +26,7 @@ namespace Jtext103.CFET2.CFET2App
             MyHub.Pipeline.AddMiddleware(new NavigationMidware());
 
             //------------------------------Nancy HTTP通信模块------------------------------//
-            var nancyCM = new NancyCommunicationModule(new Uri("http://localhost:8002"));
+            var nancyCM = new NancyCommunicationModule(new Uri("http://localhost:8002"), "MessagePack");
             MyHub.TryAddCommunicationModule(nancyCM);
 
             //you can add Thing by coding here

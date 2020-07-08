@@ -131,6 +131,7 @@ namespace Jtext103.CFET2.Core
             var resource = GetLocalResouce(resourcePath);
             if (resource != null)
             {
+                //this is almost the same as array but only add an indicator to indicate thie input has a dictionary
                 return resource.Get(inputDict) as ISample;
             }
             throw new ResourceDoesNotExistException();
@@ -267,7 +268,8 @@ namespace Jtext103.CFET2.Core
             string requestUri, Dictionary<string, object> inputDict, object[] inputs,bool usingDictInput)
         {
             var uri = new Uri(requestUri, UriKind.RelativeOrAbsolute);
-            //if is using dict indicate by setting ParseLocalRequest input = null
+            //if is using dict indicate by setting ParseLocalRequest input = null to ignore the array input
+            //the below find the real path to the resource by mathc from the path backward the excessive parts in the path is add to the input
             (var resourcePath, var realInputs, var queryInputDict) = ParseLocalRequest(uri, usingDictInput?null:inputs);
 
             if (queryInputDict != null || usingDictInput)

@@ -170,12 +170,12 @@ namespace Jtext103.CFET2.Core.Resource
         {
             //convert inout into valid input
             var methodParameters = method.GetParameters();
-            if (inputs.Length > methodParameters.Count()) //parameters number not match
-            {
-                //return the MethodInfo list
-                return new SampleBase<MethodInfo>(method).AddErrorMessage(BadResourceRequestException.DefualtMessage)
-                    .AddErrorMessage("Excessive inputs!!").SetPath(Path).ToStatus();
-            }
+            //if (inputs.Length > methodParameters.Count()) //parameters number not match
+            //{
+            //    //return the MethodInfo list
+            //    return new SampleBase<MethodInfo>(method).AddErrorMessage(BadResourceRequestException.DefualtMessage)
+            //        .AddErrorMessage("Excessive inputs!!").SetPath(Path).ToStatus();
+            //}
             //if so cast (map) the input and invoke
             //cast, convert 
             object[] mappedInputs;

@@ -50,9 +50,10 @@ namespace Jtext103.CFET2.Core.Test.PipelineTest
             sample.Context[ResourceInfoMidware.ResourceType].Should().Be("Config");
             (sample.Context[ResourceInfoMidware.Actions] as Dictionary<string, ActionInfo>).Count.Should().Be(2);
             (sample.Context[ResourceInfoMidware.Actions] as Dictionary<string, ActionInfo>)[AccessAction.get.ToString()].OutputType.Should().Be("Int32");
-            (sample.Context[ResourceInfoMidware.Actions] as Dictionary<string, ActionInfo>)[AccessAction.get.ToString()].Parameters.Count.Should().Be(0);
             (sample.Context[ResourceInfoMidware.Actions] as Dictionary<string, ActionInfo>)[AccessAction.set.ToString()].OutputType.Should().Be("Int32");
-            (sample.Context[ResourceInfoMidware.Actions] as Dictionary<string, ActionInfo>)[AccessAction.set.ToString()].Parameters.Count.Should().Be(0);
+            (sample.Context[ResourceInfoMidware.Actions] as Dictionary<string, ActionInfo>)[AccessAction.set.ToString()].Parameters.Count.Should().Be(1);
+            (sample.Context[ResourceInfoMidware.Actions] as Dictionary<string, ActionInfo>)[AccessAction.get.ToString()].Parameters.Count.Should().Be(0);
+
         }
 
 
@@ -100,7 +101,7 @@ namespace Jtext103.CFET2.Core.Test.PipelineTest
         }
 
         [TestMethod]
-        public void ShouldWorkOnRoot_todo()
+        public void ShouldWorkOnRoot()
         {
             //todo
             ResourceRequest req1 = new ResourceRequest(@"/", AccessAction.get, null, null, null);

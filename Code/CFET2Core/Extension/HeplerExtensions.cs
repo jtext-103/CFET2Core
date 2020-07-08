@@ -88,15 +88,21 @@ namespace Jtext103.CFET2.Core.Extension
                     {
                         newInputs.Add(inputDict[methodParameters[i].Name]);
                     }
-                    else if(i != methodParameters.Count()-1)     //last one missing is ok
+                    else if (i != methodParameters.Count() - 1)     //last one missing is ok, if the last has default value it will be used later
                     {
+                        //if not last on try to add default value, if there is not default value then throw
+                        if (methodParameters[i].HasDefaultValue)
+                        {
+                            newInputs.Add(methodParameters[i].DefaultValue);
+                            continue;
+                        }
                         //newInputs.Add(null);    //you have to fill this missing parameter or else the rest will be screwed 
                         throw new BadResourceRequestException();    //missing parameter is not ok!!
                     }
                 }
-                //if there is a last parameter
+                //if there is a last parameter, add to last
                 if (inputDict.ContainsKey(CommonConstants.TheLastInputsKey))
-                {
+                {                   
                     newInputs.Add(inputDict[CommonConstants.TheLastInputsKey]);
                 }
                 return newInputs.ToArray();
@@ -107,8 +113,10 @@ namespace Jtext103.CFET2.Core.Extension
 
         /// <summary>
         /// this is a helper, 
-        /// map the inputs object to the coorected type according to the parameters for a method,
-        /// if the object is not mapped sussesfully the original object will just be put into place(todo? throw exceptions?)
+        /// map the inputs object to the coorected type according to the parameters for a method,  
+        /// if the object is not mapped sussesfully the original object will just be put into place(todo? throw exceptions?)  
+        /// It works like: if there is just right number of parameters that just use it as input, if there are less input then the method parameters try using default, if there 
+        /// are more, put the excessive parameters in params []
         /// </summary>
         /// <param name="inputs">the orignal input</param>
         /// <param name="methodParameters">the parameters for a method</param>
@@ -127,7 +135,26 @@ namespace Jtext103.CFET2.Core.Extension
                         outputList.Add(methodParameters[i].DefaultValue);
                         continue;
                     }
+                    //not enough input
                     throw new System.Exception("Parameter Number does not match");
+                }
+
+                if (i== methodParameters.Count()-1)
+                {
+                    //check if the last paremeter is params [], if so add all the input left to the params
+                    if (methodParameters[i].IsDefined(typeof(ParamArrayAttribute), false))
+                    {
+                        var elementType = methodParameters[i].ParameterType.GetElementType();
+                        var paramsCount = inputs.Count() - methodParameters.Count() + 1;
+                        var paramsArray = Array.CreateInstance(elementType, paramsCount);
+                        for (int j = i; j < inputs.Count(); j++)
+                        {
+                            var paramsElement = inputs[j].TryConvertTo(elementType);
+                            paramsArray.SetValue( paramsElement, j - i);
+                        }
+                        outputList.Add(paramsArray);
+                        continue;
+                    }
                 }
 
                 if (inputs[i] == null)

@@ -24,11 +24,25 @@ namespace Jtext103.CFET2.Core.Test.HubTest
         }
 
         [TestMethod]
-        public void ShouldWorkWithJustParams_todo()
+        public void ShouldWorkWithJustParams()
         {
+            //public string JustParams(params string[] inputs)
             ResourceRequest req1 = new ResourceRequest(@"/params/justparams/a/b/c/d/e", AccessAction.get, null, null, null);
             ISample sample = MyHub.TryAccessResourceSampleWithUri(req1);
             sample.ObjectVal.ToString().Should().Be("a:b:c:d:e");
+        }
+
+        [TestMethod]
+        public void ShouldWorkWithJustParamsAndRoutePArameter()
+        {
+            //public string ParamsAndMore(int a,int b, params string[] inputs)
+            ResourceRequest req1 = new ResourceRequest(@"/params/justparams/a/b/c/d/e", AccessAction.get, null, null, null);
+            ISample sample = MyHub.TryAccessResourceSampleWithUri(req1);
+            sample.ObjectVal.ToString().Should().Be("a:b:c:d:e");
+
+            ResourceRequest req2 = new ResourceRequest(@"/params/justparams/a/b/c/d/e", AccessAction.get, new string[] { "h","i"}, null, null);
+            ISample sample2 = MyHub.TryAccessResourceSampleWithUri(req2);
+            sample2.ObjectVal.ToString().Should().Be("a:b:c:d:e:h:i");
         }
     }
 }

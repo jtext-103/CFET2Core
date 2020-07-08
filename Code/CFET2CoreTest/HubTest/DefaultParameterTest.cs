@@ -31,7 +31,6 @@ namespace Jtext103.CFET2.Core.Test.HubTest
         [TestMethod]
         public void ShouldUseDefaultParams()
         {
-            //this will fail!!! 
             //arrange
             var resultSt = MyHub.TryGetResourceSampleWithUri(@"/thing/StatusWithDefualtParams"); //"0+ASS-1"
             var resultSt2 = MyHub.TryGetResourceSampleWithUri(@"/thing/StatusWithDefualtParams/1"); //1+ASS-1
@@ -51,6 +50,21 @@ namespace Jtext103.CFET2.Core.Test.HubTest
 
             resultConSet.ObjectVal.Should().Be(ThingWithDefualtParameters.MyPoco);
             resultCon.ObjectVal.Should().Be(ThingWithDefualtParameters.MyPoco);
+        }
+
+        [TestMethod]
+        public void ShouldUseDefaultParamsWithQueryString()
+        {
+            //this will fail!!! 
+            //arrange
+            //StatusWithDefualtParams(int i= 0,  string s= "+", PocoParam o= null)
+            var resultSt = MyHub.TryGetResourceSampleWithUri(@"/thing/StatusWithDefualtParams?s=a"); //"0#ASS-1"
+            var resultSt2 = MyHub.TryGetResourceSampleWithUri(@"/thing/StatusWithDefualtParams",new Dictionary<string, object>(){ { "s", "#"} }); //"0#ASS-1"
+
+
+            //assert
+            resultSt.ObjectVal.Should().Be("0aASS-1");
+            resultSt2.ObjectVal.Should().Be("0#ASS-1");
         }
     }
 }

@@ -20,10 +20,10 @@ namespace Jtext103.CFET2.Core
 
 
         /// <summary>
-        /// get inpus or inputdict from the request uri, check the inputdict==null to see which input use, if not null use it otherwise use inputs public for test
+        /// it finds the real path to the resource by matching backward. it moves the excessive path segments  to parameter array and put query string to input dict.
         /// </summary>
-        /// <param name="requestUri"></param>
-        /// <param name="inputs"></param>
+        /// <param name="requestUri">the request uri</param>
+        /// <param name="inputs">the user provided array input</param>
         /// <returns></returns>
         public (string ResourcePath, object[] Inputs, Dictionary<string, object> InputDict) ParseLocalRequest(Uri requestUri, params object[] inputs)
         {
@@ -41,7 +41,7 @@ namespace Jtext103.CFET2.Core
             //find the resouce and use the excessive route segments as route parameter
             resourcePath = extractResourcePath(resourcePathToStart, routeInputs);
 
-            if (inputs != null && inputs.Length > 0) //if we have input array the query string and input dict will be ignored
+            if (inputs != null && inputs.Length > 0) 
             {
                 for (int i = 0; i < inputs.Length; i++) //using for to matain the order
                 {

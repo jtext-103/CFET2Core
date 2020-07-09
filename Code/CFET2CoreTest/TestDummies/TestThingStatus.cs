@@ -48,7 +48,7 @@ namespace Jtext103.CFET2.Core.Test.TestDummies
         /// <param name="n2"></param>
         /// <returns></returns>
         [Cfet2Status]
-        public string Status2Para(int n,string n2)
+        public string Status2Para(int n,string n2="xxx")
         {
             return n.ToString()+n2;
         }

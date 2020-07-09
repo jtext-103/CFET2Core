@@ -19,7 +19,7 @@ namespace UnitTestProject2.TestDummies
         [Cfet2Status]
         public string ParamsAndMore(int a,int b, params string[] inputs)
         {
-            return string.Join(":", a,b,inputs);
+            return string.Join(":", a,b, string.Join(":", inputs));
         }
     }
 }

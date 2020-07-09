@@ -10,18 +10,7 @@ When you are in a Thing that is mounted to a CFET App, you have access to the hu
 
 Down below we first introduced how to using the hub way, by this way we can get you familiar with some concept. Then we will show you how to using http client.
 
-## Actions
-When you access the resource inside a thing, you use method in hub:
-```csharp
-       public ISample TryGetResourceSampleWithUri(string requestUri, Dictionary<string, object> inputDict);
-       public ISample TryGetResourceSampleWithUri(string requestUri, params object[] inputs);
-       public ISample TryInvokeSampleResourceWithUri(string requestUri, Dictionary<string, bject> inputDict);
-       public ISample TryInvokeSampleResourceWithUri(string requestUri, params object[] nputs);
-       public ISample TrySetResourceSampleWithUri(string requestUri, Dictionary<string, bject> inputDict);
-       public ISample TrySetResourceSampleWithUri(string requestUri, params object[] inputs);
-```
-
-The above is obsolete, us
+## Using Hub
 
 ```csharp
 public ISample TryAccessResourceSampleWithUri(ResourceRequest request)
@@ -34,11 +23,11 @@ public ResourceRequest(string uri,AccessAction action, object[] inputarray,
             bool usingdict = false)
 ```
 
-Before making access request you have to make a request object. It is simple, as show above, most time you will just need the `uri` parameter and the action. For the action you have `public enum AccessAction { get,set,invoke};` to choose.
+Before making access request you have to make a request object. It is simple, as show above, most time you will just need the `uri` and the action. For the action you have `public enum AccessAction { get,set,invoke};` to choose from.
 
-When you making a request it is like using a remote remote procedure call to a function of a object in a control system. The URI not only specifies the location of the function or property but it also can have parameter in it just like restful APIs (shown later). If -in rare case- you need complex parameters you can put them in a dictionary or in an array, just link when you making HTTP request and put some parameters in the request body or form.
+When you making a request it is like using a remote remote procedure call to a function of a object in a control system. The URI not only specifies the location of the function or property but it also can have parameters in it just like restful APIs (shown later). If -in rare case- you need complex parameters you can put them in a dictionary or in an array, just link when you making HTTP request and put some parameters in the request body or form.
 
-## Using Only the URI path
+### Using Only the URI path
 
 When you don't have complex type as parameter you can just use the **URI path**. 
 
@@ -61,27 +50,110 @@ Like you want the temperature of the channel 3 in Celsius you can simplly:
 ```
 Simple right? Just give the path and put the parameters at last, note that the must match the order and the number of the function that implement the resource. if the resource is implemented by property than no parameter is needed.
 
-Using array input
+The Hub matches the resource using the path backward. This means it first tries to find is a resource "/building1/tempsensor/temp/3/c". If not match, the "/c" is considered as a parameter and it tries to match a resource at "/building1/tempsensor/temp/3". In the above example it find a resource at "/building1/tempsensor/temp" so the parameter is "3, c". CFET will convert to the suitable types, see [Convert](#convert) for detail.
+
+### More Complex request
+
+Suppose you have a thing that has a function implements a status:
+
 ```csharp
-         var sample= TryGetResourceSampleWithUri("/building1/tempsensor", new int[]{5,103} );
+    [Cfet2Status]
+    public int Status(string a,string b="b",string c="c", params string[] d=null)
+    {
+        some logic...
+    }
 ```
-Now you now how input are mapped to the parameters in the resource implementation. Not that when using array input the input must be in the order of the parameters in the method signature. For the above if you use ` new int[]{103,5} `, you would get floor 103, room 5. For dictionary input they are mapped using the string key. The key must match the parameter names in the method signature.
+That is probably as complex as you may get. And this thing is mounted at `/thing`. So you can use the following way to request this request this resource.
 
-The above is for get, for invoke it's exactly the same.
+1. `/thing/status/a`, this will call Status("a")
+2. `/thing/status/a/x`, this wll call Status("a", "x")
+3. `/thing/status/a/x/y/z/z` ,this will call Status("a", "x", "y", "z", "z"), the excessive segment will be put to the params parameter.
+4. `/thing/status` this will give an invalid sample, you don't have enough input.
 
-Oh, I forgot, for the status implemented by property no input is needed. property index is not supported.
+The trailing segments in the url after the path matched to t resource is called array input, each segment is a array input element.
 
-For config and set, if it is implemented by method, the parameter and the input are mapped the same way.
+If the function you have does not have a params parameter and you give more parameters it wants it will error out and give you an invalid sample. Such as 
+for `public int Status(string a,string b="b",string c="c")`, this will error: `/thing/status/a/x/y/z/z`.
 
-But if it is implemented by property, then you cannot use the dictionary input, you can use the array input, and the array contains only one element. Example: 
+And you can also use dictionary like inputs,suck as using query string. But you must NOTE, when using dictionary, the array input will be joined with "/" and put to the last parameters
+
+1. `/thing/status?a=a`, this will call Status("a")
+2. `/thing/status?a=a&b=x`, this will call Status("a", "x")
+3. `/thing/status?a=a&x=x`, this will call Status("a"), when you have excessive input in the query string, it will be ignored.
+4. `/thing/status?a=a&c=y`, this will call Status("a","b","y"), you can skip parameters with default values, not matter the order.
+5. `/thing/status/a/b/c?a=a&c=y`, this will call Status("a", "b", "y", "/a/b/c"), when using query string, the path segment is not mapped to parameters. If there are excessive path, it will be put to the last parameter as a whole.
+6. `/thing/status?b=a`, this will call error, you are missing a input.
+
+### array input and dictionary input
+
+When you have complex input that can't be put into a URI, you can put them in Dictionary input or array input.
+
+Just like below, not you can use either one of them but not both.
+
 ```csharp
-        [Cfet2Config]
-        public int Config1 { get; set; } = 1;
-        ...................
-        var sample= MyHub.TrySetResourceSampleWithUri("/building1/tempsensor", new int[]{5} );
+public ResourceRequest(string uri,AccessAction action, object[] inputarray, 
+            Dictionary<string, object> inputdict, Dictionary<string, string> extraRequest, 
+            bool usingdict = false)
 ```
 
-### Convert
+The array input is just like the trailing path segment, when using them both the array input will be append to the path segment:
+
+```csharp
+new ResourceRequest(
+        "/thing/status/a", 
+        AccessAction.get,
+        new object[]{"x","y"},null,null
+        )
+```
+
+The above will call `Status("a", "x", "y")`
+
+When using the dictionary input, the value in the dictionary is merged with the query string, and override them:
+
+```csharp
+new ResourceRequest(
+        "/thing/status?a=a", 
+        AccessAction.get,
+        null,
+        new Dictionary<string,object>(){{"a","q"},{"b","x"}},
+        null,true
+        )
+```
+
+The above will call `Status("q", "x", "y")`
+
+Note that when using query string is a just like dictionary input. When using them, the path segment parameters will be put to the last:
+
+```csharp
+new ResourceRequest(
+        "/thing/status/a/b", 
+        AccessAction.get,
+        null,
+        new Dictionary<string,object>(){{"a","q"},{"b","x"}},
+        null,true
+        )
+```
+
+The above will call `Status("q", "x", "y","/a/b")`
+
+The below figure sums it up:
+
+![](AccessingResources/2020-07-09-18-10-46.png)
+
+### if the resource is implemented by property
+
+Other than function it is very common for a Thing to implement status or config using property. When using property there is no input when getting, and one and only one input for setting a config.
+
+```csharp
+    [Cfet2Config]
+    public int Config1 { get; set; } = 1;
+```
+
+Suppose the thing is mounted as /Thing
+
+You can get with `/thing/config1`, and you can set it to 2 by `/thing/config1/2`. The first and only input when setting if the value to be set.
+
+## Convert
 The CFET2 will handles the type conversion. 
 
 ```csharp
@@ -91,69 +163,8 @@ var sample= MyHub.TrySetResourceSampleWithUri("/building1/tempsensor", new strin
 ```
 The above is the same. It even works on POCO object. When type is not matching, CFET2 will serialize you input into JSON and tye de-serialize them into the target type.
 
-### Using Route
-You can embedded input in the route. This means that the `requestUri` does not need to be a path is can be a URI that contains the input.
+## Using HTTP
 
-1. Route Parameters
+The HTTP server support is provided by the NancyCommunicationModule which is part of the CfetCore.
 
-You can embed you input into URI path, like:
-```csharp
-        [Cfet2Status]
-        public int Temp(int unit,int floor,int section,int room)
-```
-Assume it belongs to a thing name `tempSensor`, and mounted at `/building1/`.
-
-The path to the resource is `/building1/tempsensor`. If you need unit 1, floor2, section 3, room 4.
-```csharp
-        var sample= MyHub.TrySetResourceSampleWithUri("/building1/tempsensor/1/2/3/4");
-        var sample= MyHub.TrySetResourceSampleWithUri("/building1/tempsensor/1/2", new int[]{3,4} );
-```
-The above 2 lines are the same. You can put some input in the path some in the input array. The order is the key to get everything mapped right. CFET2 will think `"/building1/tempsensor/1/2/3/4"` is a path to a resource, but if it can not find not it goes upward and think the last segment of the path is a input, like:
-```
-path="/building1/tempsensor/1/2/3"
-input={4}
-```
-It will go up until it get to a resource. it you have a resource, which happens to have a path of "/building1/tempsensor/1" then if will try to get the resource with:
-```
-path="/building1/tempsensor/1"
-input={2,3,4}
-```
-That not what you want so proper naming is essential.
-
-The input in the URI path is called **Route Input**. You can use route input with array input, since some input may not be able to be presented as string, like POCO. But you can not use is with dictionary input, since the order of the route input can not be clearly presented. Like
-```csharp
-        var sample= MyHub.TrySetResourceSampleWithUri("/building1/tempsensor/1/2",new Dictionary<string,object>
-         {
-             {"section",5},
-             {"room", 103}
-         });
-```
-This will fail. When dictionary input are presented, CFET2 will consider the path has no route input. So `"/building1/tempsensor/1/2"` is just a path to a resource. it will try to get that resource with input of `         {
-             {"section",5},
-             {"room", 103}
-         }
-`. This is not what you want.
-
-2. Query Parameters
-
-You can also use query string in the requested URI. The query will be converted into key value pairs. This is called query parameters. Take the same example that in the above:
-
-```csharp
-        //the order does not matter in query parameters
-        var sample= MyHub.TrySetResourceSampleWithUri("/building1/tempsensor?unit=1&section=2&room=4&floor=3");
-        var sample= MyHub.TrySetResourceSampleWithUri("/building1/tempsensor?unit=1&room=4&floor=3",
-            new Dictionary<string,object>
-            {
-                {"section",5},
-                {"room", 103}
-            });
-```
-
-You can see the query parameter must contains all the parameters of the config, all it must be completed with a dictionary input as shown in the second line. If there are overlap in dictionary input and query input the dictionary input will overwrite the query input.
-
-The query input cannot used with route parameter, that's to say the path in the URI is the requested path to the resource. Query parameters can not used with array input neither.
-```csharp
-        //this is WRONG!!!
-        var sample= MyHub.TrySetResourceSampleWithUri("/building1/tempsensor?unit=1&room=4&floor=3",
-            new int[]{3,5});
-```
+When requesting, you can use any http client. Currently the NancyCommunicationModule only support embedding parameters in URL, soon it will support complex input parameter in the body just like array input and dictionary input.

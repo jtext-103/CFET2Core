@@ -10,6 +10,22 @@ When you are in a Thing that is mounted to a CFET App, you have access to the hu
 
 Down below we first introduced how to using the hub way, by this way we can get you familiar with some concept. Then we will show you how to using http client.
 
+## Actions
+
+When accessing resources, you need to specify the action.
+
+1. Get: you can use get on Status, Config. Depending on your setup, you can also use get on Thing or Method. This will not git you a valid sample, but you can get metadata or navigational data.
+
+2. Set: you can set a Config, to set a new value to the Config. the returned sample is the latest value of the Config (same as performing a get immediately after the set).
+
+3. Invoke: you can invoke a method. the returned value depends on the method implementation.
+
+When using http, tha above 3 map s to corresponding http verbs.
+
+* get:get
+* set:put
+* invoke:post
+
 ## Using Hub
 
 ```csharp

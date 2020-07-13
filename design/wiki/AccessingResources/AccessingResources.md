@@ -98,7 +98,7 @@ And you can also use dictionary like inputs,suck as using query string. But you 
 3. `/thing/status?a=a&x=x`, this will call Status("a"), when you have excessive input in the query string, it will be ignored.
 4. `/thing/status?a=a&c=y`, this will call Status("a","b","y"), you can skip parameters with default values, not matter the order.
 5. `/thing/status/a/b/c?a=a&c=y`, this will call Status("a", "b", "y", "/a/b/c"), when using query string, the path segment is not mapped to parameters. If there are excessive path, it will be put to the last parameter as a whole.
-6. `/thing/status?b=a`, this will call error, you are missing a input.
+6. `/thing/status?b=a`, this call will error, you are missing a input.
 
 ### array input and dictionary input
 
@@ -136,7 +136,7 @@ new ResourceRequest(
         )
 ```
 
-The above will call `Status("q", "x", "y")`
+The above will call `Status("q", "x")`
 
 Note that when using query string is a just like dictionary input. When using them, the path segment parameters will be put to the last:
 
@@ -150,7 +150,7 @@ new ResourceRequest(
         )
 ```
 
-The above will call `Status("q", "x", "y","/a/b")`
+The above will call `Status("q", "x", "c","/a/b")`
 
 The below figure sums it up:
 

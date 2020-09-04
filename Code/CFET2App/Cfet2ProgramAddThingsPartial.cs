@@ -19,29 +19,29 @@ namespace Jtext103.CFET2.CFET2App
         private void AddThings()
         {
             //If you don't want dynamic load things, please comment out the line below
-            var loader = new DynamicThingsLoader(this);
+            //var loader = new DynamicThingsLoader(this);
 
             //------------------------------Pipeline------------------------------//
             MyHub.Pipeline.AddMiddleware(new ResourceInfoMidware());
             MyHub.Pipeline.AddMiddleware(new NavigationMidware());
 
             //------------------------------Nancy HTTP通信模块------------------------------//
-            var nancyCM = new NancyCommunicationModule(new Uri("http://localhost:8002"), "MessagePack");
+            var nancyCM = new NancyCommunicationModule(new Uri("http://localhost:8001"), "MessagePack");
             MyHub.TryAddCommunicationModule(nancyCM);
 
             //you can add Thing by coding here
 
             //------------------------------Custom View------------------------------//
-            var customView = new CustomViewThing();
-            MyHub.TryAddThing(customView, "/", "customView", "./CustomView");
+           // var customView = new CustomViewThing();
+           // MyHub.TryAddThing(customView, "/", "customView", "./CustomView");
 
             //you can add Thing by coding here
 
-            var fakeAI = new FakeAIThing();
-            MyHub.TryAddThing(fakeAI, "/", "fakeCard", 16);
+            //var fakeAI = new FakeAIThing();
+           // MyHub.TryAddThing(fakeAI, "/", "fakeCard", 16);
 
-            var remoteRequester = new RemoteRequester();
-            MyHub.TryAddThing(remoteRequester, "/", "remote");
+            //var remoteRequester = new RemoteRequester();
+            //MyHub.TryAddThing(remoteRequester, "/", "remote");
         }
     }
 }

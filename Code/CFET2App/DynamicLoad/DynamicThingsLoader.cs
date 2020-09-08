@@ -18,26 +18,28 @@ namespace Jtext103.CFET2.CFET2App.DynamicLoad
 
         private string separator;
 
-        private List<ThingModel> things;
+        private List<ThingModel> thingModels;
 
-        private List<string> dlls;
+        private List<string> thingDlls;
 
         private Cfet2Program cfetHost;
 
-        public DynamicThingsLoader(Cfet2Program host)
+        Dictionary<string, Type> dllsDic = new Dictionary<string, Type>();
+
+        public DynamicThingsLoader(Cfet2Program host, string thingDllPath = "./thingDll", string thingConfigPath = "./thingConfig")
         {
             cfetHost = host;
 
             separator = Path.DirectorySeparatorChar.ToString();
-            dynamicThingsRootPath = "." + separator + "DynamicLoad" + separator + "DynamicThing";
-            dynamicDllsFilePath = "." + separator + "DynamicLoad" + separator + "DynamicDll";
+            //dynamicThingsRootPath = "." + separator + "DynamicLoad" + separator + "DynamicThing";
+            //dynamicDllsFilePath = "." + separator + "DynamicLoad" + separator + "DynamicDll";
 
-            things = new List<ThingModel>();
-            dlls = new List<string>();
+            thingModels = new List<ThingModel>();
+            thingDlls = new List<string>();
 
-            LoadAndCopyDllsInDir(dynamicDllsFilePath);
+            LoadAllThings(thingConfigPath);
 
-            LoadAllThings(dynamicThingsRootPath);
+            LoadAndCopyDllsInDir(thingDllPath);
 
             SetDlls();
 
@@ -79,7 +81,7 @@ namespace Jtext103.CFET2.CFET2App.DynamicLoad
                     var newThing = new ThingModel();
                     if (newThing.LoadConfig(file.FullName))
                     {
-                        things.Add(newThing);
+                        thingModels.Add(newThing);
                     }
                     else
                     {
@@ -109,10 +111,11 @@ namespace Jtext103.CFET2.CFET2App.DynamicLoad
             {
                 if (file.Extension.ToLower() == ".dll")
                 {
-                    dlls.Add(file.FullName);
+                    thingDlls.Add(file.FullName);
                 }
             }
         }
+
 
         //将所有Thing实例化并挂载到CFET
         private void AddAllThings()
@@ -120,7 +123,7 @@ namespace Jtext103.CFET2.CFET2App.DynamicLoad
             var builder = new ContainerBuilder();
 
             //添加所有dll
-            foreach (var dll in dlls)
+            foreach (var dll in thingDlls)
             {
                 try
                 {
@@ -146,39 +149,33 @@ namespace Jtext103.CFET2.CFET2App.DynamicLoad
             {
                 throw new Exception(e.ToString());
             }
+  
+            foreach (var dll in thingDlls)
+            {
+                Type[] types = null;
+                try
+                {
+                    types = Assembly.LoadFrom(dll).GetTypes();
+                }
+                catch (Exception e)
+                {
+                    throw new Exception(e.ToString());
+                }
+
+                foreach (var type in types)
+                {
+                    dllsDic[type.FullName] = type;
+                }
+            }
 
 
             //添加每个Thing
-            foreach (var thing in things)
+            foreach (var thing in thingModels)
             {
+                Console.WriteLine(thing.Config.InitObj.GetType());
                 Type type = null;
-                bool isTypeOk = false;
-                string nowDll;
-
-                //找到第一个和DllName匹配的dll
-                foreach (var dll in dlls)
-                {
-                    FileInfo dllFile = new FileInfo(dll);
-                    if (dllFile.Name == thing.Config.DllName)
-                    {
-                        try
-                        {
-                            type = Assembly.LoadFrom(dll).GetType(thing.Config.Type);
-                            
-                        }
-                        catch
-                        {
-                            continue;
-                        }
-                        isTypeOk = true;
-                        break;
-                    }
-                }
-
-                if (!isTypeOk)
-                {
-                    throw new Exception("Failed to load thing: " + thing.Name + "!");
-                }
+                type = dllsDic[thing.Config.Type];
+                Console.WriteLine(type);
 
                 try
                 {

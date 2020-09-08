@@ -19,7 +19,7 @@ namespace Jtext103.CFET2.CFET2App
         private void AddThings()
         {
             //If you don't want dynamic load things, please comment out the line below
-            //var loader = new DynamicThingsLoader(this);
+            var loader = new DynamicThingsLoader(this);
 
             //------------------------------Pipeline------------------------------//
             MyHub.Pipeline.AddMiddleware(new ResourceInfoMidware());
@@ -32,7 +32,7 @@ namespace Jtext103.CFET2.CFET2App
             //you can add Thing by coding here
 
             //------------------------------Custom View------------------------------//
-           // var customView = new CustomViewThing();
+            //var customView = new CustomViewThing();
            // MyHub.TryAddThing(customView, "/", "customView", "./CustomView");
 
             //you can add Thing by coding here

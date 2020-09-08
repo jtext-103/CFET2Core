@@ -43,7 +43,7 @@ namespace Jtext103.CFET2.CFET2App.DynamicLoad
             {
                 JsonConvert.PopulateObject(File.ReadAllText(configFilePath, Encoding.Default), Config);
 
-                int startIndex = configFilePath.IndexOf("DynamicLoad" + Path.DirectorySeparatorChar + "DynamicThing") + 24;
+                int startIndex = configFilePath.IndexOf("thingConfig")+ "thingConfig".Length;
                 int endIndex = configFilePath.IndexOf("Config.json");
 
                 string fullThingPath = configFilePath.Substring(startIndex, endIndex - startIndex - 1).Replace(Path.DirectorySeparatorChar, '/');
@@ -67,11 +67,6 @@ namespace Jtext103.CFET2.CFET2App.DynamicLoad
         /// Thing的类型，需要有完整的命名空间+类名
         /// </summary>
         public string Type { get; set; }
-
-        /// <summary>
-        /// Thing的类型所在dll的名字
-        /// </summary>
-        public string DllName { get; set; }
 
         /// <summary>
         /// Thing挂载时传入的参数

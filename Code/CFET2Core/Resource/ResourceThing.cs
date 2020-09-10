@@ -48,12 +48,13 @@ namespace Jtext103.CFET2.Core.Resource
         /// <param name="theThing"></param>
         /// <param name="name"></param>
         /// <param name="initObject">the object of initial configuration</param>
-        public ResourceThing(Thing  theThing,string name,object initObject=null)
+        public ResourceThing(Thing theThing,string name, string thingConfigPath,object initObject =null)
         {
             ResourceType = ResourceTypes.Thing;
             Name = name;
             TheThing = theThing;
             ProbeTheThing();
+            theThing.ConfigFilePath = thingConfigPath;
             theThing.TryInit(initObject);
         }
 

@@ -57,13 +57,13 @@ namespace Jtext103.CFET2.Core
         /// <param name="name">the name of the thing</param>
         /// <param name="mountPath">the path you want your thing be mounted, the path will be /[mountpath]/[name]</param>
         /// <param name="initObject"></param>
-        public void TryAddThing(Thing thing, string mountPath, string name, object initObject = null)
+        public void TryAddThing(Thing thing, string mountPath, string name,object initObject = null,string thingConfigPath = null)
         {
-            addThing(thing, mountPath, name, initObject);
+            addThing(thing, mountPath, name, initObject,false,thingConfigPath);
         }
 
 
-        private void addThing(Thing thing, string mountPath, string name, object initObject = null,bool isRoot=false)
+        private void addThing(Thing thing, string mountPath, string name, object initObject = null, bool isRoot = false, string thingConfigPath = null)
         {
             //make the path for the thing
             if (mountPath.EndsWith(@"/") == false)
@@ -88,7 +88,10 @@ namespace Jtext103.CFET2.Core
             HubMaster.InjectHubToModule(thing);
             //TryInitThing is called here
             //thing get probed here
-            var tThing = new ResourceThing(thing, name, initObject);
+
+            thingConfigPath = thingConfigPath + thingPath + '/';
+
+            var tThing = new ResourceThing(thing, name, thingConfigPath,initObject);
             tThing.Path = thingPath;
             thing.Path = thingPath;
             //add thing to resources

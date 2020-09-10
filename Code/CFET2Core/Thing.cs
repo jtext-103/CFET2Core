@@ -31,6 +31,8 @@ namespace Jtext103.CFET2.Core
         /// </summary>
         public string Path { get; internal set; }
 
+        public string ConfigFilePath { get; internal set; }
+
         /// <summary>
         /// return the path for a resouce in this thing
         /// </summary>

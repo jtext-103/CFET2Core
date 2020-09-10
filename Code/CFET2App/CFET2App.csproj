@@ -8,6 +8,13 @@
   <ItemGroup>
     <PackageReference Include="Autofac" Version="5.2.0" />
     <PackageReference Include="CommandLineParser" Version="1.9.71" />
+    <PackageReference Include="HDF.PInvoke.NETStandard" Version="1.10.502" />
+    <PackageReference Include="HDF5ForDAQ" Version="1.2.4" />
+    <PackageReference Include="HDF5JTEXT" Version="1.2.1" />
+    <PackageReference Include="HDF5JTextBase" Version="1.0.0" />
+    <PackageReference Include="Jtext103.BinDataFile" Version="1.2.3" />
+    <PackageReference Include="JTextDAQDataFileOperator.HDF5" Version="1.3.1" />
+    <PackageReference Include="JTextDAQDataFileOperator.Interface" Version="1.3.0" />
     <PackageReference Include="Microsoft.AspNet.Razor" Version="3.2.7" />
     <PackageReference Include="Microsoft.AspNet.WebApi.Client" Version="5.2.7" />
     <PackageReference Include="Nancy" Version="2.0.0" />

@@ -26,7 +26,10 @@ namespace Jtext103.CFET2.CFET2App.DynamicLoad
 
         Dictionary<string, Type> dllsDic = new Dictionary<string, Type>();
 
-        public DynamicThingsLoader(Cfet2Program host, string thingDllPath = "./thingDll", string thingConfigPath = "./thingConfig")
+        private string thingDllPath = "./thingDll";
+
+        private string thingConfigPath = "./thingConfig";
+        public DynamicThingsLoader(Cfet2Program host)
         {
             cfetHost = host;
 
@@ -172,16 +175,15 @@ namespace Jtext103.CFET2.CFET2App.DynamicLoad
             //添加每个Thing
             foreach (var thing in thingModels)
             {
-                Console.WriteLine(thing.Config.InitObj.GetType());
                 Type type = null;
                 type = dllsDic[thing.Config.Type];
-                Console.WriteLine(type);
 
                 try
                 {
                     dynamic ins = scope.Resolve(type);
                     //type.GetType();
-                    cfetHost.MyHub.TryAddThing(ins, thing.MountPath, thing.Name, thing.Config.InitObj);
+                    //添加配置文件路径
+                    cfetHost.MyHub.TryAddThing(ins, thing.MountPath, thing.Name,thing.Config.InitObj,thingConfigPath);
 
                 }
                 catch (Exception e)

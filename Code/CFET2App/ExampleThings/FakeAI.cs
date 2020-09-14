@@ -16,9 +16,10 @@ namespace Jtext103.CFET2.CFET2App.ExampleThings
     {
         private FakeAICard myFakeAICard;
 
-        public override void TryInit(object channelCount)
+        public override void TryInit(object channelCount = null)
         {
-            myFakeAICard = new FakeAICard((int)channelCount);
+            //myFakeAICard = new FakeAICard((int)channelCount);
+            myFakeAICard = new FakeAICard(2);
         }
 
         [Cfet2Config(ConfigActions = ConfigAction.Set, Name = "ChannelCountConfig")]

@@ -30,25 +30,25 @@ namespace Jtext103.CFET2.NancyHttpCommunicationModule
 
         public RequestModule()
         {
-            Get["/"] = r =>
+            Get("/", args =>
             {
                 return GetResponse(AccessAction.get);
-            };
+            });
 
-            Get["/{name*}"] = r =>
+            Get("/{name*}", args =>
             {
                 return GetResponse(AccessAction.get);
-            };
+            });
 
-            Put["/{name*}"] = r =>
+            Put("/{name*}", args =>
             {
                 return GetResponse(AccessAction.invoke);
-            };
+            });
 
-            Post["/{name*}"] = r =>
+            Post("/{name*}", args =>
             {
                 return GetResponse(AccessAction.set);
-            };
+            });
 
         }
 

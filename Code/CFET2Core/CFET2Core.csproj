@@ -8,7 +8,7 @@
     <Authors>Jtext103.CFET2Core</Authors>
     <AssemblyVersion>2.0</AssemblyVersion>
     <FileVersion>2.0</FileVersion>
-    <Version>2.0.1</Version>
+    <Version>2.0.2</Version>
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     <Product>Jtext103.CFET2Core</Product>
   </PropertyGroup>

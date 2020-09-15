@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.IO;
+using System.Threading;
 
 namespace Jtext103.CFET2.Core
 {
@@ -32,6 +34,24 @@ namespace Jtext103.CFET2.Core
         public string Path { get; internal set; }
 
         public string ConfigFilePath { get; internal set; }
+
+        public string getConfigFilePath(string path)
+        {
+            string configPath = null;
+            if (!File.Exists(path))
+            {
+                string tempConfigPath = ConfigFilePath + path.ToString().Split('/').Last();
+                if (File.Exists(tempConfigPath))
+                {
+                    configPath = tempConfigPath;
+                }
+            }
+            else
+            {
+                configPath = path;
+            }
+            return configPath;
+        }
 
         /// <summary>
         /// return the path for a resouce in this thing

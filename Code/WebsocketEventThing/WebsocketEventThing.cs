@@ -39,10 +39,10 @@ namespace Jtext103.CFET2.WebsocketEvent
             //todo: loop thrpugh a;; resource and create end points
             var resources = MyHub.GetAllLocalResources();
             wsServer.AddEndPoint("/");
-            foreach (var resource in resources)
-            {
-                wsServer.AddEndPoint(resource.Key);
-            }
+            //foreach (var resource in resources)
+            //{
+            //    wsServer.AddEndPoint(resource.Key);
+            //}
             wsServer.StartServer();
         }
 

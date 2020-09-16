@@ -187,7 +187,7 @@ namespace Jtext103.CFET2.Core.Test.HubTest
 
             //parsedReuest2WithQueryAndRoutePara.ShouldThrow<ResourceDoesNotExistException>();
             //parsedReuestWrongPath.ShouldThrow<ResourceDoesNotExistException>();
-            parsedReuestWrongPath2.ShouldThrow<ResourceDoesNotExistException>();
+            parsedReuestWrongPath2.Should().Throw<ResourceDoesNotExistException>();
             //parsedReuestWrongProtocol.ShouldThrow<ProtocolNotSuportedException>();
 
 

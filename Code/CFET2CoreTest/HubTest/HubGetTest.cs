@@ -205,19 +205,19 @@ namespace Jtext103.CFET2.Core.Test.HubTest
             reuestThing1.ResourceType.Should().Be(ResourceTypes.Thing);
             reuestThing1.Path.Should().Be("/thing1");
 
-            reuestThing2Wring.ShouldThrow<ResourceDoesNotExistException>();
+            reuestThing2Wring.Should().Throw<ResourceDoesNotExistException>();
 
 
             reuest2Wrong2Para.IsValid.Should().BeFalse();
             reuest2Wrong2Para.Path.Should().Be("/thing2/thing2/Status2Para");
 
 
-            reuest2Wrong2Para2.ShouldThrow<ResourceDoesNotExistException>();
-            reuest2WrongPath.ShouldThrow<ResourceDoesNotExistException>();
+            reuest2Wrong2Para2.Should().Throw<ResourceDoesNotExistException>();
+            reuest2WrongPath.Should().Throw<ResourceDoesNotExistException>();
 
             extraRouteAndQueryParams.IsValid.Should().BeFalse();
             routeAndQueryParams.ObjectVal.Should().Be("5/2");
-            reuest2QueryWPParent.ShouldThrow<ResourceDoesNotExistException>();
+            reuest2QueryWPParent.Should().Throw<ResourceDoesNotExistException>();
 
         }
 
@@ -229,7 +229,7 @@ namespace Jtext103.CFET2.Core.Test.HubTest
             var reuest2 = MyHub.TryGetResourceSampleWithUri(@"dummy://sdfsdf:99/thing2/thing2/Status2Para?n=2&n2=b");
             var reuest3 = MyHub.TryGetResourceSampleWithUri(@"test:///thing2/thing2/Status2Para",2 ,"b");
 
-            reuest.ShouldThrow<ProtocolNotSuportedException>();
+            reuest.Should().Throw<ProtocolNotSuportedException>();
             reuest2.ObjectVal.Should().Be("2b");
             reuest3.ObjectVal.Should().Be("2b");
         }

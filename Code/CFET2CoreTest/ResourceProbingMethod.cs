@@ -24,7 +24,7 @@ namespace Jtext103.CFET2.Core.Test
 
 
             //act
-            var thing = new ResourceThing(testThing, "thing");
+            var thing = new ResourceThing(testThing, "thing",null);
 
             //assert
             thing.Resources.Should().ContainKeys(new string[] { "MethodReturnVoid", "MethodJoin" }).And.HaveCount(2);

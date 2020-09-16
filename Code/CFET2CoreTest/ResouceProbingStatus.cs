@@ -22,7 +22,7 @@ namespace CFET2CoreTest
 
 
             //act
-            var thing = new ResourceThing(testThing, "thIng");
+            var thing = new ResourceThing(testThing, "thIng",null);
 
             //assert
             thing.Resources.Should().ContainKeys(new string[] { "StatusP", "statusm" , "statusM1" }).And.NotContainKeys("Statusm2").And.HaveCount(4);
@@ -41,7 +41,7 @@ namespace CFET2CoreTest
 
 
             //act
-            var thing = new ResourceThing(testThing, "thing");
+            var thing = new ResourceThing(testThing, "thing",null);
             var statusP = thing.Resources["StatusP"] as ResourceStatus;
             var statusM = thing.Resources["StatusM"] as ResourceStatus;
             var statusM1 = thing.Resources["StatusM1"] as ResourceStatus;
@@ -76,7 +76,7 @@ namespace CFET2CoreTest
 
 
             //act
-            var thing = new ResourceThing(testThing, "thing");
+            var thing = new ResourceThing(testThing, "thing",null);
             //var statusP = thing.Resources["StatusP"] as ResourceStatus;
 
             var statusM1 = thing.Resources["StatusM1"] as ResourceStatus;
@@ -108,7 +108,7 @@ namespace CFET2CoreTest
             //sample cast
             sM1IntSample.Should().BeOfType(typeof(Status<int>));
             //test original value
-            sM1ValInt.ShouldBeEquivalentTo(1);
+            sM1ValInt.Should().Be(1);
             sM1ValObj.Should().Be("1").And.BeOfType<string>();
             sM1Val.Should().Be("1").And.BeOfType<string>();
             //test casted value
@@ -126,7 +126,7 @@ namespace CFET2CoreTest
 
 
             //act
-            var thing = new ResourceThing(testThing, "thing");
+            var thing = new ResourceThing(testThing, "thing",null);
             //var statusP = thing.Resources["StatusP"] as ResourceStatus;
 
             var status2Para = thing.Resources["Status2Para"] as ResourceStatus;
@@ -159,7 +159,7 @@ namespace CFET2CoreTest
             //sample cast
             sM1IntSample.Should().BeOfType(typeof(Status<int>));
             //test original value
-            sM1ValInt.ShouldBeEquivalentTo(11);
+            sM1ValInt.Should().Be(11);
             sM1ValObj.Should().Be("11").And.BeOfType<string>();
             sM1Val.Should().Be("11").And.BeOfType<string>();
             //test casted value

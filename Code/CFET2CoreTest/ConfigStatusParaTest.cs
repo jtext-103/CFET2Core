@@ -24,7 +24,7 @@ namespace Jtext103.CFET2.Core.Test
         {
             //aeegange
             var testThing = new TestThingConfigComplex();
-            var thing = new ResourceThing(testThing, "thing");
+            var thing = new ResourceThing(testThing, "thing",null);
             var ConfigInt = thing.Resources["ConfigInt"] as ResourceConfig;
             var ConfigDict = thing.Resources["ConfigDict"] as ResourceConfig;
 
@@ -58,7 +58,7 @@ namespace Jtext103.CFET2.Core.Test
         {
             //aeegange
             var testThing = new TestThingConfigComplex();
-            var thing = new ResourceThing(testThing, "thing");
+            var thing = new ResourceThing(testThing, "thing",null);
             var ConfigDict3 = thing.Resources["ConfigDict3"] as ResourceConfig;
 
 
@@ -130,12 +130,12 @@ namespace Jtext103.CFET2.Core.Test
         {
             //aeegange
             var testThing = new TestThingConfig();
-            var thing = new ResourceThing(testThing, "thing");
+            var thing = new ResourceThing(testThing, "thing",null);
             var config1 = thing.Resources["Config1"] as ResourceConfig;
             var config2 = thing.Resources["Config2"] as ResourceConfig;
 
             var testThingStatus = new TestThingStatus();
-            var thingStatus = new ResourceThing(testThingStatus, "thing");
+            var thingStatus = new ResourceThing(testThingStatus, "thing",null);
             var status2Para = thingStatus.Resources["Status2Para"] as ResourceStatus;
             var statusM = thingStatus.Resources["StatusM"] as ResourceStatus;
 

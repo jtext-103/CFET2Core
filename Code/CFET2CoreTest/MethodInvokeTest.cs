@@ -25,7 +25,7 @@ namespace Jtext103.CFET2.Core.Test
 
 
             //act
-            var thing = new ResourceThing(testThing, "thing");
+            var thing = new ResourceThing(testThing, "thing",null);
             //var statusP = thing.Resources["StatusP"] as ResourceStatus;
 
             var methodVoid = thing.Resources["MethodReturnVoid"] as ResourceMethod;

@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Jtext103.CFET2.Core;
 
 namespace Jtext103.CFET2.Core.Test.TestDummies
 {

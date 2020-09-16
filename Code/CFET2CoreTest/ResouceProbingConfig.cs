@@ -25,7 +25,7 @@ namespace CFET2CoreTest
 
 
             //act
-            var thing = new ResourceThing(testThing, "thing");
+            var thing = new ResourceThing(testThing, "thing",null);
 
             //assert
             thing.Resources.Should().ContainKeys(new string[] { "Config1", "Config2" , "Config3" }).And.HaveCount(3);
@@ -51,13 +51,13 @@ namespace CFET2CoreTest
             Action[] acts = new Action[total];
             for (int i = 0;i< total; i++)
             {
-                acts[i] = () => new ResourceThing(things[n], "thing"+n);
+                acts[i] = () => new ResourceThing(things[n], "thing"+n,null);
             }
 
             //assert
             for (n = 0; n < total; n++)
             {
-                acts[n].ShouldThrow<BadThingImplementaionException>("because thing "+(n+1)+" should fail");
+                acts[n].Should().Throw<BadThingImplementaionException>("because thing "+(n+1)+" should fail");
                 
             }
         }
@@ -71,7 +71,7 @@ namespace CFET2CoreTest
         {
             //aeegange
             var testThing = new TestThingConfig();
-            var thing = new ResourceThing(testThing, "thing");
+            var thing = new ResourceThing(testThing, "thing",null);
             var config1 = thing.Resources["Config1"] as ResourceConfig;
             var config2 = thing.Resources["Config2"] as ResourceConfig;
             var config3 = thing.Resources["Config3"] as ResourceConfig;
@@ -107,7 +107,7 @@ namespace CFET2CoreTest
         {
             //aeegange
             var testThing = new TestThingConfig();
-            var thing = new ResourceThing(testThing, "thing");
+            var thing = new ResourceThing(testThing, "thing",null);
             var config1 = thing.Resources["Config1"] as ResourceConfig;
             var config2 = thing.Resources["Config2"] as ResourceConfig;
             var config3 = thing.Resources["Config3"] as ResourceConfig;

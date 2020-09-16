@@ -227,7 +227,41 @@ namespace Jtext103.CFET2.Core
 
 
         #region get set invoke using uri 
-        
+        /// <summary>
+        /// simple resource get,only supports url with params(if the resource has params).If you want to add params alone,you can try "TryAccessResourceSampleWithUri"
+        /// </summary>
+        /// <param name="requestUri"></param>
+        /// <returns></returns>
+        public ISample Get(string requestUri)
+        {
+            ResourceRequest request = new ResourceRequest(requestUri, AccessAction.get, null, null, null);
+            return TryAccessResourceSampleWithUri(request);
+        }
+
+
+        /// <summary>
+        /// simple resource set,only supports url with params(if the resource has params).If you want to add params alone,you can try "TryAccessResourceSampleWithUri"
+        /// </summary>
+        /// <param name="requestUri"></param>
+        /// <returns></returns>
+        public ISample Set(string requestUri)
+        {
+            ResourceRequest request = new ResourceRequest(requestUri, AccessAction.set, null, null, null);
+            return TryAccessResourceSampleWithUri(request);
+        }
+
+        /// <summary>
+        /// simple resource Invoke,only supports url with params(if the resource has params).If you want to add params alone,you can try "TryAccessResourceSampleWithUri"
+        /// </summary>
+        /// <param name="requestUri"></param>
+        /// <returns></returns>
+        public ISample Invoke(string requestUri)
+        {
+            ResourceRequest request = new ResourceRequest(requestUri, AccessAction.invoke, null, null, null);
+            return TryAccessResourceSampleWithUri(request);
+        }
+
+
         /*request resource, with pipeline support*/
         /// <summary>
         /// 
@@ -263,6 +297,7 @@ namespace Jtext103.CFET2.Core
             return myMaster.MyPipeline.BatchProcess(resource, request);
         }
 
+
         private ISample localAccessWithUri(Func<string, object[], ISample> arrayAccessFunc,
             Func<string, Dictionary<string, object>, ISample> dictAccessFunc,
             string requestUri, Dictionary<string, object> inputDict, object[] inputs,bool usingDictInput)
@@ -297,7 +332,6 @@ namespace Jtext103.CFET2.Core
             return arrayAccessFunc(resourcePath, realInputs);
         }
 
-        
 
 
         /*get*/
@@ -309,6 +343,7 @@ namespace Jtext103.CFET2.Core
         /// <param name="requestUri">the uri to access a resource, it can contain route parameters or query string parameters</param>
         /// <param name="inputs">if contain more than one inputs, then query string (if any) in uri will be ignored, the path of URI is point to a resource, route parameters will not be recognize</param>
         /// <returns></returns>
+        [Obsolete]
         public ISample TryGetResourceSampleWithUri(string requestUri, params object[] inputs)
         {
             var uri = new Uri(requestUri, UriKind.RelativeOrAbsolute);
@@ -338,6 +373,7 @@ namespace Jtext103.CFET2.Core
         /// <param name="requestUri"></param>
         /// <param name="inputDict"></param>
         /// <returns></returns>
+        [Obsolete]
         public ISample TryGetResourceSampleWithUri(string requestUri, Dictionary<string,object> inputDict)
         {
             var uri = new Uri(requestUri, UriKind.RelativeOrAbsolute);
@@ -369,6 +405,7 @@ namespace Jtext103.CFET2.Core
         /// <param name="requestUri">the uri to access a resource, it can contain route parameters or query string parameters</param>
         /// <param name="inputs">if contain more than one inputs, then query string (if any) in uri will be ignored, the path of URI is point to a resource, route parameters will not be recognize</param>
         /// <returns></returns>
+        [Obsolete]
         public ISample TrySetResourceSampleWithUri(string requestUri, params object[] inputs)
         {
             var uri = new Uri(requestUri, UriKind.RelativeOrAbsolute);
@@ -398,6 +435,7 @@ namespace Jtext103.CFET2.Core
         /// <param name="requestUri"></param>
         /// <param name="inputDict"></param>
         /// <returns></returns>
+        [Obsolete]
         public ISample TrySetResourceSampleWithUri(string requestUri, Dictionary<string, object> inputDict)
         {
             var uri = new Uri(requestUri, UriKind.RelativeOrAbsolute);
@@ -430,6 +468,7 @@ namespace Jtext103.CFET2.Core
         /// <param name="requestUri">the uri to access a resource, it can contain route parameters or query string parameters</param>
         /// <param name="inputs">if contain more than one inputs, then query string (if any) in uri will be ignored, the path of URI is point to a resource, route parameters will not be recognize</param>
         /// <returns></returns>
+        [Obsolete]
         public ISample TryInvokeSampleResourceWithUri(string requestUri, params object[] inputs)
         {
             var uri = new Uri(requestUri, UriKind.RelativeOrAbsolute);
@@ -459,6 +498,7 @@ namespace Jtext103.CFET2.Core
         /// <param name="requestUri"></param>
         /// <param name="inputDict"></param>
         /// <returns></returns>
+        [Obsolete]
         public ISample TryInvokeSampleResourceWithUri(string requestUri, Dictionary<string, object> inputDict)
         {
             var uri = new Uri(requestUri, UriKind.RelativeOrAbsolute);

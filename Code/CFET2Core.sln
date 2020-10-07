@@ -3,19 +3,19 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30320.27
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CFET2Core", "CFET2Core\CFET2Core.csproj", "{E4BD3DE4-5F65-409D-A99A-7D9DB54BF122}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CFET2Core", "CFET2Core\CFET2Core.csproj", "{E4BD3DE4-5F65-409D-A99A-7D9DB54BF122}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CFET2APP", "CFET2APP\CFET2APP.csproj", "{9A0D9BF4-8111-473E-9183-366883333BB3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CFET2APP", "CFET2APP\CFET2APP.csproj", "{9A0D9BF4-8111-473E-9183-366883333BB3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CFET2CoreTest", "CFET2CoreTest\CFET2CoreTest.csproj", "{04C152A8-BFCA-4A4A-B913-C47064D6FB12}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CFET2CoreTest", "CFET2CoreTest\CFET2CoreTest.csproj", "{04C152A8-BFCA-4A4A-B913-C47064D6FB12}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NancyHttpCommunicationModule", "NancyHttpCommunicationModule\NancyHttpCommunicationModule.csproj", "{3FF0151C-4915-440B-B682-01AA1120D235}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NancyHttpCommunicationModule", "NancyHttpCommunicationModule\NancyHttpCommunicationModule.csproj", "{3FF0151C-4915-440B-B682-01AA1120D235}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebsocketEventThing", "WebsocketEventThing\WebsocketEventThing.csproj", "{7466D2C7-6264-43F0-98BD-BDE4BB9D4D04}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebsocketEventThing", "WebsocketEventThing\WebsocketEventThing.csproj", "{7466D2C7-6264-43F0-98BD-BDE4BB9D4D04}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebSocketRTTTest", "WebSocketRTTTest\WebSocketRTTTest.csproj", "{09826117-4190-49A4-943C-7AE500D5B7EE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebSocketRTTTest", "WebSocketRTTTest\WebSocketRTTTest.csproj", "{09826117-4190-49A4-943C-7AE500D5B7EE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WobsocketEventTest", "WobsocketEventTest\WobsocketEventTest.csproj", "{8DB6FADA-FCF6-450E-BAD5-F8D8EA49EB57}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WobsocketEventTest", "WobsocketEventTest\WobsocketEventTest.csproj", "{8DB6FADA-FCF6-450E-BAD5-F8D8EA49EB57}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

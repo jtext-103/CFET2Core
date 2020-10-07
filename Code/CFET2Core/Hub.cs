@@ -294,6 +294,10 @@ namespace Jtext103.CFET2.Core
                 default:
                     throw new WrongResourceActionException();
             }
+            if (resource.IsRemote)
+            {
+                return resource;
+            }
             return myMaster.MyPipeline.BatchProcess(resource, request);
         }
 
@@ -352,7 +356,9 @@ namespace Jtext103.CFET2.Core
                 var comm = myMaster.MyCommunicationManager.GetMouduleFor(uri.Scheme);
                 if (comm != null)
                 {
-                    return comm.TryGetResourceSampleWithUri(requestUri, inputs);
+                    ISample result = comm.TryGetResourceSampleWithUri(requestUri, inputs);
+                    result.Context["CFET2CORE_SAMPLE_ISREMOTE"] = true;
+                    return result;
                 }
                 else
                 {

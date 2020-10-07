@@ -84,6 +84,11 @@ namespace Jtext103.CFET2.NancyHttpCommunicationModule
             {
                 //req.Headers.Set(HttpRequestHeader.Accept, "application/octet-stream");
                 req.Headers.Set(HttpRequestHeader.AcceptEncoding, "MessagePack");
+                req.Accept= "application/MessagePack";
+            }
+            else
+            {
+                req.Accept =  "application/JSON";
             }
 
             HttpWebResponse resp;
@@ -95,17 +100,15 @@ namespace Jtext103.CFET2.NancyHttpCommunicationModule
             {
                 throw new Exception(e.ToString());
             }
-
             Stream stream = resp.GetResponseStream();
             ISample result = new SampleBase<object>();
 
             try
             {
-                if (AcceptEncoding == "MessagePack")
+                if (resp.ContentType.Contains("MessagePack"))
                 {
                     MemoryStream realStream = new MemoryStream();
                     stream.CopyTo(realStream);
-
                     var deserializer = MessagePackSerializer.Get<Dictionary<string, object>>();
                     realStream.Position = 0;
                     result.Context = deserializer.Unpack(realStream);

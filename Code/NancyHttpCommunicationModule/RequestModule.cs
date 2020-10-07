@@ -88,21 +88,22 @@ namespace Jtext103.CFET2.NancyHttpCommunicationModule
                     return response;
                 }
 
-                if (this.Request.Headers.AcceptEncoding.Contains("MessagePack"))
+                if (Request.Headers.AcceptEncoding.Contains("MessagePack") || Request.Headers.Accept.Where(i=>i.Item1.Contains("application/MessagePack")).Count()>0)
                 {
                     var serializer = MessagePackSerializer.Get<Dictionary<string, object>>();
                     MemoryStream stream = new MemoryStream();
+                    result.Context["CFET2CORE_SAMPLE_ISREMOTE"] = true;
                     serializer.Pack(stream, result.Context);
-
                     SetData(stream);
                     var rightResponse = new Nancy.Responses.StreamResponse(GetData, "application/octet-stream");
                     rightResponse.Headers.Add(new KeyValuePair<string, string>("Content-Encoding", "MessagePack"));
+                    rightResponse.Headers.Add(new KeyValuePair<string, string>("Content-Type", "application/MessagePack"));
                     return rightResponse;
                 }
                 else
                 {
-                    var rightResponse = JsonConvert.SerializeObject(result.Context);
-                    return Response.AsText(rightResponse);
+                    result.Context["CFET2CORE_SAMPLE_ISREMOTE"] = true;
+                    return Response.AsJson(result.Context);
                 }
             }
         }

@@ -112,7 +112,14 @@ namespace Jtext103.CFET2.Core.Sample
             get
             {
                 object isValid;
-                Context.TryGetValue(KeyOfIsValid,out isValid);
+                if (Context.ContainsKey(KeyOfIsValid))
+                {
+                    isValid = Convert.ToBoolean(Context[KeyOfIsValid].ToString());
+                }
+                else
+                {
+                    isValid = false;
+                }
                 return (bool)(isValid ?? false);
             }
             internal set
@@ -146,7 +153,8 @@ namespace Jtext103.CFET2.Core.Sample
             get
             {
                 object path;
-                Context.TryGetValue(KeyOfPath, out path);
+                path = Context[KeyOfPath].ToString();
+                //Context.TryGetValue(KeyOfPath, out path);
                 return (string)(path ?? "");
             }
         }
@@ -173,7 +181,15 @@ namespace Jtext103.CFET2.Core.Sample
             get
             {
                 object isRemote;
-                Context.TryGetValue(KeyOfIsRemote, out isRemote);
+                if(Context.ContainsKey(KeyOfIsRemote))
+                {
+                    isRemote = Convert.ToBoolean(Context[KeyOfIsRemote].ToString());
+                }
+                else
+                {
+                    isRemote = false;
+                }
+                
                 return (bool)(isRemote ?? false);
             }
             set
